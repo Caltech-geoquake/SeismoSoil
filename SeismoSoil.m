@@ -64,11 +64,11 @@ end
 
 current_script_fullname = mfilename('fullpath');  % get full name of current script
 seismosoil_path = fileparts(current_script_fullname);  % strip path only
-addpath(fullfile(seismosoil_path,'Tools'));
-addpath(fullfile(seismosoil_path,'Analyses'));
-addpath(fullfile(seismosoil_path,'Fortran_exe'));
-addpath(fullfile(seismosoil_path,'Helper_functions'));
-addpath(fullfile(seismosoil_path,'Prepare'));
+addpath(fullfile(seismosoil_path,'subroutines/analyses'));
+addpath(fullfile(seismosoil_path,'subroutines/Fortran_exe'));
+addpath(fullfile(seismosoil_path,'subroutines/helper_functions'));
+addpath(fullfile(seismosoil_path,'subroutines/prepare'));
+addpath(fullfile(seismosoil_path,'subroutines/tools'));
 
 % Update handles structure
 guidata(hObject, handles);
