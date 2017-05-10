@@ -62,6 +62,14 @@ if isempty(start_dir0)
     start_dir0 = pwd;
 end
 
+current_script_fullname = mfilename('fullpath');  % get full name of current script
+seismosoil_path = fileparts(current_script_fullname);  % strip path only
+addpath(fullfile(seismosoil_path,'Tools'));
+addpath(fullfile(seismosoil_path,'Analyses'));
+addpath(fullfile(seismosoil_path,'Fortran_exe'));
+addpath(fullfile(seismosoil_path,'Helper_functions'));
+addpath(fullfile(seismosoil_path,'Prepare'));
+
 % Update handles structure
 guidata(hObject, handles);
 
