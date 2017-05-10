@@ -87,7 +87,6 @@ close SeismoSoil_Tools_Deconvolution;
 SeismoSoil_Tools;
 
 
-
 function edit1_thickness_Callback(hObject, eventdata, handles)
 % hObject    handle to edit1_thickness (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -182,6 +181,7 @@ function edit4_damping_Callback(hObject, eventdata, handles)
 %        str2double(get(hObject,'String')) returns contents of edit4_damping as a double
 handles.metricdata.damping = str2double(get(hObject,'String'));
 guidata(hObject,handles);
+
 
 % --- Executes during object creation, after setting all properties.
 function edit4_damping_CreateFcn(hObject, eventdata, handles)
@@ -300,7 +300,7 @@ elseif handles.metricdata.load_complete == -1 % single rock layer
             command_text = sprintf('explorer.exe %s',motion_dir_name);
             system(command_text);
         end
-    else % more than one motion was chosen
+    else  % more than one motion was chosen
         fprintf('Deconvolving... ');
         nn = length(motion_file_name);
         for sj = 1 : 1 : nn
@@ -339,7 +339,7 @@ elseif handles.metricdata.load_complete == -1 % single rock layer
             system(command_text);
         end
     end
-elseif handles.metricdata.load_complete == 1 % multiple soil layers
+elseif handles.metricdata.load_complete == 1  % multiple soil layers
     profile_fname = handles.metricdata.profile_file_name;
     profile_dname = handles.metricdata.profile_dir_name;
     profile = importdata(fullfile(profile_dname,profile_fname));
