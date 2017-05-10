@@ -22,7 +22,7 @@ function varargout = SeismoSoil_Tools_Deconvolution(varargin)
 
 % Edit the above text to modify the response to help SeismoSoil_Tools_Deconvolution
 
-% Last Modified by GUIDE v2.5 07-Jun-2016 17:23:12
+% Last Modified by GUIDE v2.5 09-May-2017 18:14:11
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -257,7 +257,7 @@ elseif handles.metricdata.load_complete == -1 % single rock layer
     h = handles.metricdata.thickness;
     Vs = handles.metricdata.Vs;
     rho = handles.metricdata.density;
-    xi = handles.metricdata.damping;
+    xi = handles.metricdata.damping/100;
     
     profile = [h,Vs,xi,rho;0,Vs,xi,rho];
     motion_file_name = handles.metricdata.motion_file_name;
@@ -426,6 +426,16 @@ elseif handles.metricdata.load_complete == 1  % multiple soil layers
     
 end
 
+% --- Executes during object creation, after setting all properties.
+function uipanel3_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to uipanel3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+handles.metricdata.load_complete = -1;
+guidata(hObject,handles);
+
+
 % --- Executes when selected object is changed in uipanel3.
 function uipanel3_SelectionChangeFcn(hObject, eventdata, handles)
 % hObject    handle to the selected object in uipanel3 
@@ -530,3 +540,6 @@ function pushbutton5_close_all_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 close all;
+
+
+
