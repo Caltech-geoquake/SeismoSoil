@@ -62,14 +62,6 @@ if isempty(start_dir0)
     start_dir0 = pwd;
 end
 
-current_script_fullname = mfilename('fullpath');  % get full name of current script
-seismosoil_path = fileparts(current_script_fullname);  % strip path only
-addpath(fullfile(seismosoil_path,'subroutines/analyses'));
-addpath(fullfile(seismosoil_path,'subroutines/Fortran_exe'));
-addpath(fullfile(seismosoil_path,'subroutines/helper_functions'));
-addpath(fullfile(seismosoil_path,'subroutines/prepare'));
-addpath(fullfile(seismosoil_path,'subroutines/tools'));
-
 % Update handles structure
 guidata(hObject, handles);
 
@@ -222,7 +214,7 @@ function pushbutton_author_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-hm = msgbox({'Current version: v1.2.8.0, 5/9/2017',...
+hm = msgbox({'Current version: v1.2.8.1, 5/10/2017',...
     'First draft: 6/30/2013',...
     ' ','Authors: Domniki Asimaki, Jian Shi, Wei Li',...
     'GUI Design: Jian Shi',' ','Contact: D.A.- domniki@caltech.edu',...
