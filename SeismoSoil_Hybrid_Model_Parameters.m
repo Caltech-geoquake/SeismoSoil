@@ -405,9 +405,9 @@ if ok_to_proceed == 1
 
     %% Get HH_G parameters
     if (handles.metricdata.step1a == 1) && strcmpi(handles.metricdata.GGmax_data_source,'fromVsProfile')
-        para = hybridParaFromVsProfile(profile,PI,Tmax,show_fig,save_fig);
+        para = hybridParaFromVsProfile(profile,PI,Tmax,show_fig,save_fig,[],inf);
     elseif (handles.metricdata.step1b == 1) && strcmpi(handles.metricdata.GGmax_data_source,'fromCurve')
-        [para,curves_expanded] = hybridParaFromCurves(profile,curve,Tmax,show_fig,save_fig);
+        [para,curves_expanded] = hybridParaFromCurves(profile,curve,Tmax,show_fig,save_fig,[],inf);
         % curve_file_name = handles.metricdata.curve_file_name;
         % curve_dir_name = handles.metricdata.curve_dir_name;
         % [~,curve_file_name_name,~] = fileparts(curve_file_name);
