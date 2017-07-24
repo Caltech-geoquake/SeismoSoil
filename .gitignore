@@ -8,7 +8,7 @@ SeismoSoil_v*.exe
 *.log
 *.7z
 *.tar
-All_executable_backups/*
+All_executables_backups/*
 dependencies.txt
 
 #############
