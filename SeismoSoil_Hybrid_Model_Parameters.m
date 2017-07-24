@@ -444,7 +444,11 @@ if ok_to_proceed == 1
         nr_layer = size(para,2); % number of layers = number of columns of "para"
         curve_HH = zeros(length_array,nr_layer*4);  % pre-allocation, to put the "curve" matrix
         h = profile(1:end-1,1); % layer thicknesses
-        rho = profile(1:end-1,4); % mass density of soil of each layer
+        if size(profile,2) <= 2
+            [~,rho] = getXiRho(profile);
+        else
+            rho = profile(1:end-1,4); % mass density of soil of each layer
+        end
         stress = computeVerticalStress(h,rho); % unit of stress: Pa
         [~,damping,~] = dynamicSoilParameter(strain_20/100,stress,PI); % unit of "damping": 1
 
