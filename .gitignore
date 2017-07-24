@@ -9,6 +9,7 @@ SeismoSoil_v*.exe
 *.7z
 *.tar
 All_executable_backups/*
+dependencies.txt
 
 #############
 ## LaTeX
