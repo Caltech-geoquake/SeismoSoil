@@ -323,6 +323,7 @@ else
     ylabel('Number of ground motions');
     grid on;
     title(sprintf('Total: %d motions',nr_motion));
+    
 end
 
 
