@@ -22,7 +22,7 @@ function varargout = SeismoSoil_Tools_Motion_Plotter(varargin)
 
 % Edit the above text to modify the response to help SeismoSoil_Tools_Motion_Plotter
 
-% Last Modified by GUIDE v2.5 24-Aug-2014 23:44:01
+% Last Modified by GUIDE v2.5 25-Jul-2017 23:19:07
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -286,6 +286,45 @@ guidata(hObject,handles);
 
 
 
+
+% --- Executes on button press in pushbutton13_plot_PGA_histogram.
+function pushbutton13_plot_PGA_histogram_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton13_plot_PGA_histogram (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+if handles.metricdata.step4_complete == 0
+    msgbox('You haven''t selected any motions yet.','Warning');
+else
+
+    motion = handles.metricdata.motion;
+    nr_motion = handles.metricdata.nr_motion;
+    unit = handles.metricdata.input_accel_unit;
+    
+    pga = zeros(nr_motion,1);
+    for i = 1 : 1 : nr_motion
+        current_motion = motion{i};    
+        pga(i) = max(abs(current_motion(:,2)));
+    end
+    
+    if nr_motion <= 20
+        nr_bins = 10;
+    elseif nr_motion <= 50
+        nr_bins = 20;
+    elseif nr_motion <= 100
+        nr_bins = 30;
+    else
+        nr_bins = 40;
+    end
+    
+    figure;
+    histogram(pga,nr_bins);
+    xlabel(sprintf('PGA [%s]',unit));
+    ylabel('Number of ground motions');
+    grid on;
+end
+
+
 % * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 % * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 % * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -402,3 +441,4 @@ function pushbutton1_return_to_tools_Callback(hObject, eventdata, handles)
 
 close SeismoSoil_Tools_Motion_Plotter;
 SeismoSoil_Tools;
+
