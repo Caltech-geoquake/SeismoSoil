@@ -260,6 +260,7 @@ else
     for i = 1 : 1 : nr_motion
         current_motion_filename = handles.metricdata.motion_file_name{i};
         [~,fname,ext] = fileparts(current_motion_filename);
+        fprintf('%s\n',current_motion_filename);
         
         switch handles.metricdata.factor_from_SI % Get Tag of selected object.
             case 1
@@ -276,7 +277,14 @@ else
         factor_to_SI = 9.81;
         
         accel_matrix = current_motion_struct.data;
-        dt = str2double(current_motion_struct.colheaders{4});
+        
+        if any(strcmp('colheaders',fields(current_motion_struct)))
+            dt = str2double(current_motion_struct.colheaders{4});
+        else  % if current_motion_struct does not have a field named 'colheaders'
+            dt_info = current_motion_struct.textdata{end};
+            dt_str = dt_info(18:26);
+            dt = str2double(dt_str);
+        end
         
         accel_matrix_tr = transpose(accel_matrix);
         npts = numel(accel_matrix);
