@@ -1,4 +1,4 @@
-function [ok_to_proceed,h_running] = runNLH4FromGUI(profile,curve,H4G,H4x,...
+function [ok_to_proceed,h_running] = runNLH4FromGUI(vs_profile,curve,H4G,H4x,...
     nr_motion,motion,motion_name,output_dir,...
     factor_rho,factor_xi,unit_factor_accel,bedrock_type,motion_type,...
     fig_visible,use_fortran,use_parallel)
@@ -17,12 +17,12 @@ function [ok_to_proceed,h_running] = runNLH4FromGUI(profile,curve,H4G,H4x,...
 
 h_running = 0;
 
-rho = profile(:,4);
-xi = profile(:,3);
+rho = vs_profile(:,4);
+xi = vs_profile(:,3);
 rho = rho ./ factor_rho;
 xi = xi ./ factor_xi;
-profile(:,4) = rho;
-profile(:,3) = xi;
+vs_profile(:,4) = rho;
+vs_profile(:,3) = xi;
 
 if use_parallel == 1
     nr_cores = inf; % using a maximum of "nr_cores" workers or threads
@@ -123,11 +123,11 @@ if ok_to_proceed == 1
     main_directory = output_dir;
     
     %% Re-discretize soil profile
-    h = profile(:,1); % thickness of each layer (m)
-    vs = profile(:,2); % shear wave velocity of each layer (m/s)
-    D = profile(:,3); % initial value of damping ratio (unit: 1)
-    rho = profile(:,4); % mass density of soil of each layer
-    material_nr = profile(:,5); % material number
+    h = vs_profile(:,1); % thickness of each layer (m)
+    vs = vs_profile(:,2); % shear wave velocity of each layer (m/s)
+    D = vs_profile(:,3); % initial value of damping ratio (unit: 1)
+    rho = vs_profile(:,4); % mass density of soil of each layer
+    material_nr = vs_profile(:,5); % material number
     [h,vs,D,rho,material_nr] = stratify(h,vs,D,rho,material_nr);
     
     new_profile = [h,vs,D,rho,material_nr];
@@ -449,7 +449,7 @@ end
 % function calling the H4 model
 %
 % function [ layer_depth, node_depth, out_a, out_v, out_d, out_gamma, out_tau ] = ...
-%    resp_H4(f_max, ppw, n_dt, boundary, N_spr, acc, profile, curve, para_G, para_x, dir_H4 )
+%    resp_H4(f_max, ppw, n_dt, boundary, N_spr, acc, vs_profile, curve, para_G, para_x, dir_H4 )
 %
 %       layer_depth: depth of the central point of every layer
 %       node_depth:  depth of node
@@ -464,20 +464,20 @@ end
 %       boundary:    boundary condition
 %       N_spr:       number of Iwan springs
 %       acc:         input acceleration time history
-%       profile:     profile data
+%       vs_profile:  vs_profile data
 %       curve:       modulus reduction and material damping data
 %       para:        parameters for nonlinear model
 %       dir_??       directory of the executable file
 
 function [ layer_depth, node_depth, out_a, out_v, out_d, out_gamma, out_tau ] = ...
-    resp_NLH4(f_max, ppw, n_dt, boundary, N_spr, acc, profile, curve, para_G, para_x, dir_H4, use_fortran )
+    resp_NLH4(f_max, ppw, n_dt, boundary, N_spr, acc, vs_profile, curve, para_G, para_x, dir_H4, use_fortran )
 
-profile(:,4) = profile(:,4)/1000; % The input "profile" has a unit of rho of kg/m^3.
+vs_profile(:,4) = vs_profile(:,4)/1000; % The input "profile" has a unit of rho of kg/m^3.
 %                                   It is necessary to convert it to g/cm^3
 %                                   to give to NLH4.
 
 cd (dir_H4);
-nlayer=size(profile,1)-1;
+nlayer=size(vs_profile,1)-1;
 t=acc(:,1); nt_out=length(t);
 N_obs=size(curve,1); n_ma=size(curve,2)/4;
 
@@ -495,7 +495,7 @@ fprintf(fid, '%6.1f %6.0f %6.0f %6.0f %6.0f %10.0f %6.0f %6.0f %6.0f', ...
               f_max, ppw, n_dt, n_bound, nlayer, nt_out, n_ma, N_spr, N_obs);
 fclose(fid);
 
-dlmwrite('profile.dat', profile);
+dlmwrite('profile.dat', vs_profile);
 dlmwrite('incident.dat',acc);
 dlmwrite('curve.dat', curve);
 dlmwrite('H4_G.dat', para_G);

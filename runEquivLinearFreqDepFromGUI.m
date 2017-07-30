@@ -1,5 +1,5 @@
 function [ok_to_proceed,h_running] = runEquivLinearFreqDepFromGUI...
-               (profile,curve,nr_motion,motion,motion_name,output_dir,...
+               (vs_profile,curve,nr_motion,motion,motion_name,output_dir,...
                factor_rho,factor_xi,unit_factor_accel,bedrock_type,...
                motion_type,fig_visible_option)
 %
@@ -14,12 +14,12 @@ fz_title = 14;
 % % end
 
 %% Unit conversions -- soil profile
-rho = profile(:,4);
-xi = profile(:,3);
+rho = vs_profile(:,4);
+xi = vs_profile(:,3);
 rho = rho ./ factor_rho;
 xi = xi ./ factor_xi;
-profile(:,4) = rho;
-profile(:,3) = xi;
+vs_profile(:,4) = rho;
+vs_profile(:,3) = xi;
 
 %% Bedrock type and input motion type processing
 ok_to_proceed = 1;
@@ -95,7 +95,7 @@ if ok_to_proceed == 1
         accel_incident(:,2) = accel_incident(:,2)/accel_division_factor;
         
         [freq_array,tf,t_out,accel_on_surface] ...
-            = callFDEQ_internal(profile,accel_incident,curve,boundary,output_dir2);
+            = callFDEQ_internal(vs_profile,accel_incident,curve,boundary,output_dir2);
         
         filename_TF = sprintf('%s_equivalent_linear_(FD)_TF%s',motion_name_without_ext,ext);
         filename_surface_accel = sprintf('%s_accel_on_surface%s',motion_name_without_ext,ext);
@@ -231,11 +231,11 @@ end
 end
 
 function [freq_array,tf,t_out,accel_on_surface]...
-         = callFDEQ_internal(profile,motion,curve,boundary,dir_FDEQ)
+         = callFDEQ_internal(vs_profile,motion,curve,boundary,dir_FDEQ)
 %
 %
 % [Inputs]
-%    profile
+%    vs_profile
 %    motion
 %    curve
 %    fig_visible: 'off' (default) and 'on'
@@ -247,7 +247,7 @@ function [freq_array,tf,t_out,accel_on_surface]...
 %    tf: linear transfer function
 %    t_out: time array, same as input time array
 %    accel_on_surface: only one column
-%    new_profile: new (denser) soil profile after re-discretization
+%    new_profile: new (denser) soil vs profile after re-discretization
 %    out_a: acceleration time history of every layer
 %    out_v
 %    out_d
@@ -262,7 +262,7 @@ function [freq_array,tf,t_out,accel_on_surface]...
 %     incident motion by the function that calls this function), regardless
 %     of the "boundary" type.
 % (2) Damping curves are adjusted, based on the initial damping values
-%     provided in the "profile" matrix.
+%     provided in the "vs_profile" matrix.
 %
 % Jian Shi, 12/18/2013
 
@@ -300,14 +300,14 @@ end
 motion = [time,accel];
 
 % Adjust the damping curves according to damping values in "profile"
-xi = profile(:,3);
+xi = vs_profile(:,3);
 nr_layer = length(xi); % layer count, including the rock halfspace
 for k = 1 : 1 : nr_layer-1
     curve(:,(k-1)*4+4) = curve(:,(k-1)*4+4) - curve(1,(k-1)*4+4) + xi(k)*100;
 end
 
 % call resp_FD, which calls FDEQ.exe
-[gm,tf2col] = resp_FD_internal(input_motion_type,motion,profile,curve,dir_FDEQ);
+[gm,tf2col] = resp_FD_internal(input_motion_type,motion,vs_profile,curve,dir_FDEQ);
 
 % delete the text files generated during "resp_FD"
 delete('kausel001.sac');
@@ -337,7 +337,7 @@ end
 
 % % 
 
-function [GM,transfer] = resp_FD_internal(input_accel_type,accel,profile,curve,dirFD)
+function [GM,transfer] = resp_FD_internal(input_accel_type,accel,vs_profile,curve,dirFD)
 
 % function calling the FD model
 %
@@ -353,11 +353,11 @@ function [GM,transfer] = resp_FD_internal(input_accel_type,accel,profile,curve,d
 
 cd(dirFD);
 
-h = profile(:,1); % height (m)
-vs = profile(:,2); % shear velocity (m/s)
-rho = profile(:,4); % density (kg/m^3)
+h = vs_profile(:,1); % height (m)
+vs = vs_profile(:,2); % shear velocity (m/s)
+rho = vs_profile(:,4); % density (kg/m^3)
 % x=parameter(:,3); % initial value of damping ratio
-mtrl_nr = profile(:,5); %material number
+mtrl_nr = vs_profile(:,5); %material number
 nlayer = length(h); % include layer of bedrock
 
 str1 = 'input_motion.dat';

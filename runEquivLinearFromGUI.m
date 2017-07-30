@@ -1,15 +1,15 @@
-function [ok_to_proceed,h_running] = runEquivLinearFromGUI(profile,curve,nr_motion,motion,motion_name,output_dir,...
+function [ok_to_proceed,h_running] = runEquivLinearFromGUI(vs_profile,curve,nr_motion,motion,motion_name,output_dir,...
         factor_rho,factor_xi,unit_factor_accel,bedrock_type,motion_type,fig_visible_option,use_parallel)
 %
 h_running = 0;
 
 %% Unit conversions -- soil profile
-rho = profile(:,4);
-xi = profile(:,3);
+rho = vs_profile(:,4);
+xi = vs_profile(:,3);
 rho = rho ./ factor_rho;
 xi = xi ./ factor_xi;
-profile(:,4) = rho;
-profile(:,3) = xi;
+vs_profile(:,4) = rho;
+vs_profile(:,3) = xi;
 
 if use_parallel == 1
     nr_cores = inf; % using a maximum of "nr_cores" workers or threads
@@ -94,7 +94,7 @@ if ok_to_proceed == 1
         output_or_not = 'n';
         [freq_array,tf,t_out,accel_on_surface,...
             new_profile,out_a,out_v,out_d,out_gamma,out_tau,max_avd,max_gt] ...
-            = equivLinSiteResp(profile,accel_incident,curve,'off',boundary,output_or_not);
+            = equivLinSiteResp(vs_profile,accel_incident,curve,'off',boundary,output_or_not);
         
         filename_TF = sprintf('%s_equivalent_linear_TF%s',motion_name_without_ext,ext);
         filename_surface_accel = sprintf('%s_accel_on_surface%s',motion_name_without_ext,ext);

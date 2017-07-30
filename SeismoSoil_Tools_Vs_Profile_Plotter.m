@@ -159,17 +159,16 @@ if handles.metricdata.step4_complete == 0
     msgbox('You haven''t selected any motions yet.','Warning');
 else
 
-    profile = handles.metricdata.motion;
+    vs_profile = handles.metricdata.motion;
     nr_profile = handles.metricdata.nr_motion;
 
     for i = 1 : 1 : nr_profile
         current_profile_filename = handles.metricdata.motion_file_name{i};
-        current_profile = profile{i};
+        current_profile = vs_profile{i};
         plotVsProfileForGUI(current_profile,current_profile_filename);
     end
     
 end
-
 
 
 % --- Executes on button press in pushbutton4_plot_selected.
