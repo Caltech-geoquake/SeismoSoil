@@ -98,7 +98,7 @@ function pushbutton1a_select_profile_Callback(hObject, eventdata, handles)
 global start_dir0;
 
 filter_spec = {'*.dat;*.txt','Text files (*.dat,*.txt)';'*.*', 'All Files (*.*)'};
-dlg_title = 'Select profile data file...';
+dlg_title = 'Select Vs profile data file...';
 [profile_file_name,profile_dir_name,filter_index] ...
     = uigetfile(filter_spec,dlg_title,start_dir0,'MultiSelect','off');
 
@@ -119,8 +119,8 @@ else
     handles.metricdata.sitecode = sitecode_;
     set(handles.edit1a_profile_name,'string',sitecode_);
     
-    profile_ = importdata(fullfile(profile_dir_name,profile_file_name));
-    handles.metricdata.profile = profile_;
+    vs_profile_ = importdata(fullfile(profile_dir_name,profile_file_name));
+    handles.metricdata.profile = vs_profile_;
     
     handles.metricdata.step1_complete = 1;
     
@@ -217,9 +217,9 @@ function pushbutton1c_help_dlgbox_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-msgbox({'If you don''t specify a profile name, a site code modified',...
+msgbox({'If you don''t specify a Vs profile name, a site code modified',...
         'from the file name is used. For example, the file name',...
-        'is usually "profile_CE.11023.dat", then the profile name',...
+        'is usually "profile_CE.11023.dat", then the Vs profile name',...
         'will be "CE.11023".'},...
         'Help');
 
@@ -1015,7 +1015,7 @@ if step1*step2*step3*step4 == 0 % if a certain step is not completed
     h_msgbox = msgbox(warning_text,'Warning');
     ok_to_proceed = 0;
 else
-    profile = handles.metricdata.profile;
+    vs_profile = handles.metricdata.profile;
     curve = handles.metricdata.curve;
     H4G = handles.metricdata.H4G;
     H4x = handles.metricdata.H4x;
@@ -1040,7 +1040,7 @@ else
     use_fortran_for_calc = handles.metricdata.use_fortran_for_calc;
     
     tic;
-    [ok_to_proceed,h_running] = runNLHHFromGUI(profile,curve,H4G,H4x,nr_motion,motion,motion_name,output_dir,...
+    [ok_to_proceed,h_running] = runNLHHFromGUI(vs_profile,curve,H4G,H4x,nr_motion,motion,motion_name,output_dir,...
         factor_rho,factor_xi,factor_accel,bedrock_type,motion_type,fig_visible_option,use_fortran_for_calc,use_parallel);
     elapsed_time = toc;
     fprintf('Simulation finished. Elapsed time: %.1f sec.\n',elapsed_time);

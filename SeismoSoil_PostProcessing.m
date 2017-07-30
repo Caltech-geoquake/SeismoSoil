@@ -117,14 +117,14 @@ profile_filename2 = fullfile(results_dir,sprintf...
 try
     strain = importdata(strain_time_history_filename1);
     stress = importdata(stress_time_history_filename1);
-    profile = importdata(profile_filename1);
+    vs_profile = importdata(profile_filename1);
 catch
     strain = importdata(strain_time_history_filename2);
     stress = importdata(stress_time_history_filename2);
-    profile = importdata(profile_filename2);
+    vs_profile = importdata(profile_filename2);
 end
 nr_layer = size(strain,2);
-thickness = profile(:,1);
+thickness = vs_profile(:,1);
 depth = convertThicknessToDepth(thickness);
 
 for j = 1 : 1 : nr_layer
@@ -161,14 +161,14 @@ profile_filename2 = fullfile(results_dir,sprintf...
 try
     strain = importdata(strain_time_history_filename1);
     stress = importdata(stress_time_history_filename1);
-    profile = importdata(profile_filename1);
+    vs_profile = importdata(profile_filename1);
 catch
     strain = importdata(strain_time_history_filename2);
     stress = importdata(stress_time_history_filename2);
-    profile = importdata(profile_filename2);
+    vs_profile = importdata(profile_filename2);
 end
 nr_layer = size(strain,2);
-thickness = profile(:,1);
+thickness = vs_profile(:,1);
 depth = convertThicknessToDepth(thickness);
 
 mkdir(fullfile(results_dir,'Stress strain loops'));
@@ -206,16 +206,16 @@ profile_filename2 = fullfile(results_dir,sprintf...
 try
     displ = importdata(displ_time_history_filename1);
     surf_accel = importdata(surface_accel_filename1);
-    profile = importdata(profile_filename1);
+    vs_profile = importdata(profile_filename1);
 catch
     displ = importdata(displ_time_history_filename2);
     surf_accel = importdata(surface_accel_filename2);
-    profile = importdata(profile_filename2);
+    vs_profile = importdata(profile_filename2);
 end
 
 time = surf_accel(:,1);
 dt = time(2) - time(1);
-h = profile(:,1);
+h = vs_profile(:,1);
 z = convertThicknessToDepth(h);
 
 max_displ = max(max(abs(displ)));
@@ -259,16 +259,16 @@ profile_filename2 = fullfile(results_dir,sprintf...
 try
     displ = importdata(displ_time_history_filename1);
     surf_accel = importdata(surface_accel_filename1);
-    profile = importdata(profile_filename1);
+    vs_profile = importdata(profile_filename1);
 catch
     displ = importdata(displ_time_history_filename2);
     surf_accel = importdata(surface_accel_filename2);
-    profile = importdata(profile_filename2);
+    vs_profile = importdata(profile_filename2);
 end
 
 time = surf_accel(:,1);
 dt = time(2) - time(1);
-h = profile(:,1);
+h = vs_profile(:,1);
 z = convertThicknessToDepth(h);
 
 max_displ = max(max(abs(displ)));

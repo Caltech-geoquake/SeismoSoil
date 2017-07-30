@@ -121,13 +121,13 @@ function pushbutton2_choose_Vs_profile_Callback(hObject, eventdata, handles)
 global start_dir0;
 
 filter_spec = {'*.dat;*.txt','Text files (*.dat,*.txt)';'*.*','All Files (*.*)'};
-dlg_title = 'Select "profile" file...';
+dlg_title = 'Select Vs profile...';
 [profile_file_name,profile_dir_name,filter_index] ...
     = uigetfile(filter_spec,dlg_title,start_dir0,'MultiSelect','off');
 disp(['User selected ',fullfile(profile_dir_name,profile_file_name)]);
 start_dir0 = profile_dir_name;  % update start_dir0
-profile = importdata(fullfile(profile_dir_name,profile_file_name));
-handles.metricdata.profile = profile;
+vs_profile = importdata(fullfile(profile_dir_name,profile_file_name));
+handles.metricdata.profile = vs_profile;
 handles.metricdata.profile_file_name = profile_file_name;
 handles.metricdata.profile_dir_name = profile_dir_name;
 handles.metricdata.step1a = 1;
@@ -149,9 +149,9 @@ function pushbutton3_plot_Vs_profile_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-profile = handles.metricdata.profile;
-h = profile(:,1);
-Vs = profile(:,2);
+vs_profile = handles.metricdata.profile;
+h = vs_profile(:,1);
+Vs = vs_profile(:,2);
 plotVsProfileFromArrays(h,Vs,sum(h));
 title(handles.metricdata.profile_file_name,'interpreter','none');
 
@@ -382,10 +382,10 @@ if ok_to_proceed == 1
     if handles.metricdata.step1b == 1
         curve = handles.metricdata.curve;
     end
-    profile = handles.metricdata.profile;
+    vs_profile = handles.metricdata.profile;
     % PI = handles.metricdata.PI;
-    Vs = profile(:,2);
-    if profile(end,1) == 0
+    Vs = vs_profile(:,2);
+    if vs_profile(end,1) == 0
         PI = zeros(length(Vs)-1,1);
     else
         PI = zeros(length(Vs),1);
@@ -405,9 +405,9 @@ if ok_to_proceed == 1
 
     %% Get HH_G parameters
     if (handles.metricdata.step1a == 1) && strcmpi(handles.metricdata.GGmax_data_source,'fromVsProfile')
-        para = hybridParaFromVsProfile(profile,PI,Tmax,show_fig,save_fig,[],inf);
+        para = hybridParaFromVsProfile(vs_profile,PI,Tmax,show_fig,save_fig,[],inf);
     elseif (handles.metricdata.step1b == 1) && strcmpi(handles.metricdata.GGmax_data_source,'fromCurve')
-        [para,curves_expanded] = hybridParaFromCurves(profile,curve,Tmax,show_fig,save_fig,[],inf);
+        [para,curves_expanded] = hybridParaFromCurves(vs_profile,curve,Tmax,show_fig,save_fig,[],inf);
         % curve_file_name = handles.metricdata.curve_file_name;
         % curve_dir_name = handles.metricdata.curve_dir_name;
         % [~,curve_file_name_name,~] = fileparts(curve_file_name);
@@ -421,8 +421,8 @@ if ok_to_proceed == 1
         % strain_20 = logspace(-4,log10(10),length_array)'; % 20-point array from 1e-4 to 10 (unit: percent)
         nr_layer = size(para,2); % number of layers = number of columns of "para"
         curve_HH = zeros(length_array,nr_layer*4);  % pre-allocation, to put the "curve" matrix
-        % h = profile(1:end-1,1); % layer thicknesses
-        % rho = profile(1:end-1,4); % mass density of soil of each layer
+        % h = vs_profile(1:end-1,1); % layer thicknesses
+        % rho = vs_profile(1:end-1,4); % mass density of soil of each layer
         % stress = computeVerticalStress(h,rho); % unit of stress: Pa
         % [~,damping,~] = dynamicSoilParameter(strain_20/100,stress,PI); % unit of "damping": 1
 
@@ -443,11 +443,11 @@ if ok_to_proceed == 1
         strain_20 = logspace(-4,log10(10),length_array)'; % 50-point array from 1e-4 to 10 (unit: percent)
         nr_layer = size(para,2); % number of layers = number of columns of "para"
         curve_HH = zeros(length_array,nr_layer*4);  % pre-allocation, to put the "curve" matrix
-        h = profile(1:end-1,1); % layer thicknesses
-        if size(profile,2) <= 2
-            [~,rho] = getXiRho(profile);
+        h = vs_profile(1:end-1,1); % layer thicknesses
+        if size(vs_profile,2) <= 2
+            [~,rho] = getXiRho(vs_profile);
         else
-            rho = profile(1:end-1,4); % mass density of soil of each layer
+            rho = vs_profile(1:end-1,4); % mass density of soil of each layer
         end
         stress = computeVerticalStress(h,rho); % unit of stress: Pa
         [~,damping,~] = dynamicSoilParameter(strain_20/100,stress,PI); % unit of "damping": 1
@@ -547,8 +547,8 @@ para_xi = [para_xi;ones(1,size(para_xi,2))]; % manually add a row of "1" at the 
 
 % * * *  Transform para_xi according to the material number  * * * *
 try
-    profile = handles.metricdata.profile;
-    mat = profile(1:end-1,5);
+    vs_profile = handles.metricdata.profile;
+    mat = vs_profile(1:end-1,5);
     para_xi_old = para_xi;
     para_xi_new = [];
     for j = 1 : 1 : length(mat)
@@ -556,7 +556,7 @@ try
     end
     para_xi = para_xi_new;
 catch
-    warndlg('You did not choose a "profile" file. Just a reminder...');
+    warndlg('You did not choose a Vs profile. Just a reminder...');
 end
 % * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 

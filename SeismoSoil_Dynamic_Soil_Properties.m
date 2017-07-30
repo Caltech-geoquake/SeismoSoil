@@ -101,7 +101,7 @@ clc;
 global start_dir0;
 
 filter_spec = {'*.dat;*.txt','Text files (*.dat,*.txt)';'*.*','All Files (*.*)'};
-dlg_title = 'Select profile data file...';
+dlg_title = 'Select Vs profile data file...';
 [profile_file_name,profile_dir_name,filter_index] ...
     = uigetfile(filter_spec,dlg_title,start_dir0,'MultiSelect','off');
 
@@ -261,7 +261,7 @@ if handles.metricdata.select_profile_complete == 1
     guidata(hObject,handles);
 
 else
-    msgbox('You need to select a profile file first.','Error...');
+    msgbox('You need to select a Vs profile file first.','Error...');
 end
 
 

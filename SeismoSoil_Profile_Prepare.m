@@ -264,23 +264,23 @@ if handles.metricdata.rock_property_complete * handles.metricdata.soil_property_
     elseif size(profile_without_rock,2) == 2
         rr = size(profile_without_rock,1);
         profile_without_rock = [profile_without_rock,zeros(rr,3)];
-        profile = [profile_without_rock;0,rock_Vs,rock_xi,rock_rho,0];
+        vs_profile = [profile_without_rock;0,rock_Vs,rock_xi,rock_rho,0];
         if strcmp(unit_of_damping,'percent')
-            profile(:,3) = profile(:,3)/100;
+            vs_profile(:,3) = vs_profile(:,3)/100;
         end
         if strcmp(density_or_unit_weight,'unit_weight')
-            profile(:,4) = profile(:,4)*1000/g;
+            vs_profile(:,4) = vs_profile(:,4)*1000/g;
         end
-        plotVsProfileFromMatrix(profile);
+        plotVsProfileFromMatrix(vs_profile);
     else
-        profile = [profile_without_rock;0,rock_Vs,rock_xi,rock_rho,0];
+        vs_profile = [profile_without_rock;0,rock_Vs,rock_xi,rock_rho,0];
         if strcmp(unit_of_damping,'percent')
-            profile(:,3) = profile(:,3)/100;
+            vs_profile(:,3) = vs_profile(:,3)/100;
         end
         if strcmp(density_or_unit_weight,'unit_weight')
-            profile(:,4) = profile(:,4)*1000/g;
+            vs_profile(:,4) = vs_profile(:,4)*1000/g;
         end
-        plotVsProfileFromMatrix(profile);
+        plotVsProfileFromMatrix(vs_profile);
     end
 else
     msgbox({'You haven''t finished entering all the properties.'},...
@@ -302,24 +302,24 @@ if handles.metricdata.rock_property_complete * handles.metricdata.soil_property_
     density_or_unit_weight = handles.metricdata.density_or_unit_weight;
     unit_of_damping = handles.metricdata.unit_of_damping;
     
-    profile_without_rock = cell2mat(handles.metricdata.profile_without_rock);
+    vs_profile_without_rock = cell2mat(handles.metricdata.profile_without_rock);
     
     rock_property = handles.metricdata.rock_property; % this is a 1x5 cell array
     rock_Vs = rock_property{2};
     rock_xi = rock_property{3};
     rock_rho = rock_property{4};
     
-    profile = [profile_without_rock;0,rock_Vs,rock_xi,rock_rho,0];
+    vs_profile = [vs_profile_without_rock;0,rock_Vs,rock_xi,rock_rho,0];
     
     if strcmp(unit_of_damping,'percent')
-        profile(:,3) = profile(:,3)/100;
+        vs_profile(:,3) = vs_profile(:,3)/100;
     end
     if strcmp(density_or_unit_weight,'unit_weight')
-        profile(:,4) = profile(:,4)*1000/g;
+        vs_profile(:,4) = vs_profile(:,4)*1000/g;
     end
     
-    [filename,pathname] = uiputfile('profile.txt','Save profile as...');
-    dlmwrite(fullfile(pathname,filename),profile,'delimiter','\t');
+    [filename,pathname] = uiputfile('profile.txt','Save Vs profile as...');
+    dlmwrite(fullfile(pathname,filename),vs_profile,'delimiter','\t');
 else
     msgbox({'You haven''t finished entering all the properties.'},...
         'Error...');

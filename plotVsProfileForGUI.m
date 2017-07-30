@@ -1,4 +1,4 @@
-function plotVsProfileForGUI(profile_matrix,title_text)
+function plotVsProfileForGUI(vs_profile,title_text)
 % USAGE: plotVsProfileForGUI(profile_matrix,title_text)
 %
 % (c) Jian Shi, 7/1/2013
@@ -7,7 +7,7 @@ if nargin < 2
     title_text = ''; % empty string
 end
 
-data = profile_matrix;
+data = vs_profile;
 
 thickness = data(:,1);
 Vs = data(:,2);

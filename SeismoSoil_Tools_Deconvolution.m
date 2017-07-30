@@ -250,7 +250,7 @@ function pushbutton3_go_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 if handles.metricdata.load_complete == 0
-    msgbox('Please select a profile.','Error...');
+    msgbox('Please select a Vs profile.','Error...');
 elseif handles.metricdata.select_motion_complete == 0
     msgbox('Please select a free surface motion.','Error...');
 elseif handles.metricdata.load_complete == -1 % single rock layer
@@ -259,7 +259,7 @@ elseif handles.metricdata.load_complete == -1 % single rock layer
     rho = handles.metricdata.density;
     xi = handles.metricdata.damping/100;
     
-    profile = [h,Vs,xi,rho;0,Vs,xi,rho];
+    vs_profile = [h,Vs,xi,rho;0,Vs,xi,rho];
     motion_file_name = handles.metricdata.motion_file_name;
     motion_dir_name = handles.metricdata.motion_dir_name;
 
@@ -269,12 +269,12 @@ elseif handles.metricdata.load_complete == -1 % single rock layer
         motion = importdata(fullfile(motion_dir_name,motion_file_name));
         
         if strcmp(handles.metricdata.type_of_motion_desired,'incident')
-            response = linearSiteResp(profile,motion,'elastic',0,'y'); % deconvolution
+            response = linearSiteResp(vs_profile,motion,'elastic',0,'y'); % deconvolution
             response(:,2) = response(:,2)/2;
         elseif strcmp(handles.metricdata.type_of_motion_desired,'rock-outcrop')
-            response = linearSiteResp(profile,motion,'elastic',0,'y'); % deconvolution
+            response = linearSiteResp(vs_profile,motion,'elastic',0,'y'); % deconvolution
         elseif strcmp(handles.metricdata.type_of_motion_desired,'total')
-            response = linearSiteResp(profile,motion,'rigid',0,'y'); % deconvolution
+            response = linearSiteResp(vs_profile,motion,'rigid',0,'y'); % deconvolution
         end
         
         fh = figure;
@@ -307,12 +307,12 @@ elseif handles.metricdata.load_complete == -1 % single rock layer
             motion = importdata(fullfile(motion_dir_name,motion_file_name{sj}));
             
             if strcmp(handles.metricdata.type_of_motion_desired,'incident')
-                response = linearSiteResp(profile,motion,'elastic',0,'y'); % deconvolution
+                response = linearSiteResp(vs_profile,motion,'elastic',0,'y'); % deconvolution
                 response(:,2) = response(:,2)/2;
             elseif strcmp(handles.metricdata.type_of_motion_desired,'rock-outcrop')
-                response = linearSiteResp(profile,motion,'elastic',0,'y'); % deconvolution
+                response = linearSiteResp(vs_profile,motion,'elastic',0,'y'); % deconvolution
             elseif strcmp(handles.metricdata.type_of_motion_desired,'total')
-                response = linearSiteResp(profile,motion,'rigid',0,'y'); % deconvolution
+                response = linearSiteResp(vs_profile,motion,'rigid',0,'y'); % deconvolution
             end
             
             fh = figure;
@@ -342,7 +342,7 @@ elseif handles.metricdata.load_complete == -1 % single rock layer
 elseif handles.metricdata.load_complete == 1  % multiple soil layers
     profile_fname = handles.metricdata.profile_file_name;
     profile_dname = handles.metricdata.profile_dir_name;
-    profile = importdata(fullfile(profile_dname,profile_fname));
+    vs_profile = importdata(fullfile(profile_dname,profile_fname));
     
     motion_file_name = handles.metricdata.motion_file_name;
     motion_dir_name = handles.metricdata.motion_dir_name;
@@ -352,12 +352,12 @@ elseif handles.metricdata.load_complete == 1  % multiple soil layers
         motion = importdata(fullfile(motion_dir_name,motion_file_name));
         
         if strcmp(handles.metricdata.type_of_motion_desired,'incident')
-            response = linearSiteResp(profile,motion,'elastic',0,'y'); % deconvolution
+            response = linearSiteResp(vs_profile,motion,'elastic',0,'y'); % deconvolution
             response(:,2) = response(:,2)/2;
         elseif strcmp(handles.metricdata.type_of_motion_desired,'rock-outcrop')
-            response = linearSiteResp(profile,motion,'elastic',0,'y'); % deconvolution
+            response = linearSiteResp(vs_profile,motion,'elastic',0,'y'); % deconvolution
         elseif strcmp(handles.metricdata.type_of_motion_desired,'total')
-            response = linearSiteResp(profile,motion,'rigid',0,'y'); % deconvolution
+            response = linearSiteResp(vs_profile,motion,'rigid',0,'y'); % deconvolution
         end
         
         fh = figure;
@@ -390,12 +390,12 @@ elseif handles.metricdata.load_complete == 1  % multiple soil layers
             motion = importdata(fullfile(motion_dir_name,motion_file_name{sj}));
             
             if strcmp(handles.metricdata.type_of_motion_desired,'incident')
-                response = linearSiteResp(profile,motion,'elastic',0,'y'); % deconvolution
+                response = linearSiteResp(vs_profile,motion,'elastic',0,'y'); % deconvolution
                 response(:,2) = response(:,2)/2;
             elseif strcmp(handles.metricdata.type_of_motion_desired,'rock-outcrop')
-                response = linearSiteResp(profile,motion,'elastic',0,'y'); % deconvolution
+                response = linearSiteResp(vs_profile,motion,'elastic',0,'y'); % deconvolution
             elseif strcmp(handles.metricdata.type_of_motion_desired,'total')
-                response = linearSiteResp(profile,motion,'rigid',0,'y'); % deconvolution
+                response = linearSiteResp(vs_profile,motion,'rigid',0,'y'); % deconvolution
             end
             
             fh = figure;
@@ -473,7 +473,7 @@ function pushbutton4_load_profile_Callback(hObject, eventdata, handles)
 global start_dir0;
 
 filter_spec = {'*.dat;*.txt','Text files (*.dat,*.txt)';'*.*','All Files (*.*)'};
-dlg_title = 'Select profile...';
+dlg_title = 'Select Vs profile...';
 [profile_file_name,profile_dir_name,filter_index] ...
     = uigetfile(filter_spec,dlg_title,start_dir0,'MultiSelect','off');
 

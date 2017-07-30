@@ -200,8 +200,8 @@ para_xi = [para_xi;ones(1,size(para_xi,2))]; % manually add a row of "1" at the 
 
 % * * *  Transform para_xi according to the material number  * * * *
 try
-    profile = handles.metricdata.profile;
-    mat = profile(1:end-1,5);
+    vs_profile = handles.metricdata.profile;
+    mat = vs_profile(1:end-1,5);
     para_xi_old = para_xi;
     para_xi_new = [];
     for j = 1 : 1 : length(mat)
@@ -209,7 +209,7 @@ try
     end
     para_xi = para_xi_new;
 catch
-    warndlg('You did not choose a "profile" file. Just a reminder...');
+    warndlg('You did not choose a Vs profile. Just a reminder...');
 end
 % * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 

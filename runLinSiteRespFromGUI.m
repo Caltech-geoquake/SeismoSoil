@@ -1,4 +1,4 @@
-function [ok_to_proceed,h_running] = runLinSiteRespFromGUI(profile,nr_motion,motion,motion_name,output_dir,...
+function [ok_to_proceed,h_running] = runLinSiteRespFromGUI(vs_profile,nr_motion,motion,motion_name,output_dir,...
         factor_rho,factor_xi,unit_factor_accel,bedrock_type,motion_type,fig_visible_option)
 %
 
@@ -8,12 +8,12 @@ fz_axes = 12;
 fz_title = 14;
 
 %% Unit conversions -- soil profile
-rho = profile(:,4);
-xi = profile(:,3);
+rho = vs_profile(:,4);
+xi = vs_profile(:,3);
 rho = rho ./ factor_rho;
 xi = xi ./ factor_xi;
-profile(:,4) = rho;
-profile(:,3) = xi;
+vs_profile(:,4) = rho;
+vs_profile(:,3) = xi;
 
 %% Bedrock type and input motion type processing
 ok_to_proceed = 1;
@@ -91,7 +91,7 @@ if ok_to_proceed == 1
         output_or_not = 'n';
         [freq_array,tf,t_out,accel_on_surface,...
             new_profile,out_a,out_v,out_d,out_gamma,out_tau,max_avd,max_gt] ...
-            = linearSiteRespEveryLayer(profile,accel_incident,'off',boundary,output_or_not);
+            = linearSiteRespEveryLayer(vs_profile,accel_incident,'off',boundary,output_or_not);
         
         filename_TF = sprintf('%s_linear_TF%s',motion_name_without_ext,ext);
         filename_surface_accel = sprintf('%s_accel_on_surface%s',motion_name_without_ext,ext);
