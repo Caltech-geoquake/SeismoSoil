@@ -165,7 +165,9 @@ else
     for i = 1 : 1 : nr_profile
         current_profile_filename = handles.metricdata.motion_file_name{i};
         current_profile = vs_profile{i};
-        plotVsProfileForGUI(current_profile,current_profile_filename);
+        vs30 = calcVs30(current_profile);
+        figure_title = sprintf('%s,Vs30=%.1fm/s',current_profile_filename,vs30);
+        plotVsProfileForGUI(current_profile,figure_title);
     end
     
 end
