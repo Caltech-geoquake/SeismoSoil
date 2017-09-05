@@ -22,7 +22,7 @@ function varargout = SeismoSoil_Hybrid_Model_Parameters(varargin)
 
 % Edit the above text to modify the response to help SeismoSoil_Hybrid_Model_Parameters
 
-% Last Modified by GUIDE v2.5 17-Feb-2015 02:37:43
+% Last Modified by GUIDE v2.5 04-Sep-2017 19:41:06
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -95,7 +95,8 @@ curve = importdata(fullfile(curve_dir_name,curve_file_name));
 handles.metricdata.curve_file_name = curve_file_name;
 handles.metricdata.curve_dir_name = curve_dir_name;
 handles.metricdata.curve = curve;
-handles.metricdata.step1b = 1;
+handles.metricdata.step1b1 = 1;
+handles.metricdata.step1b = handles.metricdata.step1b1 * handles.metricdata.step1b2;
 
 plotCurves(curve);
 
@@ -195,16 +196,18 @@ function uibuttongroup1_SelectionChangedFcn(hObject, eventdata, handles)
 switch get(eventdata.NewValue,'Tag') % Get Tag of selected object.
     case 'radiobutton1a'  % from Vs profile
         GGmax_data_source = 'fromVsProfile';
-        set(handles.metricdata.handle_import_Vs_profile,'enable','on');
+        set(handles.metricdata.handle_import_Vs_profile_A,'enable','on');
         set(handles.metricdata.handle_plot_Vs_profile,'enable','on');
         set(handles.metricdata.handle_import_curve,'enable','on');
         set(handles.metricdata.handle_PI,'enable','on');
         set(handles.metricdata.handle_import_curve,'enable','off');
+        set(handles.metricdata.handle_import_Vs_profile_B,'enable','off');
     case 'radiobutton1b'  % from curve file
         GGmax_data_source = 'fromCurve';
-        set(handles.metricdata.handle_import_Vs_profile,'enable','off');
+        set(handles.metricdata.handle_import_Vs_profile_A,'enable','off');
         set(handles.metricdata.handle_plot_Vs_profile,'enable','off');
         set(handles.metricdata.handle_import_curve,'enable','on');
+        set(handles.metricdata.handle_import_Vs_profile_B,'enable','on');
         set(handles.metricdata.handle_PI,'enable','off');
 end
 handles.metricdata.GGmax_data_source = GGmax_data_source;
@@ -245,6 +248,55 @@ handles.metricdata.Tmax_data_source = Tmax_data_source;
 guidata(hObject,handles);
 
 
+
+% --- Executes during object creation, after setting all properties.
+function pushbutton9_choose_Vs_profile_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pushbutton9_choose_Vs_profile (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+set(hObject,'enable','off');
+handle_import_Vs_profile_B = hObject;  % obtain availability status
+handles.metricdata.handle_import_Vs_profile_B = handle_import_Vs_profile_B;
+handles.metricdata.step1b  = 0;
+handles.metricdata.step1b2 = 0;
+guidata(hObject,handles);
+
+
+% --- Executes on button press in pushbutton9_choose_Vs_profile.
+function pushbutton9_choose_Vs_profile_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton9_choose_Vs_profile (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+global start_dir0;
+
+filter_spec = {'*.dat;*.txt','Text files (*.dat,*.txt)';'*.*','All Files (*.*)'};
+dlg_title = 'Select Vs profile...';
+[profile_file_name,profile_dir_name,filter_index] ...
+    = uigetfile(filter_spec,dlg_title,start_dir0,'MultiSelect','off');
+disp(['User selected ',fullfile(profile_dir_name,profile_file_name)]);
+start_dir0 = profile_dir_name;  % update start_dir0
+vs_profile = importdata(fullfile(profile_dir_name,profile_file_name));
+handles.metricdata.profile = vs_profile;
+handles.metricdata.profile_file_name = profile_file_name;
+handles.metricdata.profile_dir_name = profile_dir_name;
+handles.metricdata.step1b2 = 1;
+handles.metricdata.step1b = handles.metricdata.step1b1 * handles.metricdata.step1b2;
+
+if handles.metricdata.step1b == 1  % damping parameter fitting does not require Vs profile
+    set(handles.metricdata.handle_Start_damping,'enable','on');
+end
+if handles.metricdata.step2 * handles.metricdata.step1a == 1
+    set(handles.metricdata.handle_Start,'enable','on');
+end
+if handles.metricdata.step2 * handles.metricdata.step1b * handles.metricdata.step1a == 1
+    set(handles.metricdata.handle_Start,'enable','on');
+end
+
+guidata(hObject,handles);
+
+
 % --- Executes on button press in pushbutton4_choose_Tau_max_file.
 function pushbutton4_choose_Tau_max_file_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton4_choose_Tau_max_file (see GCBO)
@@ -280,9 +332,10 @@ function pushbutton1_choose_GGmax_data_CreateFcn(hObject, eventdata, handles)
 % handles    empty - handles not created until after all CreateFcns called
 
 set(hObject,'enable','off');
-handle_import_curve = hObject;
+handle_import_curve = hObject;  % obtain availability status
 handles.metricdata.handle_import_curve = handle_import_curve;
-handles.metricdata.step1b = 0;
+handles.metricdata.step1b  = 0;
+handles.metricdata.step1b1 = 0;
 guidata(hObject,handles);
 
 
@@ -291,8 +344,8 @@ function pushbutton2_choose_Vs_profile_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to pushbutton2_choose_Vs_profile (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
-handle_import_Vs_profile = hObject;
-handles.metricdata.handle_import_Vs_profile = handle_import_Vs_profile;
+handle_import_Vs_profile_A = hObject;
+handles.metricdata.handle_import_Vs_profile_A = handle_import_Vs_profile_A;
 handles.metricdata.step1a = 0;
 guidata(hObject,handles);
 
@@ -407,7 +460,7 @@ if ok_to_proceed == 1
     if (handles.metricdata.step1a == 1) && strcmpi(handles.metricdata.GGmax_data_source,'fromVsProfile')
         para = hybridParaFromVsProfile(vs_profile,PI,Tmax,show_fig,save_fig,[],inf);
     elseif (handles.metricdata.step1b == 1) && strcmpi(handles.metricdata.GGmax_data_source,'fromCurve')
-        [para,curves_expanded] = hybridParaFromCurves(vs_profile,curve,Tmax,show_fig,save_fig,[],inf);
+        [para,curves_expanded] = hybridParaFromCurves(vs_profile,curve,Tmax,show_fig,save_fig,inf);
         % curve_file_name = handles.metricdata.curve_file_name;
         % curve_dir_name = handles.metricdata.curve_dir_name;
         % [~,curve_file_name_name,~] = fileparts(curve_file_name);
@@ -477,13 +530,17 @@ if ok_to_proceed == 1
     HH_G_filename = sprintf('HH_G_%s.txt',sitecode);
     if (handles.metricdata.step1a == 1) && strcmpi(handles.metricdata.GGmax_data_source,'fromCurve')
         curve_HH_filename = sprintf('curve_HH_%s_expanded.txt',sitecode);
+        dlmwrite(fullfile(dir_out,curve_HH_filename),curve_HH,'delimiter','\t','precision',6);
+        fprintf('curve_HH file saved to directory: %s\n',dir_out);
     end
     if (handles.metricdata.step1a == 1) && strcmpi(handles.metricdata.GGmax_data_source,'fromVsProfile')
         curve_HH_filename = sprintf('curve_HH_%s.txt',sitecode);
+        dlmwrite(fullfile(dir_out,curve_HH_filename),curve_HH,'delimiter','\t','precision',6);
+        fprintf('curve_HH file saved to directory: %s\n',dir_out);
     end
 
     dlmwrite(fullfile(dir_out,HH_G_filename),para,'delimiter','\t','precision',6);
-    dlmwrite(fullfile(dir_out,curve_HH_filename),curve_HH,'delimiter','\t','precision',6);
+    fprintf('HH_G file saved to directory: %s\n',dir_out);
 
 end
 
@@ -560,8 +617,8 @@ catch
 end
 % * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-Hy_G_filename = sprintf('HH_X_%s.txt',sitecode);
-dlmwrite(fullfile(dir_out,Hy_G_filename),para_xi,'delimiter','\t','precision',6);
+HH_x_filename = sprintf('HH_X_%s.txt',sitecode);
+dlmwrite(fullfile(dir_out,HH_x_filename),para_xi,'delimiter','\t','precision',6);
 
 fitted_curves_filename = sprintf('Damping_curve_fit_by_HH_%s.txt',sitecode);
 dlmwrite(fullfile(dir_out,fitted_curves_filename),fitted_curves,'delimiter','\t','precision',6);
@@ -617,3 +674,5 @@ function pushbutton8_close_all_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 close all;
+
+
