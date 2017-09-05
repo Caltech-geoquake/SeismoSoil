@@ -22,7 +22,7 @@ function varargout = SeismoSoil_Tools(varargin)
 
 % Edit the above text to modify the response to help SeismoSoil_Tools
 
-% Last Modified by GUIDE v2.5 21-May-2015 15:18:21
+% Last Modified by GUIDE v2.5 04-Sep-2017 00:50:47
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -182,3 +182,15 @@ function pushbutton11_SMC_to_2col_Callback(hObject, eventdata, handles)
 
 close SeismoSoil_Tools;
 SeismoSoil_Tools_SMC_To_2COL;
+
+
+% --- Executes on button press in pushbutton12.
+function pushbutton12_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton12 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+close SeismoSoil_Tools;
+SeismoSoil_Tools_GoF_score;
+
+
