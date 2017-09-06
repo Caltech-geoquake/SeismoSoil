@@ -201,6 +201,17 @@ function pushbutton8_Linear_Time_Domain_Callback(hObject, eventdata, handles)
 close SeismoSoil;
 SeismoSoil_Linear_Analysis_Time_Domain;
 
+
+% --- Executes on button press in pushbutton13_nonlinear_EPP.
+function pushbutton13_nonlinear_EPP_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton13_nonlinear_EPP (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+close SeismoSoil;
+SeismoSoil_Nonlinear_Analysis_EPP;
+
+
 % --- Executes on button press in pushbutton10.
 function pushbutton10_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton10 (see GCBO)
@@ -217,7 +228,7 @@ function pushbutton_author_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-hm = msgbox({'Current version: v1.2.8.3, 9/4/2017',...
+hm = msgbox({'Current version: v1.2.8.4, 9/5/2017',...
     'First draft: 6/30/2013',...
     ' ','Authors: Domniki Asimaki, Jian Shi, Wei Li',...
     'GUI Design: Jian Shi',' ','Contact: D.A.- domniki@caltech.edu',...
@@ -238,11 +249,3 @@ set(hm,'position',pos);
 % 06/08/2014 - Bug fix in fourierTransform
 
 
-% --- Executes on button press in pushbutton13_nonlinear_EPP.
-function pushbutton13_nonlinear_EPP_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton13_nonlinear_EPP (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-close SeismoSoil;
-SeismoSoil_Nonlinear_Analysis_EPP;
