@@ -278,6 +278,7 @@ dlg_title = 'Select Vs profile...';
 disp(['User selected ',fullfile(profile_dir_name,profile_file_name)]);
 start_dir0 = profile_dir_name;  % update start_dir0
 vs_profile = importdata(fullfile(profile_dir_name,profile_file_name));
+plotVsProfileForGUI(vs_profile);
 handles.metricdata.profile = vs_profile;
 handles.metricdata.profile_file_name = profile_file_name;
 handles.metricdata.profile_dir_name = profile_dir_name;
