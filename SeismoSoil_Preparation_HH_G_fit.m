@@ -1,35 +1,35 @@
-function varargout = SeismoSoil_Hybrid_Model_Parameters(varargin)
-% SEISMOSOIL_HYBRID_MODEL_PARAMETERS MATLAB code for SeismoSoil_Hybrid_Model_Parameters.fig
-%      SEISMOSOIL_HYBRID_MODEL_PARAMETERS, by itself, creates a new SEISMOSOIL_HYBRID_MODEL_PARAMETERS or raises the existing
+function varargout = SeismoSoil_Preparation_HH_G_fit(varargin)
+% SEISMOSOIL_PREPARATION_HH_G_FIT MATLAB code for SeismoSoil_Preparation_HH_G_fit.fig
+%      SEISMOSOIL_PREPARATION_HH_G_FIT, by itself, creates a new SEISMOSOIL_PREPARATION_HH_G_FIT or raises the existing
 %      singleton*.
 %
-%      H = SEISMOSOIL_HYBRID_MODEL_PARAMETERS returns the handle to a new SEISMOSOIL_HYBRID_MODEL_PARAMETERS or the handle to
+%      H = SEISMOSOIL_PREPARATION_HH_G_FIT returns the handle to a new SEISMOSOIL_PREPARATION_HH_G_FIT or the handle to
 %      the existing singleton*.
 %
-%      SEISMOSOIL_HYBRID_MODEL_PARAMETERS('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in SEISMOSOIL_HYBRID_MODEL_PARAMETERS.M with the given input arguments.
+%      SEISMOSOIL_PREPARATION_HH_G_FIT('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in SEISMOSOIL_PREPARATION_HH_G_FIT.M with the given input arguments.
 %
-%      SEISMOSOIL_HYBRID_MODEL_PARAMETERS('Property','Value',...) creates a new SEISMOSOIL_HYBRID_MODEL_PARAMETERS or raises the
+%      SEISMOSOIL_PREPARATION_HH_G_FIT('Property','Value',...) creates a new SEISMOSOIL_PREPARATION_HH_G_FIT or raises the
 %      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before SeismoSoil_Hybrid_Model_Parameters_OpeningFcn gets called.  An
+%      applied to the GUI before SeismoSoil_Preparation_HH_G_fit_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to SeismoSoil_Hybrid_Model_Parameters_OpeningFcn via varargin.
+%      stop.  All inputs are passed to SeismoSoil_Preparation_HH_G_fit_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
-% Edit the above text to modify the response to help SeismoSoil_Hybrid_Model_Parameters
+% Edit the above text to modify the response to help SeismoSoil_Preparation_HH_G_fit
 
-% Last Modified by GUIDE v2.5 04-Sep-2017 19:41:06
+% Last Modified by GUIDE v2.5 07-Sep-2017 23:56:11
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @SeismoSoil_Hybrid_Model_Parameters_OpeningFcn, ...
-                   'gui_OutputFcn',  @SeismoSoil_Hybrid_Model_Parameters_OutputFcn, ...
+                   'gui_OpeningFcn', @SeismoSoil_Preparation_HH_G_fit_OpeningFcn, ...
+                   'gui_OutputFcn',  @SeismoSoil_Preparation_HH_G_fit_OutputFcn, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -44,21 +44,21 @@ end
 % End initialization code - DO NOT EDIT
 
 
-% --- Executes just before SeismoSoil_Hybrid_Model_Parameters is made visible.
-function SeismoSoil_Hybrid_Model_Parameters_OpeningFcn(hObject, eventdata, handles, varargin)
+% --- Executes just before SeismoSoil_Preparation_HH_G_fit is made visible.
+function SeismoSoil_Preparation_HH_G_fit_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to SeismoSoil_Hybrid_Model_Parameters (see VARARGIN)
+% varargin   command line arguments to SeismoSoil_Preparation_HH_G_fit (see VARARGIN)
 
-% Choose default command line output for SeismoSoil_Hybrid_Model_Parameters
+% Choose default command line output for SeismoSoil_Preparation_HH_G_fit
 handles.output = hObject;
 
 % Update handles structure
 guidata(hObject, handles);
 
-% UIWAIT makes SeismoSoil_Hybrid_Model_Parameters wait for user response (see UIRESUME)
+% UIWAIT makes SeismoSoil_Preparation_HH_G_fit wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
 % When this property is set to 1, this GUI will stays open even if "close
@@ -67,7 +67,7 @@ setappdata(hObject, 'IgnoreCloseAll', 1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = SeismoSoil_Hybrid_Model_Parameters_OutputFcn(hObject, eventdata, handles) 
+function varargout = SeismoSoil_Preparation_HH_G_fit_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -155,36 +155,6 @@ h = vs_profile(:,1);
 Vs = vs_profile(:,2);
 plotVsProfileFromArrays(h,Vs,sum(h));
 title(handles.metricdata.profile_file_name,'interpreter','none');
-
-
-function edit1_Callback(hObject, eventdata, handles)
-% hObject    handle to edit1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit1 as text
-%        str2double(get(hObject,'String')) returns contents of edit1 as a double
-
-PI = str2double(get(hObject,'String'));
-handles.metricdata.PI = PI;
-guidata(hObject,handles);
-
-
-% --- Executes during object creation, after setting all properties.
-function edit1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-handles.metricdata.handle_PI = hObject;
-handles.metricdata.PI = 20;
-guidata(hObject,handles);
 
 
 % --- Executes when selected object is changed in uibuttongroup1.
@@ -391,9 +361,8 @@ function pushbutton6_return_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton6_return (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-close SeismoSoil_Hybrid_Model_Parameters;
-SeismoSoil_Input_Files_Preperation;
-
+close SeismoSoil_Preparation_HH_G_fit;
+SeismoSoil_Preparation;
 
 
 % --- Executes on button press in pushbutton5_GGmax_para.
@@ -437,14 +406,13 @@ if ok_to_proceed == 1
         curve = handles.metricdata.curve;
     end
     vs_profile = handles.metricdata.profile;
-    % PI = handles.metricdata.PI;
     Vs = vs_profile(:,2);
     if vs_profile(end,1) == 0
         PI = zeros(length(Vs)-1,1);
     else
         PI = zeros(length(Vs),1);
     end
-    for j = 1 : 1 : length(PI)  % calculate PI from Vs values
+    for j = 1 : 1 : length(PI)  % PI = f(Vs), see Appendix of Shi & Asimaki (2017)
         if Vs(j) <= 200
             PI(j) = 10;
         elseif Vs(j) <= 360

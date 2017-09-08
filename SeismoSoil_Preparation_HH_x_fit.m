@@ -1,35 +1,35 @@
-function varargout = SeismoSoil_HH_x_fit(varargin)
-% SEISMOSOIL_HH_X_FIT MATLAB code for SeismoSoil_HH_x_fit.fig
-%      SEISMOSOIL_HH_X_FIT, by itself, creates a new SEISMOSOIL_HH_X_FIT or raises the existing
+function varargout = SeismoSoil_Preparation_HH_x_fit(varargin)
+% SEISMOSOIL_PREPARATION_HH_X_FIT MATLAB code for SeismoSoil_Preparation_HH_x_fit.fig
+%      SEISMOSOIL_PREPARATION_HH_X_FIT, by itself, creates a new SEISMOSOIL_PREPARATION_HH_X_FIT or raises the existing
 %      singleton*.
 %
-%      H = SEISMOSOIL_HH_X_FIT returns the handle to a new SEISMOSOIL_HH_X_FIT or the handle to
+%      H = SEISMOSOIL_PREPARATION_HH_X_FIT returns the handle to a new SEISMOSOIL_PREPARATION_HH_X_FIT or the handle to
 %      the existing singleton*.
 %
-%      SEISMOSOIL_HH_X_FIT('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in SEISMOSOIL_HH_X_FIT.M with the given input arguments.
+%      SEISMOSOIL_PREPARATION_HH_X_FIT('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in SEISMOSOIL_PREPARATION_HH_X_FIT.M with the given input arguments.
 %
-%      SEISMOSOIL_HH_X_FIT('Property','Value',...) creates a new SEISMOSOIL_HH_X_FIT or raises the
+%      SEISMOSOIL_PREPARATION_HH_X_FIT('Property','Value',...) creates a new SEISMOSOIL_PREPARATION_HH_X_FIT or raises the
 %      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before SeismoSoil_HH_x_fit_OpeningFcn gets called.  An
+%      applied to the GUI before SeismoSoil_Preparation_HH_x_fit_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to SeismoSoil_HH_x_fit_OpeningFcn via varargin.
+%      stop.  All inputs are passed to SeismoSoil_Preparation_HH_x_fit_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
-% Edit the above text to modify the response to help SeismoSoil_HH_x_fit
+% Edit the above text to modify the response to help SeismoSoil_Preparation_HH_x_fit
 
-% Last Modified by GUIDE v2.5 29-Mar-2016 17:50:51
+% Last Modified by GUIDE v2.5 08-Sep-2017 00:13:49
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @SeismoSoil_HH_x_fit_OpeningFcn, ...
-                   'gui_OutputFcn',  @SeismoSoil_HH_x_fit_OutputFcn, ...
+                   'gui_OpeningFcn', @SeismoSoil_Preparation_HH_x_fit_OpeningFcn, ...
+                   'gui_OutputFcn',  @SeismoSoil_Preparation_HH_x_fit_OutputFcn, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -44,21 +44,21 @@ end
 % End initialization code - DO NOT EDIT
 
 
-% --- Executes just before SeismoSoil_HH_x_fit is made visible.
-function SeismoSoil_HH_x_fit_OpeningFcn(hObject, eventdata, handles, varargin)
+% --- Executes just before SeismoSoil_Preparation_HH_x_fit is made visible.
+function SeismoSoil_Preparation_HH_x_fit_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to SeismoSoil_HH_x_fit (see VARARGIN)
+% varargin   command line arguments to SeismoSoil_Preparation_HH_x_fit (see VARARGIN)
 
-% Choose default command line output for SeismoSoil_HH_x_fit
+% Choose default command line output for SeismoSoil_Preparation_HH_x_fit
 handles.output = hObject;
 
 % Update handles structure
 guidata(hObject, handles);
 
-% UIWAIT makes SeismoSoil_HH_x_fit wait for user response (see UIRESUME)
+% UIWAIT makes SeismoSoil_Preparation_HH_x_fit wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
 % When this property is set to 1, this GUI will stays open even if "close
@@ -67,7 +67,7 @@ setappdata(hObject, 'IgnoreCloseAll', 1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = SeismoSoil_HH_x_fit_OutputFcn(hObject, eventdata, handles) 
+function varargout = SeismoSoil_Preparation_HH_x_fit_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -130,15 +130,13 @@ handles.metricdata.step1b = 0;
 guidata(hObject,handles);
 
 
-
 % --- Executes on button press in pushbutton6_return.
 function pushbutton6_return_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton6_return (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-close SeismoSoil_HH_x_fit;
-SeismoSoil_Input_Files_Preperation;
-
+close SeismoSoil_Preparation_HH_x_fit;
+SeismoSoil_Preparation;
 
 
 % --- Executes on button press in checkbox1_show_fig.
