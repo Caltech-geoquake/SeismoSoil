@@ -1,35 +1,35 @@
-function varargout = SeismoSoil_Profile_Prepare(varargin)
-% SEISMOSOIL_PROFILE_PREPARE MATLAB code for SeismoSoil_Profile_Prepare.fig
-%      SEISMOSOIL_PROFILE_PREPARE, by itself, creates a new SEISMOSOIL_PROFILE_PREPARE or raises the existing
+function varargout = SeismoSoil_Preparation_Vs_Profile(varargin)
+% SEISMOSOIL_PREPARATION_VS_PROFILE MATLAB code for SeismoSoil_Preparation_Vs_Profile.fig
+%      SEISMOSOIL_PREPARATION_VS_PROFILE, by itself, creates a new SEISMOSOIL_PREPARATION_VS_PROFILE or raises the existing
 %      singleton*.
 %
-%      H = SEISMOSOIL_PROFILE_PREPARE returns the handle to a new SEISMOSOIL_PROFILE_PREPARE or the handle to
+%      H = SEISMOSOIL_PREPARATION_VS_PROFILE returns the handle to a new SEISMOSOIL_PREPARATION_VS_PROFILE or the handle to
 %      the existing singleton*.
 %
-%      SEISMOSOIL_PROFILE_PREPARE('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in SEISMOSOIL_PROFILE_PREPARE.M with the given input arguments.
+%      SEISMOSOIL_PREPARATION_VS_PROFILE('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in SEISMOSOIL_PREPARATION_VS_PROFILE.M with the given input arguments.
 %
-%      SEISMOSOIL_PROFILE_PREPARE('Property','Value',...) creates a new SEISMOSOIL_PROFILE_PREPARE or raises the
+%      SEISMOSOIL_PREPARATION_VS_PROFILE('Property','Value',...) creates a new SEISMOSOIL_PREPARATION_VS_PROFILE or raises the
 %      existing singleton*.  Starting from the left, property value pairs are
-%      applied to the GUI before SeismoSoil_Profile_Prepare_OpeningFcn gets called.  An
+%      applied to the GUI before SeismoSoil_Preparation_Vs_Profile_OpeningFcn gets called.  An
 %      unrecognized property name or invalid value makes property application
-%      stop.  All inputs are passed to SeismoSoil_Profile_Prepare_OpeningFcn via varargin.
+%      stop.  All inputs are passed to SeismoSoil_Preparation_Vs_Profile_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
-% Edit the above text to modify the response to help SeismoSoil_Profile_Prepare
+% Edit the above text to modify the response to help SeismoSoil_Preparation_Vs_Profile
 
-% Last Modified by GUIDE v2.5 24-Aug-2014 23:41:54
+% Last Modified by GUIDE v2.5 08-Sep-2017 00:53:57
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @SeismoSoil_Profile_Prepare_OpeningFcn, ...
-                   'gui_OutputFcn',  @SeismoSoil_Profile_Prepare_OutputFcn, ...
+                   'gui_OpeningFcn', @SeismoSoil_Preparation_Vs_Profile_OpeningFcn, ...
+                   'gui_OutputFcn',  @SeismoSoil_Preparation_Vs_Profile_OutputFcn, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -44,26 +44,26 @@ end
 % End initialization code - DO NOT EDIT
 
 
-% --- Executes just before SeismoSoil_Profile_Prepare is made visible.
-function SeismoSoil_Profile_Prepare_OpeningFcn(hObject, eventdata, handles, varargin)
+% --- Executes just before SeismoSoil_Preparation_Vs_Profile is made visible.
+function SeismoSoil_Preparation_Vs_Profile_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to SeismoSoil_Profile_Prepare (see VARARGIN)
+% varargin   command line arguments to SeismoSoil_Preparation_Vs_Profile (see VARARGIN)
 
-% Choose default command line output for SeismoSoil_Profile_Prepare
+% Choose default command line output for SeismoSoil_Preparation_Vs_Profile
 handles.output = hObject;
 
 % Update handles structure
 guidata(hObject, handles);
 
-% UIWAIT makes SeismoSoil_Profile_Prepare wait for user response (see UIRESUME)
+% UIWAIT makes SeismoSoil_Preparation_Vs_Profile wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = SeismoSoil_Profile_Prepare_OutputFcn(hObject, eventdata, handles) 
+function varargout = SeismoSoil_Preparation_Vs_Profile_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -326,16 +326,6 @@ else
 end
 
 
-% --- Executes on button press in pushbutton3_return.
-function pushbutton3_return_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton3_return (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-close SeismoSoil_Profile_Prepare;
-SeismoSoil_Input_Files_Preperation;
-
-
 % --- Executes on button press in pushbutton4_auto_calc_xi_rho.
 function pushbutton4_auto_calc_xi_rho_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton4_auto_calc_xi_rho (see GCBO)
@@ -414,3 +404,13 @@ set(handles.metricdata.rock_table_handle,'data',...
     handles.metricdata.rock_property{4},'   N/A'});
     
 guidata(hObject,handles);
+
+
+% --- Executes on button press in pushbutton3_return.
+function pushbutton3_return_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton3_return (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+close SeismoSoil_Preparation_Vs_Profile;
+SeismoSoil_Preparation;

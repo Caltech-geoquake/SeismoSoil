@@ -93,7 +93,6 @@ close SeismoSoil;
 SeismoSoil_Equivalent_Linear_Analysis;
 
 
-
 % --- Executes on button press in pushbutton3_nonlinear_H2.
 function pushbutton3_nonlinear_H2_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3_nonlinear_H2 (see GCBO)
@@ -111,7 +110,7 @@ function pushbutton1_input_preparation_Callback(hObject,eventdata,handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 close SeismoSoil;
-SeismoSoil_Input_Files_Preperation;
+SeismoSoil_Preparation;
 
 % % % --------------------------------------------------------------------
 % % function Menu1_help_Callback(hObject, eventdata, handles)
@@ -228,7 +227,7 @@ function pushbutton_author_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-hm = msgbox({'Current version: v1.2.8.5, 9/5/2017',...
+hm = msgbox({'Current version: v1.2.8.6, 9/8/2017',...
     'First draft: 6/30/2013',...
     ' ','Authors: Domniki Asimaki, Jian Shi, Wei Li',...
     'GUI Design: Jian Shi',' ','Contact: D.A.- domniki@caltech.edu',...
