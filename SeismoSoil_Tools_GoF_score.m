@@ -105,7 +105,6 @@ set(handles.edit1_path_meas,'string',sprintf('%s...%s%s',meas_dir_name(1:21),mea
 guidata(hObject,handles);
 
 
-
 % --- Executes on button press in pushbutton_select_simu.
 function pushbutton_select_simu_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton_select_simu (see GCBO)
@@ -273,8 +272,6 @@ handles.metricdata.meas_unit = meas_unit;
 guidata(hObject,handles);
 
 
-
-
 % --- Executes during object creation, after setting all properties.
 function uipanel2_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to uipanel2 (see GCBO)
@@ -305,7 +302,6 @@ switch get(eventdata.NewValue,'Tag') % Get Tag of selected object.
 end
 handles.metricdata.simu_unit = simu_unit;
 guidata(hObject,handles);
-
 
 
 % --- Executes on button press in pushbutton3_calc_score.
@@ -340,8 +336,9 @@ end
 fmin = handles.metricdata.fmin;
 fmax = handles.metricdata.fmax;
 
-gofScoresNew(meas,simu,fmin,fmax,[1 1 1 1]);
-
+fprintf('Calculating goodness-of-fit scores...  ');
+gofScores(meas,simu,fmin,fmax,[1 1 1 1],[1 1 1],4,'n');
+fprintf('done.\n');
 
 
 % --- Executes on button press in pushbutton4_close_all.
