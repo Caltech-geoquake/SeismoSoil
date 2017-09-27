@@ -22,7 +22,7 @@ function varargout = SeismoSoil_Preparation_HH_G_fit(varargin)
 
 % Edit the above text to modify the response to help SeismoSoil_Preparation_HH_G_fit
 
-% Last Modified by GUIDE v2.5 27-Sep-2017 14:18:17
+% Last Modified by GUIDE v2.5 27-Sep-2017 15:59:15
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -77,9 +77,9 @@ function varargout = SeismoSoil_Preparation_HH_G_fit_OutputFcn(hObject, eventdat
 varargout{1} = handles.output;
 
 
-% --- Executes on button press in pushbutton_step1b1_choose_GGmax_data.
-function pushbutton_step1b1_choose_GGmax_data_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton_step1b1_choose_GGmax_data (see GCBO)
+% --- Executes on button press in pushbutton_step1b_choose_GGmax_data.
+function pushbutton_step1b_choose_GGmax_data_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton_step1b_choose_GGmax_data (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
@@ -295,8 +295,8 @@ guidata(hObject,handles);
 
 
 % --- Executes during object creation, after setting all properties.
-function pushbutton_step1b1_choose_GGmax_data_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to pushbutton_step1b1_choose_GGmax_data (see GCBO)
+function pushbutton_step1b_choose_GGmax_data_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pushbutton_step1b_choose_GGmax_data (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
