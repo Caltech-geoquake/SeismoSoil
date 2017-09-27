@@ -22,7 +22,7 @@ function varargout = SeismoSoil_Preparation_HH_G_fit(varargin)
 
 % Edit the above text to modify the response to help SeismoSoil_Preparation_HH_G_fit
 
-% Last Modified by GUIDE v2.5 07-Sep-2017 23:56:11
+% Last Modified by GUIDE v2.5 27-Sep-2017 14:18:17
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -77,9 +77,9 @@ function varargout = SeismoSoil_Preparation_HH_G_fit_OutputFcn(hObject, eventdat
 varargout{1} = handles.output;
 
 
-% --- Executes on button press in pushbutton1_choose_GGmax_data.
-function pushbutton1_choose_GGmax_data_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton1_choose_GGmax_data (see GCBO)
+% --- Executes on button press in pushbutton_step1b1_choose_GGmax_data.
+function pushbutton_step1b1_choose_GGmax_data_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton_step1b1_choose_GGmax_data (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
@@ -113,9 +113,9 @@ end
 guidata(hObject,handles);
 
 
-% --- Executes on button press in pushbutton2_choose_Vs_profile.
-function pushbutton2_choose_Vs_profile_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton2_choose_Vs_profile (see GCBO)
+% --- Executes on button press in pushbutton_step1a_choose_Vs_profile.
+function pushbutton_step1a_choose_Vs_profile_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton_step1a_choose_Vs_profile (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
@@ -144,9 +144,9 @@ handles.metricdata.step1a = 1;
 guidata(hObject,handles);
 
 
-% --- Executes on button press in pushbutton3_plot_Vs_profile.
-function pushbutton3_plot_Vs_profile_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton3_plot_Vs_profile (see GCBO)
+% --- Executes on button press in pushbutton_step1a_plot_Vs_profile.
+function pushbutton_step1a_plot_Vs_profile_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton_step1a_plot_Vs_profile (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
@@ -169,7 +169,6 @@ switch get(eventdata.NewValue,'Tag') % Get Tag of selected object.
         set(handles.metricdata.handle_import_Vs_profile_A,'enable','on');
         set(handles.metricdata.handle_plot_Vs_profile,'enable','on');
         set(handles.metricdata.handle_import_curve,'enable','on');
-        set(handles.metricdata.handle_PI,'enable','on');
         set(handles.metricdata.handle_import_curve,'enable','off');
         set(handles.metricdata.handle_import_Vs_profile_B,'enable','off');
     case 'radiobutton1b'  % from curve file
@@ -178,7 +177,6 @@ switch get(eventdata.NewValue,'Tag') % Get Tag of selected object.
         set(handles.metricdata.handle_plot_Vs_profile,'enable','off');
         set(handles.metricdata.handle_import_curve,'enable','on');
         set(handles.metricdata.handle_import_Vs_profile_B,'enable','on');
-        set(handles.metricdata.handle_PI,'enable','off');
 end
 handles.metricdata.GGmax_data_source = GGmax_data_source;
 guidata(hObject,handles);
@@ -220,8 +218,8 @@ guidata(hObject,handles);
 
 
 % --- Executes during object creation, after setting all properties.
-function pushbutton9_choose_Vs_profile_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to pushbutton9_choose_Vs_profile (see GCBO)
+function pushbutton_step1b_choose_Vs_profile_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pushbutton_step1b_choose_Vs_profile (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -233,9 +231,9 @@ handles.metricdata.step1b2 = 0;
 guidata(hObject,handles);
 
 
-% --- Executes on button press in pushbutton9_choose_Vs_profile.
-function pushbutton9_choose_Vs_profile_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton9_choose_Vs_profile (see GCBO)
+% --- Executes on button press in pushbutton_step1b_choose_Vs_profile.
+function pushbutton_step1b_choose_Vs_profile_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton_step1b_choose_Vs_profile (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
@@ -255,9 +253,9 @@ handles.metricdata.profile_dir_name = profile_dir_name;
 handles.metricdata.step1b2 = 1;
 handles.metricdata.step1b = handles.metricdata.step1b1 * handles.metricdata.step1b2;
 
-if handles.metricdata.step1b == 1  % damping parameter fitting does not require Vs profile
-    set(handles.metricdata.handle_Start_damping,'enable','on');
-end
+% if handles.metricdata.step1b == 1  % damping parameter fitting does not require Vs profile
+%     set(handles.metricdata.handle_Start_damping,'enable','on');
+% end
 if handles.metricdata.step2 * handles.metricdata.step1a == 1
     set(handles.metricdata.handle_Start,'enable','on');
 end
@@ -268,9 +266,9 @@ end
 guidata(hObject,handles);
 
 
-% --- Executes on button press in pushbutton4_choose_Tau_max_file.
-function pushbutton4_choose_Tau_max_file_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton4_choose_Tau_max_file (see GCBO)
+% --- Executes on button press in pushbutton_step2_choose_Tau_max_file.
+function pushbutton_step2_choose_Tau_max_file_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton_step2_choose_Tau_max_file (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
@@ -297,8 +295,8 @@ guidata(hObject,handles);
 
 
 % --- Executes during object creation, after setting all properties.
-function pushbutton1_choose_GGmax_data_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to pushbutton1_choose_GGmax_data (see GCBO)
+function pushbutton_step1b1_choose_GGmax_data_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pushbutton_step1b1_choose_GGmax_data (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -311,8 +309,8 @@ guidata(hObject,handles);
 
 
 % --- Executes during object creation, after setting all properties.
-function pushbutton2_choose_Vs_profile_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to pushbutton2_choose_Vs_profile (see GCBO)
+function pushbutton_step1a_choose_Vs_profile_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pushbutton_step1a_choose_Vs_profile (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 handle_import_Vs_profile_A = hObject;
@@ -322,8 +320,8 @@ guidata(hObject,handles);
 
 
 % --- Executes during object creation, after setting all properties.
-function pushbutton3_plot_Vs_profile_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to pushbutton3_plot_Vs_profile (see GCBO)
+function pushbutton_step1a_plot_Vs_profile_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pushbutton_step1a_plot_Vs_profile (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 handle_plot_Vs_profile = hObject;
@@ -332,8 +330,8 @@ guidata(hObject,handles);
 
 
 % --- Executes during object creation, after setting all properties.
-function pushbutton4_choose_Tau_max_file_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to pushbutton4_choose_Tau_max_file (see GCBO)
+function pushbutton_step2_choose_Tau_max_file_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pushbutton_step2_choose_Tau_max_file (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
