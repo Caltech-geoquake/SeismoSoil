@@ -138,6 +138,15 @@ handles.metricdata.nr_motion = nr_motion;
 motion = cell(nr_motion,1); % preallocation of cell array
 for i = 1 : 1 : nr_motion
     motion{i} = importdata(fullfile(motion_dir_name,motion_file_name{i}));
+    
+    [check_flag,err_msg] = checkInputs(motion{i},'motion');
+    if check_flag == -1
+        if nr_motion > 1  % if user loads more than one ground motions
+            err_msg = sprintf('Motion #%d %s',i,err_msg(6:end));
+        end
+        fprintf('***** %s *****\n',err_msg);
+        msgbox(err_msg, 'Warning');
+    end
 end
 handles.metricdata.motion = motion;
 handles.metricdata.step4_complete = 1;
@@ -321,10 +330,6 @@ handles.metricdata.fc_low = fc_low;
 guidata(hObject,handles);
 
 
-
-
-    
-    
 % --- Executes during object creation, after setting all properties.
 function edit3_cutoff_freq_high_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to edit3_cutoff_freq_high (see GCBO)
