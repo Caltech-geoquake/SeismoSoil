@@ -112,25 +112,6 @@ function pushbutton1_input_preparation_Callback(hObject,eventdata,handles)
 close SeismoSoil;
 SeismoSoil_Preparation;
 
-% % % --------------------------------------------------------------------
-% % function Menu1_help_Callback(hObject, eventdata, handles)
-% % % hObject    handle to Menu1_help (see GCBO)
-% % % eventdata  reserved - to be defined in a future version of MATLAB
-% % % handles    structure with handles and user data (see GUIDATA)
-% % 
-% % 
-% % 
-% % % --------------------------------------------------------------------
-% % function Menu1_1_about_Callback(hObject, eventdata, handles)
-% % % hObject    handle to Menu1_1_about (see GCBO)
-% % % eventdata  reserved - to be defined in a future version of MATLAB
-% % % handles    structure with handles and user data (see GUIDATA)
-% % 
-% % msgbox({'v1.1.4, 9/21/2013','(First draft: 6/30/2013)',' ','Authors: Dominic Assimaki, Wei Li & Jian Shi',...
-% %     'GUI Design: Jian Shi',' ','Contact: Dr. Assimaki - dominic.assimaki@ce.gatech.edu',...
-% %     '              Jian Shi - shijian@gatech.edu'},'About');
-% % 
-
 
 % --- Executes on button press in pushbutton4_tools.
 function pushbutton4_tools_Callback(hObject, eventdata, handles)
@@ -240,11 +221,4 @@ set(chm,'FontName','Helvetica');
 pos = get(hm,'position');
 pos = pos + [0,0,42,10];
 set(hm,'position',pos);
-
-% Change log:
-% 03/18/2014 - Added PI (plasticity index) in GTSRA_Dynamic_Soil_Properties
-% 06/07/2014 - Various updats of signal filtering, Fourier spectra, baseline
-%              correction, etc.
-% 06/08/2014 - Bug fix in fourierTransform
-
 
