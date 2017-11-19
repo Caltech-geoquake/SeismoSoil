@@ -85,7 +85,7 @@ The user manual, which contains a tutorial and technical details, is here.
 
 ### Copyright
 
-(C) 2014-2017, GeoQuake Research Group, California Institute of Technology
+(c) 2014-2017, GeoQuake Research Group, California Institute of Technology
 
 
 
