@@ -136,16 +136,26 @@ if ok_to_proceed == 1
         fprintf('Ground motion No. %d\n',ii);
         %% Prepare output folder
         current_motion_name_with_ext = motion_name{ii};
-        [temp_dir,motion_name_without_ext,ext] = fileparts(current_motion_name_with_ext);
+        [~,motion_name_without_ext,ext] = fileparts(current_motion_name_with_ext);
         output_dir2 = fullfile(output_dir,motion_name_without_ext);
         dir_h2rev = output_dir2;
         mkdir(dir_h2rev);
-        if strcmpi(computer,'pcwin64')
-            copyfile('TDLinear.exe',dir_h2rev);
-        elseif strcmpi(computer,'maci64')
-%             fortran_exec_dir = fullfile(current_dir,'SeismoSoil.app/Contents/MacOS/');
-%             copyfile(fullfile(fortran_exec_dir,'TDLinear'),dir_h2rev);
-            copyfile('/Applications/SeismoSoil.app/Contents/MacOS/TDLinear',dir_h2rev);
+        [fortran_dir,~,~] = fileparts(mfilename('fullpath'));  % assume same as this M file
+        if ispc()
+            if isdeployed()
+                copyfile('TDLinear.exe',dir_h2rev);
+            else
+                copyfile(fullfile(fortran_dir,'TDLinear.exe'),dir_h2rev);
+            end
+        elseif ismac()
+            if isdeployed()
+                copyfile('/Applications/SeismoSoil.app/Contents/MacOS/TDLinear',dir_h2rev);
+            else
+                copyfile(fullfile(fortran_dir,'TDLinear'),dir_h2rev);
+            end
+        else  % Linux, not mac
+            warning('Compiled SeismoSoil does not work properly on Linux.');
+            copyfile(fullfile(fortran_dir,'TDLinear'),dir_h2rev);
         end
         
         %% Reconstruct "tabk.dat"
