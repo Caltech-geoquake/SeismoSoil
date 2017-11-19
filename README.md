@@ -1,6 +1,6 @@
 # *SeismoSoil*
 
-###### A software package for 1D site response analysis and engineering seismology tools
+#### Software package for 1D site response analysis and engineering seismology tools
 
 *SeismoSoil* provides the following site response analysis routines:
 
