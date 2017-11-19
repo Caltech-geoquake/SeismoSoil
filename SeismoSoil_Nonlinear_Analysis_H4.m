@@ -121,6 +121,12 @@ else
     
     vs_profile_ = importdata(fullfile(profile_dir_name,profile_file_name));
     handles.metricdata.profile = vs_profile_;
+
+    [check_flag,err_msg] = checkInputs(vs_profile_,'vs_profile');
+    if check_flag == -1
+        fprintf('***** %s *****\n',err_msg);
+        msgbox(err_msg, 'Warning');
+    end
     
     handles.metricdata.step1_complete = 1;
     
@@ -131,7 +137,6 @@ else
 end
 
 guidata(hObject,handles);
-
 
 
 % --- Executes on selection change in popupmenu1a_bedrock_type.
@@ -258,6 +263,12 @@ else
     
     curve_ = importdata(fullfile(curve_dir_name,curve_file_name));
     handles.metricdata.curve = curve_;
+
+    [check_flag,err_msg] = checkInputs(curve_,'curve');
+    if check_flag == -1
+        fprintf('***** %s *****\n',err_msg);
+        msgbox(err_msg, 'Warning');
+    end
     
     handles.metricdata.step2_complete = 1;
 end
@@ -306,10 +317,6 @@ handles.metricdata.rho_unit_division_factor = rho_unit_division_factor;
 guidata(hObject,handles);
 
 
-
-
-
-
 % --- Executes during object creation, after setting all properties.
 function uipanel1b_xi_unit_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to uipanel1b_xi_unit (see GCBO)
@@ -338,18 +345,6 @@ switch get(eventdata.NewValue,'Tag') % Get Tag of selected object.
 end
 handles.metricdata.xi_unit_division_factor = xi_unit_division_factor;
 guidata(hObject,handles);
-
-
-
-% % % % --- Executes on button press in pushbutton66666666.
-% % % function pushbutton66666666_Callback(hObject, eventdata, handles)
-% % % % hObject    handle to pushbutton66666666 (see GCBO)
-% % % % eventdata  reserved - to be defined in a future version of MATLAB
-% % % % handles    structure with handles and user data (see GUIDATA)
-% % % 
-% % % profile_ = handles.metricdata.profile;
-% % % rho = profile_(:,4);
-% % % rho,
 
 
 % --- Executes during object creation, after setting all properties.
@@ -389,9 +384,15 @@ else
     H4G = importdata(fullfile(H4G_dir_name,H4G_file_name));
     handles.metricdata.H4G = H4G;
     
+    [check_flag,err_msg] = checkInputs(H4G,'h4g');
+    if check_flag == -1
+        fprintf('***** %s *****\n',err_msg);
+        msgbox(err_msg, 'Warning');
+    end
+    
     handles.metricdata.already_import_H4G = 1;
     handles.metricdata.step3A_complete = 1;
-    
+
     if (handles.metricdata.step3A_complete == 1) && (handles.metricdata.step3B_complete == 1)
         handles.metricdata.step3_complete = 1;
     end
@@ -436,8 +437,6 @@ end
 guidata(hObject,handles);
 
 
-
-
 % --- Executes during object creation, after setting all properties.
 function pushbutton3Ba_select_H4x_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to pushbutton3Ba_select_H4x (see GCBO)
@@ -447,8 +446,6 @@ function pushbutton3Ba_select_H4x_CreateFcn(hObject, eventdata, handles)
 handles.metricdata.already_import_H4x = 0;
 handles.metricdata.step3B_complete = 0;
 guidata(hObject,handles);
-
-
 
 
 % --- Executes on button press in pushbutton3Ba_select_H4x.
@@ -475,6 +472,12 @@ else
     
     H4x = importdata(fullfile(H4x_dir_name,H4x_file_name));
     handles.metricdata.H4x = H4x;
+    
+    [check_flag,err_msg] = checkInputs(H4x,'h4x');
+    if check_flag == -1
+        fprintf('***** %s *****\n',err_msg);
+        msgbox(err_msg, 'Warning');
+    end
     
     handles.metricdata.already_import_H4x = 1;
     handles.metricdata.step3B_complete = 1;
@@ -523,10 +526,6 @@ end
 guidata(hObject,handles);
 
 
-
-
-
-
 % --- Executes during object creation, after setting all properties.
 function uipanel_unit_accel_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to uipanel_unit_accel (see GCBO)
@@ -563,6 +562,7 @@ end
 handles.metricdata.accel_unit_division_factor = accel_unit_division_factor;
 handles.metricdata.input_accel_unit = input_accel_unit_;
 guidata(hObject,handles);
+
 
 % --- Executes during object creation, after setting all properties.
 function pushbutton4a_select_motion_CreateFcn(hObject, eventdata, handles)
@@ -615,6 +615,15 @@ else
     motion = cell(nr_motion,1); % preallocation of cell array
     for i = 1 : 1 : nr_motion
         motion{i} = importdata(fullfile(motion_dir_name,motion_file_name{i}));
+        
+        [check_flag,err_msg] = checkInputs(motion{i},'motion');
+        if check_flag == -1
+            if nr_motion > 1  % if user loads more than one ground motions
+                err_msg = sprintf('Motion #%d %s',i,err_msg(6:end));
+            end
+            fprintf('***** %s *****\n',err_msg);
+            msgbox(err_msg, 'Warning');
+        end
     end
     handles.metricdata.motion = motion;
     handles.metricdata.step4_complete = 1;
@@ -1030,7 +1039,13 @@ else
     factor_accel = handles.metricdata.accel_unit_division_factor;
     bedrock_type = handles.metricdata.bedrock_type;
     motion_type = handles.metricdata.motion_type;
-        
+    
+    [check_flag,err_msg] = checkInputs({vs_profile,curve,H4G,H4x},'all_h4');
+    if check_flag == -1
+        fprintf('***** %s *****\n',err_msg);
+        msgbox(err_msg, 'Warning');
+    end
+    
     if handles.metricdata.view_results_as_popup_option == 1
         fig_visible_option = 'on';
     else

@@ -122,6 +122,12 @@ else
     vs_profile_ = importdata(fullfile(profile_dir_name,profile_file_name));
     handles.metricdata.profile = vs_profile_;
     
+    [check_flag,err_msg] = checkInputs(vs_profile_,'vs_profile');
+    if check_flag == -1
+        fprintf('***** %s *****\n',err_msg);
+        msgbox(err_msg, 'Warning');
+    end
+    
     handles.metricdata.step1_complete = 1;
     
     folder_name = sprintf('%s_Nonlinear_Analysis_(H2)_Results',sitecode_);
@@ -257,6 +263,12 @@ else
     
     curve_ = importdata(fullfile(curve_dir_name,curve_file_name));
     handles.metricdata.curve = curve_;
+
+    [check_flag,err_msg] = checkInputs(curve_,'curve');
+    if check_flag == -1
+        fprintf('***** %s *****\n',err_msg);
+        msgbox(err_msg, 'Warning');
+    end
     
     handles.metricdata.step2_complete = 1;
 end
@@ -303,10 +315,6 @@ switch get(eventdata.NewValue,'Tag') % Get Tag of selected object.
 end
 handles.metricdata.rho_unit_division_factor = rho_unit_division_factor;
 guidata(hObject,handles);
-
-
-
-
 
 
 % --- Executes during object creation, after setting all properties.
@@ -386,6 +394,12 @@ else
     
     H2n_ = importdata(fullfile(H2n_dir_name,H2n_file_name));
     handles.metricdata.H2n = H2n_;
+    
+    [check_flag,err_msg] = checkInputs(H2n_,'h2n');
+    if check_flag == -1
+        fprintf('***** %s *****\n',err_msg);
+        msgbox(err_msg, 'Warning');
+    end
     
     handles.metricdata.step3_complete = 1;
     handles.metricdata.already_import_H2n = 1;
@@ -514,6 +528,15 @@ else
     motion = cell(nr_motion,1); % preallocation of cell array
     for i = 1 : 1 : nr_motion
         motion{i} = importdata(fullfile(motion_dir_name,motion_file_name{i}));
+        
+        [check_flag,err_msg] = checkInputs(motion{i},'motion');
+        if check_flag == -1
+            if nr_motion > 1  % if user loads more than one ground motions
+                err_msg = sprintf('Motion #%d %s',i,err_msg(6:end));
+            end
+            fprintf('***** %s *****\n',err_msg);
+            msgbox(err_msg, 'Warning');
+        end
     end
     handles.metricdata.motion = motion;
     handles.metricdata.step4_complete = 1;
@@ -923,7 +946,13 @@ else
     factor_accel = handles.metricdata.accel_unit_division_factor;
     bedrock_type = handles.metricdata.bedrock_type;
     motion_type = handles.metricdata.motion_type;
-        
+    
+    [check_flag,err_msg] = checkInputs({vs_profile,curve,H2n},'all_h2');
+    if check_flag == -1
+        fprintf('***** %s *****\n',err_msg);
+        msgbox(err_msg, 'Warning');
+    end
+    
     if handles.metricdata.view_results_as_popup_option == 1
         fig_visible_option = 'on';
     else

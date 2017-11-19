@@ -120,8 +120,14 @@ else
     handles.metricdata.sitecode = sitecode_;
     set(handles.edit1a_profile_name,'string',sitecode_);
     
-    profile_ = importdata(fullfile(profile_dir_name,profile_file_name));
-    handles.metricdata.profile = profile_;
+    vs_profile_ = importdata(fullfile(profile_dir_name,profile_file_name));
+    handles.metricdata.profile = vs_profile_;
+    
+    [check_flag,err_msg] = checkInputs(vs_profile_,'vs_profile');
+    if check_flag == -1
+        fprintf('***** %s *****\n',err_msg);
+        msgbox(err_msg, 'Warning');
+    end
     
     handles.metricdata.step1_complete = 1;
     
@@ -256,8 +262,14 @@ else
     handles.metricdata.curve_file_name = curve_file_name;
     handles.metricdata.curve_dir_name = curve_dir_name;
     
-    curve = importdata(fullfile(curve_dir_name,curve_file_name));
-    handles.metricdata.curve = curve;
+    curve_ = importdata(fullfile(curve_dir_name,curve_file_name));
+    handles.metricdata.curve = curve_;
+    
+    [check_flag,err_msg] = checkInputs(curve_,'curve');
+    if check_flag == -1
+        fprintf('***** %s *****\n',err_msg);
+        msgbox(err_msg, 'Warning');
+    end
     
     handles.metricdata.step2_complete = 1;
 end
@@ -429,6 +441,15 @@ else
     motion = cell(nr_motion,1); % preallocation of cell array
     for i = 1 : 1 : nr_motion
         motion{i} = importdata(fullfile(motion_dir_name,motion_file_name{i}));
+        
+        [check_flag,err_msg] = checkInputs(motion{i},'motion');
+        if check_flag == -1
+            if nr_motion > 1  % if user loads more than one ground motions
+                err_msg = sprintf('Motion #%d %s',i,err_msg(6:end));
+            end
+            fprintf('***** %s *****\n',err_msg);
+            msgbox(err_msg, 'Warning');
+        end
     end
     handles.metricdata.motion = motion;
     handles.metricdata.step3_complete = 1;
@@ -781,7 +802,6 @@ if step1*step2*step3 == 0 % if a certain step is not completed
 else
     vs_profile = handles.metricdata.profile;
     curve = handles.metricdata.curve;
-%     H2n = handles.metricdata.H2n;
     nr_motion = handles.metricdata.nr_motion;
     motion = handles.metricdata.motion;
     motion_name = handles.metricdata.motion_file_name;
@@ -792,7 +812,11 @@ else
     bedrock_type = handles.metricdata.bedrock_type;
     motion_type = handles.metricdata.motion_type;
     
-%     mkdir(output_dir);
+    [check_flag,err_msg] = checkInputs({vs_profile,curve},'all_eql');
+    if check_flag == -1
+        fprintf('***** %s *****\n',err_msg);
+        msgbox(err_msg, 'Warning');
+    end
     
     if handles.metricdata.view_results_as_popup_option == 1
         fig_visible_option = 'on';

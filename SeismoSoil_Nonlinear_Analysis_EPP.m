@@ -122,6 +122,12 @@ else
     vs_profile_ = importdata(fullfile(profile_dir_name,profile_file_name));
     handles.metricdata.profile = vs_profile_;
     
+    [check_flag,err_msg] = checkInputs(vs_profile_,'vs_profile');
+    if check_flag == -1
+        fprintf('***** %s *****\n',err_msg);
+        msgbox(err_msg, 'Warning');
+    end
+    
     handles.metricdata.step1_complete = 1;
     
     folder_name = sprintf('%s_Nonlinear_Analysis_(H2)_Results',sitecode_);
@@ -389,6 +395,12 @@ else
     Tau_max = importdata(fullfile(Tau_max_dir_name,Tau_max_file_name));
     handles.metricdata.Tau_max = Tau_max;
     
+    [check_flag,err_msg] = checkInputs(Tau_max,'tau_max');
+    if check_flag == -1
+        fprintf('***** %s *****\n',err_msg);
+        msgbox(err_msg, 'Warning');
+    end
+    
     handles.metricdata.step2_complete = 1;
     handles.metricdata.already_imported_Tau_max = 1;
 end
@@ -522,6 +534,15 @@ else
     motion = cell(nr_motion,1); % preallocation of cell array
     for i = 1 : 1 : nr_motion
         motion{i} = importdata(fullfile(motion_dir_name,motion_file_name{i}));
+        
+        [check_flag,err_msg] = checkInputs(motion{i},'motion');
+        if check_flag == -1
+            if nr_motion > 1  % if user loads more than one ground motions
+                err_msg = sprintf('Motion #%d %s',i,err_msg(6:end));
+            end
+            fprintf('***** %s *****\n',err_msg);
+            msgbox(err_msg, 'Warning');
+        end
     end
     handles.metricdata.motion = motion;
     handles.metricdata.step3_complete = 1;
