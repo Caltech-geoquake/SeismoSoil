@@ -488,9 +488,9 @@ dlmwrite(fullfile(output_dir,filename_comp),[freq_array,TF],'delimiter','\t');
 
 command_Windows = sprintf('explorer.exe %s',output_dir);
 command_Mac = sprintf('open %s',output_dir);
-if strcmpi(computer,'pcwin64')
+if ispc()
     system(command_Windows);
-elseif strcmpi(computer,'maci64')
+elseif ismac()
     system(command_Mac);
 end
 
@@ -986,14 +986,14 @@ if ok_to_proceed == 1
     msgbox(sprintf('Analysis complete!\nElapsed time: %1f sec.',elapsed_time),'Finished');
     if handles.metricdata.open_result_folder_option == 1
         output_dir_absolute = cd(cd(output_dir));
-        if strcmpi(computer,'maci64')
+        if ismac()
             output_dir_absolute = regexprep(output_dir_absolute,' ','\\ ');
         end
         command_Windows = sprintf('explorer.exe %s',output_dir_absolute);
         command_Mac = sprintf('open %s',output_dir_absolute);
-        if strcmpi(computer,'pcwin64')
+        if ispc()
             system(command_Windows);
-        elseif strcmpi(computer,'maci64')
+        elseif ismac()
             system(command_Mac);
         end
     end
@@ -1007,15 +1007,15 @@ function pushbutton17_open_result_folder_Callback(hObject, eventdata, handles)
 
 output_dir = handles.metricdata.output_dir;
 output_dir_absolute = cd(cd(output_dir));
-if strcmpi(computer,'maci64')
+if ismac()
     output_dir_absolute = regexprep(output_dir_absolute,' ','\\ ');
 end
 
 command_Windows = sprintf('explorer.exe %s',output_dir_absolute);
 command_Mac = sprintf('open %s',output_dir_absolute);
-if strcmpi(computer,'pcwin64')
+if ispc()
     system(command_Windows);
-elseif strcmpi(computer,'maci64')
+elseif ismac()
     system(command_Mac);
 end
 
