@@ -1,6 +1,6 @@
 # *SeismoSoil*
 
-Software package for 1D site response analysis and engineering seismology tools
+###### A software package for 1D site response analysis and engineering seismology tools
 
 *SeismoSoil* provides the following site response analysis routines:
 
@@ -98,8 +98,5 @@ Domniki Asimaki, Jian Shi, Wei Li, Peyman Ayoubi
 ### Terms and conditions
 
 By downloading and using this software, you agree to the terms and conditions as listed in the `LICENSE.txt` file.
-
-
-
 
 
