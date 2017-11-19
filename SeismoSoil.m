@@ -62,8 +62,10 @@ if isempty(start_dir0)
     start_dir0 = pwd();
 end
 
-[SS_dir,~,~] = fileparts(mfilename('fullpath'));  % (absolute) directory where SeismoSoil.m is stored
-addpath(fullfile(SS_dir,'lib'));  % let MATLAB search in ./lib for all necessary subroutines
+if ~isdeployed()
+    [SS_dir,~,~] = fileparts(mfilename('fullpath'));  % (absolute) directory where SeismoSoil.m is stored
+    addpath(fullfile(SS_dir,'lib'));  % let MATLAB search in ./lib for all necessary subroutines
+end
 
 % Update handles structure
 guidata(hObject, handles);
@@ -208,7 +210,7 @@ function pushbutton_author_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-hm = msgbox({'Current version: v1.2.8.9, 9/27/2017',...
+hm = msgbox({'Current version: v1.3.0.0, 11/19/2017',...
     'First draft: 6/30/2013',...
     ' ','Authors: Domniki Asimaki, Jian Shi, Wei Li',...
     'GUI Design: Jian Shi',' ','Contact: D.A.- domniki@caltech.edu',...
