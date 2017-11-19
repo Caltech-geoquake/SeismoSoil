@@ -923,9 +923,7 @@ else
     factor_accel = handles.metricdata.accel_unit_division_factor;
     bedrock_type = handles.metricdata.bedrock_type;
     motion_type = handles.metricdata.motion_type;
-    
-%     mkdir(output_dir);
-    
+        
     if handles.metricdata.view_results_as_popup_option == 1
         fig_visible_option = 'on';
     else
@@ -935,8 +933,10 @@ else
     use_fortran_for_calc = handles.metricdata.use_fortran_for_calc;
     
     tic;
-    [ok_to_proceed,h_running] = runNLH2FromGUI(vs_profile,curve,H2n,nr_motion,motion,motion_name,output_dir,...
-        factor_rho,factor_xi,factor_accel,bedrock_type,motion_type,fig_visible_option,use_fortran_for_calc,use_parallel);
+    [ok_to_proceed,h_running] = runNLH2FromGUI(vs_profile, curve, H2n,...
+        nr_motion, motion, motion_name, output_dir, factor_rho, factor_xi,...
+        factor_accel, bedrock_type, motion_type, fig_visible_option,...
+        use_fortran_for_calc, use_parallel);
     elapsed_time = toc;
     fprintf('Simulation finished. Elapsed time: %.1f sec.\n',elapsed_time);
 end

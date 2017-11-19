@@ -970,8 +970,8 @@ if step1*step2 == 0 % if a certain step is not completed
     ok_to_proceed = 0;
 else
     vs_profile = handles.metricdata.profile;
-%     curve = handles.metricdata.curve;
-%     H2n = handles.metricdata.H2n;
+    % curve = handles.metricdata.curve;
+    % H2n = handles.metricdata.H2n;
     nr_motion = handles.metricdata.nr_motion;
     motion = handles.metricdata.motion;
     motion_name = handles.metricdata.motion_file_name;
@@ -982,8 +982,6 @@ else
     bedrock_type = lower(handles.metricdata.bedrock_type);
     motion_type = handles.metricdata.motion_type;
     
-%     mkdir(output_dir);
-    
     if handles.metricdata.view_results_as_popup_option == 1
         fig_visible_option = 'on';
     else
@@ -991,9 +989,9 @@ else
     end
     
     tic;
-    [ok_to_proceed,h_running] = runLinTimeDomainFromGUI(vs_profile,nr_motion,motion,motion_name,output_dir,...
-        factor_rho,factor_xi,unit_factor_accel,bedrock_type,motion_type,...
-        fig_visible_option);
+    [ok_to_proceed,h_running] = runLinTimeDomainFromGUI(vs_profile, nr_motion,...
+        motion, motion_name, output_dir, factor_rho, factor_xi,...
+        unit_factor_accel, bedrock_type, motion_type, fig_visible_option);
     elapsed_time = toc;
     fprintf('Simulation finished. Elapsed time: %.1f sec.\n',elapsed_time);
     
