@@ -319,6 +319,20 @@ simu_file = handles.metricdata.simu_file_name;
 meas = importdata(fullfile(meas_dir,meas_file));
 simu = importdata(fullfile(simu_dir,simu_file));
 
+[check_flag,err_msg] = checkInputs(meas,'motion');
+if check_flag == -1
+    err_msg = sprintf('Measurement file %s',err_msg(6:end));
+    fprintf('***** %s *****\n',err_msg);
+    msgbox(err_msg, 'Warning');
+end
+
+[check_flag,err_msg] = checkInputs(simu,'motion');
+if check_flag == -1
+    err_msg = sprintf('Simulation file %s',err_msg(6:end));
+    fprintf('***** %s *****\n',err_msg);
+    msgbox(err_msg, 'Warning');
+end
+
 switch handles.metricdata.meas_unit
     case 'gal'
         meas(:,2) = meas(:,2) / 100;

@@ -234,6 +234,12 @@ end
 surface_motion = load(fullfile(motion_dir_name,motion_file_name));
 plotMotion(surface_motion,'unknown',1,motion_file_name,0);
 
+[check_flag,err_msg] = checkInputs(surface_motion,'motion');
+if check_flag == -1
+    fprintf('***** %s *****\n',err_msg);
+    msgbox(err_msg, 'Warning');
+end
+
 handles.metricdata.motion_file_name = motion_file_name;
 handles.metricdata.motion_dir_name = motion_dir_name;
 
