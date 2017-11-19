@@ -949,14 +949,14 @@ else
         bedrock_type, motion_type, fig_visible_option, use_fortran_for_calc,...
         use_parallel);
     elapsed_time = toc;
-    fprintf('Simulation finished. Elapsed time: %.1f sec.\n',elapsed_time);
+    fprintf('Simulation finished in %s.\n',sec2datetime(elapsed_time));
 end
 
 if ok_to_proceed == 1
     if ishandle(h_running) % if the users haven't close the figure
         close(h_running);
     end
-    msgbox(sprintf('Analysis complete!\nElapsed time: %1f sec.',elapsed_time),'Finished');
+    msgbox(sprintf('Simulation finished in %s.',sec2datetime(elapsed_time)),'Done');
     if handles.metricdata.open_result_folder_option == 1
         output_dir_absolute = cd(cd(output_dir));
         if ismac()
