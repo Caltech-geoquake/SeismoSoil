@@ -126,24 +126,30 @@ if ok_to_proceed == 1
         fprintf('Ground motion No. %d\n',ii);
         %% Prepare output folder
         current_motion_name_with_ext = motion_name{ii};
-        [temp_dir,motion_name_without_ext,ext] = fileparts(current_motion_name_with_ext);
+        [~,motion_name_without_ext,ext] = fileparts(current_motion_name_with_ext);
         output_dir2 = fullfile(output_dir,motion_name_without_ext);
         dir_h2rev = output_dir2;
         mkdir(dir_h2rev);
-        if strcmpi(computer,'pcwin64')
+        [fortran_dir,~,~] = fileparts(mfilename('fullpath'));  % assume same as this M file
+        if ispc()
             if use_fortran == 1
-                copyfile('NLEPP.exe',dir_h2rev);
-            end
-        elseif strcmpi(computer,'maci64')
-            % fortran_exec_dir = fullfile(current_dir,'SeismoSoil.app/Contents/MacOS/');
-            if use_fortran == 1
-                % copyfile(fullfile(fortran_exec_dir,'NLH2'),dir_h2rev);
-                if isdeployed  % running as compiled executable
-                    copyfile('/Applications/SeismoSoil.app/Contents/MacOS/NLEPP',dir_h2rev);
-                else  % running in MATLAB
-                    copyfile('NLEPP',dir_h2rev);
+                if isdeployed()
+                    copyfile('NLEPP.exe',dir_h2rev);
+                else
+                    copyfile(fullfile(fortran_dir,'NLEPP.exe'),dir_h2rev);
                 end
             end
+        elseif ismac()
+            if use_fortran == 1
+                if isdeployed()
+                    copyfile('/Applications/SeismoSoil.app/Contents/MacOS/NLEPP',dir_h2rev);
+                else
+                    copyfile(fullfile(fortran_dir,'NLEPP'),dir_h2rev);
+                end
+            end
+        else  % Linux, not mac
+            warning('Compiled SeismoSoil does not work properly on Linux.');
+            copyfile(fullfile(fortran_dir,'NLEPP'),dir_h2rev);
         end
         
         %% Reconstruct "tabk.dat"
@@ -158,27 +164,27 @@ if ok_to_proceed == 1
         accel_in(:,2) = accel_in(:,2)/accel_division_factor;
         
         %% Compute central frequency of incident motion
-        %     cf = centralFreq(accel_in);
-        %     dlmwrite(fullfile(output_dir2,'central_freq.dat'),cf);
+        % cf = centralFreq(accel_in);
+        % dlmwrite(fullfile(output_dir2,'central_freq.dat'),cf);
         
         %% Determine n_dt from the input motion
-% %         dt_cr = 0.5/f_max/ppw; % the factor can range from 0.5 to 0.9
-% %         dt = accel_in(2,1)-accel_in(1,1);
-% %         n_dt = ceil(dt/dt_cr)*2; % times 2 for extra safety
+        % dt_cr = 0.5/f_max/ppw; % the factor can range from 0.5 to 0.9
+        % dt = accel_in(2,1)-accel_in(1,1);
+        % n_dt = ceil(dt/dt_cr)*2; % times 2 for extra safety
         
         %% Doing non-linear analysis
-% %         if strcmpi(computer,'pcwin64')
+        % if strcmpi(computer,'pcwin64')
             current_dir = pwd;
-% %         elseif strcmpi(computer,'maci64')
-% %             % Do nothing, because current_dir has been defined.
-% %         end
+        % elseif strcmpi(computer,'maci64')
+        %     % Do nothing, because current_dir has been defined.
+        % end
         [layer_depth,node_depth,out_a,out_v,out_d,out_gamma,out_tau] = ...
             resp_NLEPP(f_max,ppw,n_dt,boundary,N_spr,accel_in,...
             new_profile,para,dir_h2rev,use_fortran);
         
         %% Process output files -- 1
         out_a = importdata('out_a.dat');
-        %     out_a = fixBugOfE(out_a);
+        % out_a = fixBugOfE(out_a);
         out_v = importdata('out_v.dat');
         out_d = importdata('out_d.dat');
         out_gamma = importdata('out_gamma.dat');
@@ -229,9 +235,9 @@ if ok_to_proceed == 1
             end
         end
         
-        %         dlmwrite('max_displ_profile.dat',max_d,'delimiter','\t');
-        %         dlmwrite('max_veloc_profile.dat',max_v,'delimiter','\t');
-        %         dlmwrite('max_stress_profile.dat',max_tau,'delimiter','\t');
+        % dlmwrite('max_displ_profile.dat',max_d,'delimiter','\t');
+        % dlmwrite('max_veloc_profile.dat',max_v,'delimiter','\t');
+        % dlmwrite('max_stress_profile.dat',max_tau,'delimiter','\t');
         
         cd(current_dir);  % go back to the previous "current" folder
         
@@ -269,7 +275,7 @@ if ok_to_proceed == 1
         freq_array = (0 : df : df*(N-1))';
         ACCEL_IN = fft(accel_in(:,2));
         ACCEL_SURFACE = fft(accel_surface(:,1));
-        %     tf1 = getsmoothed(abs(ACCEL_SURFACE),df,0.3)./(2*getsmoothed(abs(ACCEL_IN),df,0.3));
+        % tf1 = getsmoothed(abs(ACCEL_SURFACE),df,0.3)./(2*getsmoothed(abs(ACCEL_IN),df,0.3));
         freq_array = freq_array(find(freq_array <= f_max)); % only keeps 0 -- f_max
         ACCEL_IN = ACCEL_IN(find(freq_array <= f_max));
         ACCEL_SURFACE = ACCEL_SURFACE(find(freq_array <= f_max));
@@ -287,19 +293,19 @@ if ok_to_proceed == 1
         dlmwrite(fullfile(output_dir2,filename_TF_smoothed),[freq_array,tf2],'delimiter','\t','precision',6,'newline','pc');
         
         %% Fourier amplitude at ground surface
-        %     FA = [freq_array(1:round(end/2)),abs(ACCEL_SURFACE(1:round(end/2)))];
-        %     dlmwrite(fullfile(output_dir2,'Fourier_amplitude_at_surface.dat'),FA,'delimiter','\t');
+        % FA = [freq_array(1:round(end/2)),abs(ACCEL_SURFACE(1:round(end/2)))];
+        % dlmwrite(fullfile(output_dir2,'Fourier_amplitude_at_surface.dat'),FA,'delimiter','\t');
         
         %% Export figures
         fz_axes = 12;
         fz_title = 14;
         
-        % %     N = length(time_array);
-        % %     dt = time_array(2) - time_array(1);
-        % %     df = 1 / (N*dt);
-        % %     freq_array = (0 : df : df*(N-1))';
-        % %     ACCEL_IN = fft(accel_in(:,2));
-        % %     ACCEL_SURFACE = fft(accel_surface(:,1));
+        % N = length(time_array);
+        % dt = time_array(2) - time_array(1);
+        % df = 1 / (N*dt);
+        % freq_array = (0 : df : df*(N-1))';
+        % ACCEL_IN = fft(accel_in(:,2));
+        % ACCEL_SURFACE = fft(accel_surface(:,1));
         
         
         % transfer functions (raw and smoothed)
@@ -391,7 +397,7 @@ if ok_to_proceed == 1
         set(gca,'yDir','reverse','fontsize',fz_axes);
         ylim([0 max(layer_boundary_depth)]);
         xlabel('\gamma_{max} (%)','fontsize',fz_axes);
-% %         set(get(gca,'xLabel'),'position',get(get(gca,'xLabel'),'position')+[0,4.5,0]);
+        % set(get(gca,'xLabel'),'position',get(get(gca,'xLabel'),'position')+[0,4.5,0]);
         grid on;
         
         subplot(155);
@@ -399,13 +405,12 @@ if ok_to_proceed == 1
         set(gca,'yDir','reverse','fontsize',fz_axes);
         ylim([0 max(layer_boundary_depth)]);
         xlabel('\tau_{max} (kPa)','fontsize',fz_axes);
-% %         set(get(gca,'xLabel'),'position',get(get(gca,'xLabel'),'position')+[0,4.5,0]);
+        % set(get(gca,'xLabel'),'position',get(get(gca,'xLabel'),'position')+[0,4.5,0]);
         grid on;
         
         max_fig_filename = sprintf('%s_max_a_v_d_gamma_tau.png',motion_name_without_ext);
         saveas(fig3,fullfile(output_dir2,max_fig_filename));
         
-        % % % % %
         if strcmpi(fig_visible,'off')
             close(fig1);
             close(fig2);
@@ -416,12 +421,6 @@ if ok_to_proceed == 1
 end
 
 end
-
-
-
-
-
-
 
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -99,25 +99,25 @@ if ok_to_proceed == 1
         
         filename_TF = sprintf('%s_equivalent_linear_(FD)_TF%s',motion_name_without_ext,ext);
         filename_surface_accel = sprintf('%s_accel_on_surface%s',motion_name_without_ext,ext);
-%         filename_new_profile = sprintf('%s_re-discretized_profile%s',motion_name_without_ext,ext);
-%         filename_out_a = sprintf('%s_time_history_accel%s',motion_name_without_ext,ext);
-%         filename_out_v = sprintf('%s_time_history_veloc%s',motion_name_without_ext,ext);
-%         filename_out_d = sprintf('%s_time_history_displ%s',motion_name_without_ext,ext);
-%         filename_out_gamma = sprintf('%s_time_history_strain%s',motion_name_without_ext,ext);
-%         filename_out_tau = sprintf('%s_time_history_stress%s',motion_name_without_ext,ext);
-%         filename_max_avd = sprintf('%s_max_a_v_d%s',motion_name_without_ext,ext);
-%         filename_max_gt = sprintf('%s_max_gamma_tau%s',motion_name_without_ext,ext);
+        % filename_new_profile = sprintf('%s_re-discretized_profile%s',motion_name_without_ext,ext);
+        % filename_out_a = sprintf('%s_time_history_accel%s',motion_name_without_ext,ext);
+        % filename_out_v = sprintf('%s_time_history_veloc%s',motion_name_without_ext,ext);
+        % filename_out_d = sprintf('%s_time_history_displ%s',motion_name_without_ext,ext);
+        % filename_out_gamma = sprintf('%s_time_history_strain%s',motion_name_without_ext,ext);
+        % filename_out_tau = sprintf('%s_time_history_stress%s',motion_name_without_ext,ext);
+        % filename_max_avd = sprintf('%s_max_a_v_d%s',motion_name_without_ext,ext);
+        % filename_max_gt = sprintf('%s_max_gamma_tau%s',motion_name_without_ext,ext);
         
         dlmwrite(fullfile(output_dir2,filename_TF),[freq_array,tf],'delimiter','\t','precision',6,'newline','pc');
         dlmwrite(fullfile(output_dir2,filename_surface_accel),[t_out,accel_on_surface],'delimiter','\t','precision',7,'newline','pc');
-%         dlmwrite(fullfile(output_dir2,filename_new_profile),new_profile,'delimiter','\t','precision',6,'newline','pc');
-%         dlmwrite(fullfile(output_dir2,filename_out_a),out_a,'delimiter','\t','precision',6,'newline','pc');
-%         dlmwrite(fullfile(output_dir2,filename_out_v),out_v,'delimiter','\t','precision',6,'newline','pc');
-%         dlmwrite(fullfile(output_dir2,filename_out_d),out_d,'delimiter','\t','precision',6,'newline','pc');
-%         dlmwrite(fullfile(output_dir2,filename_out_gamma),out_gamma,'delimiter','\t','precision',6,'newline','pc');
-%         dlmwrite(fullfile(output_dir2,filename_out_tau),out_tau,'delimiter','\t','precision',6,'newline','pc');
-%         dlmwrite(fullfile(output_dir2,filename_max_avd),max_avd,'delimiter','\t','precision',6,'newline','pc');
-%         dlmwrite(fullfile(output_dir2,filename_max_gt),max_gt,'delimiter','\t','precision',6,'newline','pc');
+        % dlmwrite(fullfile(output_dir2,filename_new_profile),new_profile,'delimiter','\t','precision',6,'newline','pc');
+        % dlmwrite(fullfile(output_dir2,filename_out_a),out_a,'delimiter','\t','precision',6,'newline','pc');
+        % dlmwrite(fullfile(output_dir2,filename_out_v),out_v,'delimiter','\t','precision',6,'newline','pc');
+        % dlmwrite(fullfile(output_dir2,filename_out_d),out_d,'delimiter','\t','precision',6,'newline','pc');
+        % dlmwrite(fullfile(output_dir2,filename_out_gamma),out_gamma,'delimiter','\t','precision',6,'newline','pc');
+        % dlmwrite(fullfile(output_dir2,filename_out_tau),out_tau,'delimiter','\t','precision',6,'newline','pc');
+        % dlmwrite(fullfile(output_dir2,filename_max_avd),max_avd,'delimiter','\t','precision',6,'newline','pc');
+        % dlmwrite(fullfile(output_dir2,filename_max_gt),max_gt,'delimiter','\t','precision',6,'newline','pc');
         
         %% Plot transfer function
         fig1 = figure('visible',fig_visible_option); % Create a figure object named "fig1" ("handle" of the fig)
@@ -168,62 +168,62 @@ if ok_to_proceed == 1
         saveas(fig2,fullfile(output_dir2,accel_fig_filename));
         
         %% Plot max_a_v_d_gamma_tau
-%         fz_axes = fz_axes - 1;
-%         fz_title = fz_title - 1;
-%         
-%         layer_boundary_depth = max_avd(:,1); % nr_layer x 1
-%         max_a = max_avd(:,2);
-%         max_v = max_avd(:,3);
-%         max_d = max_avd(:,4);
-%         layer_midpoint_depth = max_gt(:,1);  % (nr_layer-1) x 1
-%         max_gamma = max_gt(:,2);
-%         max_tau = max_gt(:,3);
-%         
-%         fig3 = figure('visible',fig_visible_option);
-%         width = 12; height = 7;
-%         xLeft = (12.5-width)/2;  yBottom = (11-height)/2;
-%         set(fig3,'units','inches','position',[xLeft,yBottom,width,height]);
-%         
-%         subplot(151);
-%         plot(max_a,layer_boundary_depth,'b.-');
-%         set(gca,'yDir','reverse','fontsize',fz_axes);
-%         ylim([0 max(layer_boundary_depth)]);
-%         xlabel('Max. accel. (m/s^2)','fontsize',fz_axes);
-%         ylabel('Depth (m)','fontsize',fz_axes);
-%         
-%         subplot(152);
-%         plot(max_v*100,layer_boundary_depth,'b.-');
-%         set(gca,'yDir','reverse','fontsize',fz_axes);
-%         ylim([0 max(layer_boundary_depth)]);
-%         xlabel('Max. veloc. (cm/s)');
-%         
-%         subplot(153);
-%         plot(max_d*100,layer_boundary_depth,'b.-');
-%         set(gca,'yDir','reverse','fontsize',fz_axes);
-%         ylim([0 max(layer_boundary_depth)]);
-%         xlabel('Max. displ. (cm)','fontsize',fz_axes);
-%         title(motion_name_without_ext,'interpreter','none','fontsize',fz_title);
-%         
-%         subplot(154);
-%         plot(max_gamma*100,layer_midpoint_depth,'b.-');
-%         set(gca,'yDir','reverse','fontsize',fz_axes);
-%         ylim([0 max(layer_boundary_depth)]);
-%         xlabel('Max. strain (%)','fontsize',fz_axes);
-%         
-%         subplot(155);
-%         plot(max_tau/1000,layer_midpoint_depth,'b.-');
-%         set(gca,'yDir','reverse','fontsize',fz_axes);
-%         ylim([0 max(layer_boundary_depth)]);
-%         xlabel('Max. stress (kPa)','fontsize',fz_axes);
-%         
-%         max_fig_filename = sprintf('%s_max_a_v_d_gamma_tau.png',motion_name_without_ext);
-%         saveas(fig3,fullfile(output_dir2,max_fig_filename));
+        % fz_axes = fz_axes - 1;
+        % fz_title = fz_title - 1;
+        % 
+        % layer_boundary_depth = max_avd(:,1); % nr_layer x 1
+        % max_a = max_avd(:,2);
+        % max_v = max_avd(:,3);
+        % max_d = max_avd(:,4);
+        % layer_midpoint_depth = max_gt(:,1);  % (nr_layer-1) x 1
+        % max_gamma = max_gt(:,2);
+        % max_tau = max_gt(:,3);
+        % 
+        % fig3 = figure('visible',fig_visible_option);
+        % width = 12; height = 7;
+        % xLeft = (12.5-width)/2;  yBottom = (11-height)/2;
+        % set(fig3,'units','inches','position',[xLeft,yBottom,width,height]);
+        % 
+        % subplot(151);
+        % plot(max_a,layer_boundary_depth,'b.-');
+        % set(gca,'yDir','reverse','fontsize',fz_axes);
+        % ylim([0 max(layer_boundary_depth)]);
+        % xlabel('Max. accel. (m/s^2)','fontsize',fz_axes);
+        % ylabel('Depth (m)','fontsize',fz_axes);
+        % 
+        % subplot(152);
+        % plot(max_v*100,layer_boundary_depth,'b.-');
+        % set(gca,'yDir','reverse','fontsize',fz_axes);
+        % ylim([0 max(layer_boundary_depth)]);
+        % xlabel('Max. veloc. (cm/s)');
+        % 
+        % subplot(153);
+        % plot(max_d*100,layer_boundary_depth,'b.-');
+        % set(gca,'yDir','reverse','fontsize',fz_axes);
+        % ylim([0 max(layer_boundary_depth)]);
+        % xlabel('Max. displ. (cm)','fontsize',fz_axes);
+        % title(motion_name_without_ext,'interpreter','none','fontsize',fz_title);
+        % 
+        % subplot(154);
+        % plot(max_gamma*100,layer_midpoint_depth,'b.-');
+        % set(gca,'yDir','reverse','fontsize',fz_axes);
+        % ylim([0 max(layer_boundary_depth)]);
+        % xlabel('Max. strain (%)','fontsize',fz_axes);
+        % 
+        % subplot(155);
+        % plot(max_tau/1000,layer_midpoint_depth,'b.-');
+        % set(gca,'yDir','reverse','fontsize',fz_axes);
+        % ylim([0 max(layer_boundary_depth)]);
+        % xlabel('Max. stress (kPa)','fontsize',fz_axes);
+        % 
+        % max_fig_filename = sprintf('%s_max_a_v_d_gamma_tau.png',motion_name_without_ext);
+        % saveas(fig3,fullfile(output_dir2,max_fig_filename));
         
         %%
         if strcmpi(fig_visible_option,'off')
             close(fig1);
             close(fig2);
-%             close(fig3);
+            % close(fig3);
         end
     end
 end
@@ -275,18 +275,24 @@ if strcmp(boundary,'elastic')
     input_motion_type = 'outcrop';
 end
 
-% % if strcmpi(computer,'pcwin64')
-    current_dir = pwd;
-% % elseif strcmpi(computer,'maci64')
-% %     % Do nothing, because current_dir has been defined.
-% % end
+current_dir = pwd;
         
-if strcmpi(computer,'pcwin64')
-    copyfile('FDEQ.exe',dir_FDEQ); % for Windows system
-elseif strcmpi(computer,'maci64')
-%     fortran_exec_dir = fullfile(current_dir,'SeismoSoil.app/Contents/MacOS/');
-%     copyfile(fullfile(fortran_exec_dir,'FDEQ'),dir_FDEQ); % for Unix system
-    copyfile('/Applications/SeismoSoil.app/Contents/MacOS/FDEQ',dir_FDEQ);
+[fortran_dir,~,~] = fileparts(mfilename('fullpath'));  % assume same as this M file
+if ispc()
+    if isdeployed()
+        copyfile('FDEQ.exe',dir_FDEQ);
+    else
+        copyfile(fullfile(fortran_dir,'FDEQ.exe'),dir_FDEQ);
+    end
+elseif ismac()
+    if isdeployed()
+        copyfile('/Applications/SeismoSoil.app/Contents/MacOS/FDEQ',dir_FDEQ);
+    else
+        copyfile('FDEQ',dir_FDEQ);
+    end
+else  % Linux, not mac
+    warning('Compiled SeismoSoil does not work properly on Linux.')
+    copyfile(fullfile(fortran_dir,'FDEQ'),dir_FDEQ);
 end
 
 % If motion length > 16384, increase sampling time interval so that the
