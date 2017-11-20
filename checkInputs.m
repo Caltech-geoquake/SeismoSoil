@@ -1,7 +1,13 @@
-function [flag,err_msg] = checkInputs(data, option)
+function [flag,err_msg] = checkInputs(data, option, data_name, show_msg)
 
+if nargin < 4
+    show_msg = true;
+end
+if nargin < 3
+    data_name = [];
+end
 
-err_msg = string('');
+err_msg = [];
 
 if strcmpi(option(1:3),'all')
     [flag,err_msg] = checkAllInputs(data,option);
@@ -122,15 +128,34 @@ elseif strcmpi(option,'tau_max')
     else
         flag = 1;
     end
+elseif strcmpi(option,'vs_profile_and_tau_max')
+    % assumes vs_profile and tau_max have both passed their respective checks
+    vs_profile = data{1};
+    tau_max = data{2};
+    len_tau = length(tau_max);
+    if len_tau ~= size(vs_profile,1) && len_tau ~= size(vs_profile,1)-1
+        flag = -1;
+        err_msg = 'Number of layers in tau_max and in vs_profile should match.';
+    else
+        flag = 1;
+    end
 else
     error('Invalid "option" name.')
+end
+
+if (flag == -1) && (show_msg == true)
+    if ~isempty(data_name)
+        err_msg = sprintf('%s %s',data_name,err_msg(6:end));
+    end
+    fprintf('***** %s *****\n',err_msg);
+    msgbox(err_msg, 'Warning');
 end
 
 end
 
 function [flag,err_msg] = checkAllInputs(data, option)
 
-    err_msg = string('');
+    err_msg = [];
     
     if any(strcmpi(option,{'all_hh','all_h4'}))
         if strcmpi(option,'all_hh')
