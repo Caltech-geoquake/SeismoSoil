@@ -79,7 +79,7 @@ To run from compiled executable:
 
 ### User manual
 
-The user manual, which contains a tutorial and technical details, is here.
+The user manual, which contains a tutorial and technical details, is [here](https://github.com/jsh9/SeismoSoil-manual/blob/master/seismosoil_manual/SeismoSoil_Tutorial_and_Manual.pdf).
 
 
 
