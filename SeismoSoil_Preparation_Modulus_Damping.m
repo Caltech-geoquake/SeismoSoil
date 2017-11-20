@@ -110,8 +110,9 @@ if ~isequal(profile_dir_name,0)
 end
 
 soil_profile = importdata(fullfile(profile_dir_name,profile_file_name));
-
 plotVsProfileFromMatrix(soil_profile);
+
+checkInputs(soil_profile,'vs_profile');
 
 handles.metricdata.profile_file_name = profile_file_name;
 handles.metricdata.profile_dir_name = profile_dir_name;
