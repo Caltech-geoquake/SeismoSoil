@@ -122,11 +122,7 @@ else
     vs_profile_ = importdata(fullfile(profile_dir_name,profile_file_name));
     handles.metricdata.profile = vs_profile_;
 
-    [check_flag,err_msg] = checkInputs(vs_profile_,'vs_profile');
-    if check_flag == -1
-        fprintf('***** %s *****\n',err_msg);
-        msgbox(err_msg, 'Warning');
-    end
+    checkInputs(vs_profile_,'vs_profile');
     
     handles.metricdata.step1_complete = 1;
     
@@ -264,11 +260,7 @@ else
     curve_ = importdata(fullfile(curve_dir_name,curve_file_name));
     handles.metricdata.curve = curve_;
 
-    [check_flag,err_msg] = checkInputs(curve_,'curve');
-    if check_flag == -1
-        fprintf('***** %s *****\n',err_msg);
-        msgbox(err_msg, 'Warning');
-    end
+    checkInputs(curve_,'curve');
     
     handles.metricdata.step2_complete = 1;
 end
@@ -384,11 +376,7 @@ else
     H4G = importdata(fullfile(H4G_dir_name,H4G_file_name));
     handles.metricdata.H4G = H4G;
     
-    [check_flag,err_msg] = checkInputs(H4G,'h4g');
-    if check_flag == -1
-        fprintf('***** %s *****\n',err_msg);
-        msgbox(err_msg, 'Warning');
-    end
+    checkInputs(H4G,'h4g');
     
     handles.metricdata.already_import_H4G = 1;
     handles.metricdata.step3A_complete = 1;
@@ -473,11 +461,7 @@ else
     H4x = importdata(fullfile(H4x_dir_name,H4x_file_name));
     handles.metricdata.H4x = H4x;
     
-    [check_flag,err_msg] = checkInputs(H4x,'h4x');
-    if check_flag == -1
-        fprintf('***** %s *****\n',err_msg);
-        msgbox(err_msg, 'Warning');
-    end
+    checkInputs(H4x,'h4x');
     
     handles.metricdata.already_import_H4x = 1;
     handles.metricdata.step3B_complete = 1;
@@ -615,15 +599,7 @@ else
     motion = cell(nr_motion,1); % preallocation of cell array
     for i = 1 : 1 : nr_motion
         motion{i} = importdata(fullfile(motion_dir_name,motion_file_name{i}));
-        
-        [check_flag,err_msg] = checkInputs(motion{i},'motion');
-        if check_flag == -1
-            if nr_motion > 1  % if user loads more than one ground motions
-                err_msg = sprintf('Motion #%d %s',i,err_msg(6:end));
-            end
-            fprintf('***** %s *****\n',err_msg);
-            msgbox(err_msg, 'Warning');
-        end
+        checkInputs(motion{i},'motion',sprintf('Motion #%d',i));
     end
     handles.metricdata.motion = motion;
     handles.metricdata.step4_complete = 1;
@@ -1040,11 +1016,7 @@ else
     bedrock_type = handles.metricdata.bedrock_type;
     motion_type = handles.metricdata.motion_type;
     
-    [check_flag,err_msg] = checkInputs({vs_profile,curve,H4G,H4x},'all_h4');
-    if check_flag == -1
-        fprintf('***** %s *****\n',err_msg);
-        msgbox(err_msg, 'Warning');
-    end
+    checkInputs({vs_profile,curve,H4G,H4x},'all_h4');
     
     if handles.metricdata.view_results_as_popup_option == 1
         fig_visible_option = 'on';

@@ -110,6 +110,8 @@ end
 
 curve_data = importdata(fullfile(curve_dir_name,curve_file_name));
 
+checkInputs(curve_data,'curve');
+
 handles.metricdata.curve_file_name = curve_file_name;
 handles.metricdata.curve_dir_name = curve_dir_name;
 handles.metricdata.curve_data = curve_data;

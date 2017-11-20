@@ -126,11 +126,7 @@ else
     handles.metricdata.profile = vs_profile_;
 
     % check format of Vs profile
-    [check_flag,err_msg] = checkInputs(vs_profile_,'vs_profile');
-    if check_flag == -1
-        fprintf('***** %s *****\n',err_msg);
-        msgbox(err_msg, 'Warning');
-    end
+    checkInputs(vs_profile_,'vs_profile');
     
     % progress marker
     handles.metricdata.step1_complete = 1;
@@ -608,15 +604,7 @@ else
     motion = cell(nr_motion,1); % preallocation of cell array
     for i = 1 : 1 : nr_motion
         motion{i} = importdata(fullfile(motion_dir_name,motion_file_name{i}));
-        
-        [check_flag,err_msg] = checkInputs(motion{i},'motion');
-        if check_flag == -1
-            if nr_motion > 1  % if user loads more than one ground motions
-                err_msg = sprintf('Motion #%d %s',i,err_msg(6:end));
-            end
-            fprintf('***** %s *****\n',err_msg);
-            msgbox(err_msg, 'Warning');
-        end
+        checkInputs(motion{i},'motion',sprintf('Motion #%d',i));
     end
     handles.metricdata.motion = motion;
     handles.metricdata.step2_complete = 1;

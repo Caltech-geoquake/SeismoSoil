@@ -97,6 +97,8 @@ handles.metricdata.curve_dir_name = curve_dir_name;
 handles.metricdata.curve = curve;
 handles.metricdata.step1b = 1;
 
+checkInputs(curve,'curve');
+
 plotCurves(curve);
 title(handles.metricdata.curve_file_name,'interpreter','none');
 

@@ -92,6 +92,9 @@ dlg_title = 'Select "curve" file...';
 disp(['User selected ',fullfile(curve_dir_name,curve_file_name)]);
 start_dir0 = curve_dir_name;
 curve = importdata(fullfile(curve_dir_name,curve_file_name));
+
+checkInputs(curve,'curve');
+
 handles.metricdata.curve_file_name = curve_file_name;
 handles.metricdata.curve_dir_name = curve_dir_name;
 handles.metricdata.curve = curve;
@@ -128,6 +131,9 @@ dlg_title = 'Select Vs profile...';
 disp(['User selected ',fullfile(profile_dir_name,profile_file_name)]);
 start_dir0 = profile_dir_name;  % update start_dir0
 vs_profile = importdata(fullfile(profile_dir_name,profile_file_name));
+
+checkInputs(vs_profile,'vs_profile');
+
 handles.metricdata.profile = vs_profile;
 handles.metricdata.profile_file_name = profile_file_name;
 handles.metricdata.profile_dir_name = profile_dir_name;
@@ -247,6 +253,9 @@ disp(['User selected ',fullfile(profile_dir_name,profile_file_name)]);
 start_dir0 = profile_dir_name;  % update start_dir0
 vs_profile = importdata(fullfile(profile_dir_name,profile_file_name));
 plotVsProfileForGUI(vs_profile);
+
+checkInputs(vs_profile,'vs_profile');
+
 handles.metricdata.profile = vs_profile;
 handles.metricdata.profile_file_name = profile_file_name;
 handles.metricdata.profile_dir_name = profile_dir_name;
@@ -281,6 +290,9 @@ dlg_title = 'Select "Tau_max" file...';
 disp(['User selected ',fullfile(Tmax_dir_name,Tmax_file_name)]);
 start_dir0 = Tmax_dir_name;
 Tmax = importdata(fullfile(Tmax_dir_name,Tmax_file_name));
+
+checkInputs(Tmax,'tau_max');
+
 handles.metricdata.Tmax = Tmax;
 handles.metricdata.step2 = 1;
 handles.metricdata.step2_ = 1;
@@ -425,14 +437,12 @@ if ok_to_proceed == 1
 
     %% Get HH_G parameters
     if (handles.metricdata.step1a == 1) && strcmpi(handles.metricdata.GGmax_data_source,'fromVsProfile')
+        checkInputs({vs_profile,Tmax},'vs_profile_and_tau_max');
         para = hybridParaFromVsProfile(vs_profile,PI,Tmax,show_fig,save_fig,[],inf);
     elseif (handles.metricdata.step1b == 1) && strcmpi(handles.metricdata.GGmax_data_source,'fromCurve')
+        checkInputs({vs_profile,Tmax},'vs_profile_and_tau_max');
+        checkInputs({vs_profile,curve},'all_eql');
         [para,curves_expanded] = hybridParaFromCurves(vs_profile,curve,Tmax,show_fig,save_fig,inf);
-        % curve_file_name = handles.metricdata.curve_file_name;
-        % curve_dir_name = handles.metricdata.curve_dir_name;
-        % [~,curve_file_name_name,~] = fileparts(curve_file_name);
-        % curve_file_name_new = sprintf('%s_expanded.txt',curve_file_name_name);
-        % dlmwrite(fullfile(curve_dir_name,curve_file_name_new),curves_expanded,'delimiter','\t','precision',6);
     end
 
     %% Re-generate HH G/Gmax curves and damping curves (from Darendeli, 2001)
