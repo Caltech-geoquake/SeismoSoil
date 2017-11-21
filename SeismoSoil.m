@@ -65,6 +65,7 @@ end
 if ~isdeployed()
     [SS_dir,~,~] = fileparts(mfilename('fullpath'));  % (absolute) directory where SeismoSoil.m is stored
     addpath(fullfile(SS_dir,'lib'));  % let MATLAB search in ./lib for all necessary subroutines
+    addpath(fullfile(SS_dir,'subroutines'));
 end
 
 % Update handles structure
