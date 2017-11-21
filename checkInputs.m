@@ -7,6 +7,7 @@ if nargin < 3
     data_name = [];
 end
 
+flag = 1;
 err_msg = [];
 
 if strcmpi(option(1:3),'all')
@@ -36,8 +37,6 @@ elseif strcmpi(option,'vs_profile')
     elseif any(data(:,3) > 1)  % damping larger than 1
         flag = -1;
         err_msg = 'Unit of damping ratio wrong: should be 1, not percent.';
-    else
-        flag = 1;
     end
 elseif strcmpi(option,'curve')
     if ~isnumeric(data)
@@ -55,8 +54,6 @@ elseif strcmpi(option,'curve')
     elseif any(data(1:2:end,3) > 1)  % shear strain larger than 1
         flag = -1;
         err_msg = 'Unit of shear strain wrong: should be 1, not percent.';
-    else
-        flag = 1;
     end
 elseif strcmpi(option,'motion')
     if ~isnumeric(data)
@@ -73,9 +70,7 @@ elseif strcmpi(option,'motion')
         err_msg = 'Data has incorrect number of columns. (Should be 2.)';
     elseif ~ismonotonic(data(:,1),1,'INCREASING')
         flag = -1;
-        err_msg = 'Data has time column not monotonically increasing.';
-    else
-        flag = 1;
+        err_msg = 'Data has time column not monotonically increasing.';   
     end
 elseif any(strcmpi(option,{'h2n','h4g','h4x'}))
     if ~isnumeric(data)
@@ -93,8 +88,6 @@ elseif any(strcmpi(option,{'h2n','h4g','h4x'}))
     elseif any(data(2,:) ~= 0)
         flag = -1;
         err_msg = 'The second row should be all zeros.';
-    else
-        flag = 1;
     end
 elseif any(strcmpi(option,{'hhg','hhx','hh_g','hh_x'}))
     if ~isnumeric(data)
@@ -109,8 +102,6 @@ elseif any(strcmpi(option,{'hhg','hhx','hh_g','hh_x'}))
     elseif size(data,1) ~= 9  % number of rows
         flag = -1;
         err_msg = 'Data has incorrect number of rows. (Should be 9.)';
-    else
-        flag = 1;
     end
 elseif strcmpi(option,'tau_max')
     if ~isnumeric(data)
@@ -125,8 +116,6 @@ elseif strcmpi(option,'tau_max')
     elseif size(data,2) ~= 1  % number of columns
         flag = -1;
         err_msg = 'Data has incorrect number of rows. (Should be 1.)';
-    else
-        flag = 1;
     end
 elseif strcmpi(option,'vs_profile_and_tau_max')
     % assumes vs_profile and tau_max have both passed their respective checks
@@ -136,8 +125,6 @@ elseif strcmpi(option,'vs_profile_and_tau_max')
     if len_tau ~= size(vs_profile,1) && len_tau ~= size(vs_profile,1)-1
         flag = -1;
         err_msg = 'Number of layers in tau_max and in vs_profile should match.';
-    else
-        flag = 1;
     end
 else
     error('Invalid "option" name.')
@@ -145,7 +132,11 @@ end
 
 if (flag == -1) && (show_msg == true)
     if ~isempty(data_name)
-        err_msg = sprintf('%s %s',data_name,err_msg(6:end));
+        if strcmpi(err_msg(1:4),'Data')
+            err_msg = sprintf('%s %s',data_name,err_msg(6:end));
+        else  % original error message does not start with "Data "
+            err_msg = sprintf('%s: %s',data_name,err_msg);
+        end
     end
     fprintf('***** %s *****\n',err_msg);
     msgbox(err_msg, 'Warning');
@@ -155,6 +146,7 @@ end
 
 function [flag,err_msg] = checkAllInputs(data, option)
 
+    flag = 1;
     err_msg = [];
     
     if any(strcmpi(option,{'all_hh','all_h4'}))
