@@ -98,6 +98,9 @@ start_dir0 = meas_dir_name;
 handles.metricdata.meas_file_name = meas_file_name;
 handles.metricdata.meas_dir_name = meas_dir_name;
 
+meas = importdata(fullfile(meas_dir_name,meas_file_name));
+checkInputs(meas,'motion');
+
 handles.metricdata.step1_complete = 1;
 
 set(handles.edit1_path_meas,'string',sprintf('%s...%s%s',meas_dir_name(1:21),meas_dir_name(end-4:end),meas_file_name));
@@ -122,6 +125,9 @@ start_dir0 = simu_dir_name;
 
 handles.metricdata.simu_file_name = simu_file_name;
 handles.metricdata.simu_dir_name = simu_dir_name;
+
+simu = importdata(fullfile(simu_dir_name,simu_file_name));
+checkInputs(simu,'motion');
 
 handles.metricdata.step2_complete = 1;
 
@@ -318,9 +324,6 @@ simu_file = handles.metricdata.simu_file_name;
 
 meas = importdata(fullfile(meas_dir,meas_file));
 simu = importdata(fullfile(simu_dir,simu_file));
-
-checkInputs(meas,'motion');
-checkInputs(simu,'motion');
 
 switch handles.metricdata.meas_unit
     case 'gal'
