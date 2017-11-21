@@ -55,7 +55,7 @@ To run from compiled executable:
 - Download executable files and extract to hard drive
 - Before running *SeismoSoil* for the first time, **make sure to set up MATLAB Runtime**:
   - Go to http://www.mathworks.com/products/compiler/mcr/
-  - Download MATLAB Runtime (R2017b version) for your operating system
+  - Download MATLAB Runtime (R2016b version) for your operating system
   - Install MATLAB Runtime to your computer
 
 
