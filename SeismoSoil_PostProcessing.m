@@ -22,7 +22,7 @@ function varargout = SeismoSoil_PostProcessing(varargin)
 
 % Edit the above text to modify the response to help SeismoSoil_PostProcessing
 
-% Last Modified by GUIDE v2.5 09-Feb-2015 01:23:55
+% Last Modified by GUIDE v2.5 20-Nov-2017 16:18:16
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -77,6 +77,16 @@ function varargout = SeismoSoil_PostProcessing_OutputFcn(hObject, eventdata, han
 varargout{1} = handles.output;
 
 
+% --- Executes during object creation, after setting all properties.
+function pushbutton1_select_dir_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pushbutton1_select_dir (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+handles.metricdata.folder_select_flag = 0;
+guidata(hObject,handles);
+
+
 % --- Executes on button press in pushbutton1_select_dir.
 function pushbutton1_select_dir_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1_select_dir (see GCBO)
@@ -84,14 +94,20 @@ function pushbutton1_select_dir_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 global start_dir0;
+
 results_dir = uigetdir(start_dir0,'Select folder where results are stored...');
 handles.metricdata.results_dir = results_dir;
+handles.metricdata.folder_select_flag = 1;  % mark as done
 
-file_list = listFile(results_dir,'*_accelerations.png'); % return a cell array "file_list"
-accel_time_history_figure_filename = file_list{1}; % file_list should have only 1 element
-result_event_name = accel_time_history_figure_filename(1:end-18);
-handles.metricdata.result_event_name = result_event_name;
-guidata(hObject,handles);
+try
+    file_list = listFile(results_dir,'*_accelerations.png'); % return a cell array "file_list"
+    accel_time_history_figure_filename = file_list{1}; % file_list should have only 1 element
+    result_event_name = accel_time_history_figure_filename(1:end-18);
+    handles.metricdata.result_event_name = result_event_name;
+    guidata(hObject,handles);
+catch
+    msgbox('The folder you selected does not contain valid simulation results.','Warning');
+end
 
 
 % --- Executes on button press in pushbutton2_plot_loops.
@@ -100,42 +116,11 @@ function pushbutton2_plot_loops_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-results_dir = handles.metricdata.results_dir;
-event_name = handles.metricdata.result_event_name;
-strain_time_history_filename1 = fullfile(results_dir,sprintf...
-    ('%s_time_history_strain.txt',event_name));
-strain_time_history_filename2 = fullfile(results_dir,sprintf...
-    ('%s_time_history_strain.dat',event_name));
-stress_time_history_filename1 = fullfile(results_dir,sprintf...
-    ('%s_time_history_stress.txt',event_name));
-stress_time_history_filename2 = fullfile(results_dir,sprintf...
-    ('%s_time_history_stress.dat',event_name));
-profile_filename1 = fullfile(results_dir,sprintf...
-    ('%s_re-discretized_profile.txt',event_name));
-profile_filename2 = fullfile(results_dir,sprintf...
-    ('%s_re-discretized_profile.dat',event_name));
-try
-    strain = importdata(strain_time_history_filename1);
-    stress = importdata(stress_time_history_filename1);
-    vs_profile = importdata(profile_filename1);
-catch
-    strain = importdata(strain_time_history_filename2);
-    stress = importdata(stress_time_history_filename2);
-    vs_profile = importdata(profile_filename2);
+if handles.metricdata.folder_select_flag == 0
+    msgbox('You have not selected a folder yet.','Warning');
+else
+    showLoops(handles);
 end
-nr_layer = size(strain,2);
-thickness = vs_profile(:,1);
-depth = convertThicknessToDepth(thickness);
-
-for j = 1 : 1 : nr_layer
-    figure;
-    plot(strain(:,j)*100,stress(:,j)/1000);
-    xlabel('Strain [%]');
-    ylabel('Stress [kPa]');
-    grid on;
-    title(sprintf('Layer #%d. Depth = %.2f m',j,depth(j)));
-end
-
 
 
 % --- Executes on button press in pushbutton3_plot_and_save_loops.
@@ -144,6 +129,19 @@ function pushbutton3_plot_and_save_loops_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+if handles.metricdata.folder_select_flag == 0
+    msgbox('You have not selected a folder yet.','Warning');
+else
+    showLoops(handles,true);
+end
+
+function showLoops(handles,save_figure)
+
+if nargin < 2
+    save_figure = false;
+end
+
+h_running = msgbox('Calculation in progess. Please do not click other buttons.','Calculating');
 results_dir = handles.metricdata.results_dir;
 event_name = handles.metricdata.result_event_name;
 strain_time_history_filename1 = fullfile(results_dir,sprintf...
@@ -171,7 +169,9 @@ nr_layer = size(strain,2);
 thickness = vs_profile(:,1);
 depth = convertThicknessToDepth(thickness);
 
-mkdir(fullfile(results_dir,'Stress strain loops'));
+if save_figure
+    mkdir(fullfile(results_dir,'Stress strain loops'));
+end
 for j = 1 : 1 : nr_layer
     fig = figure;
     plot(strain(:,j)*100,stress(:,j)/1000);
@@ -179,15 +179,23 @@ for j = 1 : 1 : nr_layer
     xlabel('Strain [%]');
     ylabel('Stress [kPa]');
     title(sprintf('Layer #%d. Depth = %.2f m',j,depth(j)));
-    saveas(fig,fullfile(results_dir,'Stress strain loops',...
-        sprintf('Stress_strain_loops_Layer_%d.png',j)));
+    if save_figure
+        saveas(fig,fullfile(results_dir,'Stress strain loops',...
+            sprintf('Stress_strain_loops_Layer_%d.png',j)));
+    end
+end
+close(h_running);
+
+if save_figure
+    msgbox(sprintf('Figures saved to %s.',results_dir),'Message');
 end
 
-% --- Executes on button press in pushbutton4_view_movie.
-function pushbutton4_view_movie_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton4_view_movie (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
+function showMovie(handles,save_movie)
+
+if nargin < 2
+    save_movie = false;
+end
 
 results_dir = handles.metricdata.results_dir;
 event_name = handles.metricdata.result_event_name;
@@ -222,17 +230,65 @@ max_displ = max(max(abs(displ)));
 
 movie_speed = handles.metricdata.movie_speed;
 
-figure;
+frames(floor(length(time)/movie_speed)) = struct('cdata',[],'colormap',[]);
+counter = 1;
+hfig = figure('unit','normalized','outerposition',[0.35 0.2 0.3 0.65]);
+% hfig = figure;
+subplot(10,1,1:6);
+subplot(10,1,8:10);
 for k = 1 : movie_speed : length(time)
-    plot(displ(k,:)*100, z(1:end), '-.o');
+    subplot(10,1,1:6);
+    plot(displ(k,:)*100, z(1:end), 'b-.o');
     grid on;
-    set(gca,'Ydir','reverse','fontsize',12);
+    set(gca,'Ydir','reverse');
     xlabel('Horizontal ground displacement [cm]');
     ylabel('Depth [m]');
     xlim([-max_displ*100, max_displ*100]);
     ylim([0 max(z)]);
     title(sprintf('Time = %.2f sec (%d times faster)',k*dt,movie_speed));
+    
+    subplot(10,1,8:10);
+    cla;
+    %plot(surf_accel(:,1),surf_accel(:,2),'color',[.4 .4 .4],'linewidth',1.25); hold on;
+    plot(surf_accel(:,1),surf_accel(:,2),'color',[.4 .4 .4],'linewidth',1.25); hold on;
+    if k == 1  % only query ylim during the first iteration
+        yl = ylim();
+    end
+    plot(surf_accel(1:k,1),surf_accel(1:k,2),'b','linewidth',1.75); hold on;
+    plot(time(k)*[1 1],yl,'b','linewidth',1.0); hold on;
+    grid on;
+    xlabel('Time [sec]');
+    ylabel('Acceleration [m/s/s]');
+    
     pause(dt);
+    frames(counter) = getframe(hfig);
+    counter = counter + 1;
+end
+
+if save_movie
+    movie_filename = fullfile(results_dir,sprintf('%s.avi',event_name));
+    my_video = VideoWriter(movie_filename);
+    my_video.FrameRate = floor(1/dt); 
+    % my_video.FrameRate = 50;
+    open(my_video);
+    writeVideo(my_video,frames);
+    close(my_video);
+    
+    msgbox(sprintf('Movie saved to %s.',results_dir),'Message');
+end
+
+
+
+% --- Executes on button press in pushbutton4_view_movie.
+function pushbutton4_view_movie_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton4_view_movie (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+if handles.metricdata.folder_select_flag == 0
+    msgbox('You have not selected a folder yet.','Warning');
+else
+    showMovie(handles);
 end
 
 
@@ -242,65 +298,11 @@ function pushbutton5_view_and_save_movie_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-results_dir = handles.metricdata.results_dir;
-event_name = handles.metricdata.result_event_name;
-displ_time_history_filename1 = fullfile(results_dir,sprintf...
-    ('%s_time_history_displ.txt',event_name));
-displ_time_history_filename2 = fullfile(results_dir,sprintf...
-    ('%s_time_history_displ.dat',event_name));
-surface_accel_filename1 = fullfile(results_dir,sprintf...
-    ('%s_accel_on_surface.txt',event_name));
-surface_accel_filename2 = fullfile(results_dir,sprintf...
-    ('%s_accel_on_surface.dat',event_name));
-profile_filename1 = fullfile(results_dir,sprintf...
-    ('%s_re-discretized_profile.txt',event_name));
-profile_filename2 = fullfile(results_dir,sprintf...
-    ('%s_re-discretized_profile.dat',event_name));
-try
-    displ = importdata(displ_time_history_filename1);
-    surf_accel = importdata(surface_accel_filename1);
-    vs_profile = importdata(profile_filename1);
-catch
-    displ = importdata(displ_time_history_filename2);
-    surf_accel = importdata(surface_accel_filename2);
-    vs_profile = importdata(profile_filename2);
+if handles.metricdata.folder_select_flag == 0
+    msgbox('You have not selected a folder yet.','Warning');
+else
+    showMovie(handles,true);
 end
-
-time = surf_accel(:,1);
-dt = time(2) - time(1);
-h = vs_profile(:,1);
-z = convertThicknessToDepth(h);
-
-max_displ = max(max(abs(displ)));
-
-movie_speed = handles.metricdata.movie_speed;  % an integer, e.g., 20
-
-frames(floor(length(time)/movie_speed)) = struct('cdata',[],'colormap',[]);
-counter = 1;
-hfig = figure;
-for k = 1 : movie_speed : length(time)
-    plot(displ(k,:)*100, z(1:end), '-.o');
-    grid on;
-    set(gca,'Ydir','reverse','fontsize',12);
-    xlabel('Horizontal ground displacement [cm]');
-    ylabel('Depth [m]');
-    xlim([-max_displ*100, max_displ*100]);
-    ylim([0 max(z)]);
-    title(sprintf('Time = %.2f sec (%d times faster)',k*dt,movie_speed));
-    pause(dt);
-    frames(counter) = getframe(hfig);
-    counter = counter + 1;
-end
-
-movie_filename = fullfile(results_dir,sprintf('%s.avi',event_name));
-my_video = VideoWriter(movie_filename);
-my_video.FrameRate = floor(1/dt); 
-% my_video.FrameRate = 50;
-open(my_video);
-writeVideo(my_video,frames);
-close(my_video);
-
-
 
 
 function edit1_relative_speed_Callback(hObject, eventdata, handles)
@@ -341,3 +343,4 @@ function pushbutton6_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 close all;
+
