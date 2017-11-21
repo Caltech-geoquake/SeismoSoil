@@ -22,7 +22,7 @@ function varargout = SeismoSoil_Equivalent_Linear_Frequency_Dependent_Analysis(v
 
 % Edit the above text to modify the response to help SeismoSoil_Equivalent_Linear_Frequency_Dependent_Analysis
 
-% Last Modified by GUIDE v2.5 24-Aug-2014 23:38:49
+% Last Modified by GUIDE v2.5 20-Nov-2017 17:52:44
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -874,3 +874,12 @@ function pushbutton19_close_all_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 close all;
+
+
+% --- Executes on button press in pushbutton20_post_process.
+function pushbutton20_post_process_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton20_post_process (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+SeismoSoil_PostProcessing;
