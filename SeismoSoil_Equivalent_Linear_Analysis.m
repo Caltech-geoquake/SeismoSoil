@@ -22,7 +22,7 @@ function varargout = SeismoSoil_Equivalent_Linear_Analysis(varargin)
 
 % Edit the above text to modify the response to help SeismoSoil_Equivalent_Linear_Analysis
 
-% Last Modified by GUIDE v2.5 19-May-2016 11:25:35
+% Last Modified by GUIDE v2.5 20-Nov-2017 17:51:14
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -898,3 +898,12 @@ function pushbutton19_close_all_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 close all;
+
+
+% --- Executes on button press in pushbutton20_post_process.
+function pushbutton20_post_process_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton20_post_process (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+SeismoSoil_PostProcessing;
