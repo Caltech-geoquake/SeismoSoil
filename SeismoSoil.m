@@ -22,7 +22,7 @@ function varargout = SeismoSoil(varargin)
 
 % Edit the above text to modify the response to help SeismoSoil
 
-% Last Modified by GUIDE v2.5 20-May-2015 13:26:43
+% Last Modified by GUIDE v2.5 20-Nov-2017 23:45:17
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -165,15 +165,6 @@ close SeismoSoil
 SeismoSoil_Nonlinear_Analysis_HH;
 
 
-% --- Executes on button press in pushbutton7_fewer_clicks.
-function pushbutton7_fewer_clicks_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton7_fewer_clicks (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-close SeismoSoil;
-SeismoSoil_Fewer_Clicks_Analysis;
-
-
 % --- Executes on button press in pushbutton8_Linear_Time_Domain.
 function pushbutton8_Linear_Time_Domain_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton8_Linear_Time_Domain (see GCBO)
@@ -210,7 +201,7 @@ function pushbutton_author_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-hm = msgbox({'Current version: v1.3.0.0, 11/19/2017',...
+hm = msgbox({'Current version: v1.3.1.0, 11/20/2017',...
     'First draft: 6/30/2013',...
     ' ','Authors: Domniki Asimaki, Jian Shi, Wei Li',...
     'GUI Design: Jian Shi',' ','Contact: D.A.- domniki@caltech.edu',...
