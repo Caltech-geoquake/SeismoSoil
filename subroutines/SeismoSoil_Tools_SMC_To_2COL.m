@@ -257,11 +257,15 @@ else
     motion_file_name = handles.metricdata.motion_file_name;
     
     motion = cell(nr_motion,1); % preallocation of cell array
+    bh = msgbox('Importing data...','Importing...');
     for i = 1 : 1 : nr_motion
         motion{i} = readtext(fullfile(motion_dir_name,motion_file_name{i}));
     end
+    close(bh);
 
     for i = 1 : 1 : nr_motion
+        bh = msgbox(sprintf('Converting %d of %d...',i,nr_motion),'Converting...');
+        
         fprintf('%d/%d\n',i,nr_motion);
         current_motion_filename = handles.metricdata.motion_file_name{i};
         [~,fname,ext] = fileparts(current_motion_filename);
@@ -336,6 +340,7 @@ else
         
         dlmwrite(fullfile(motion_dir_name,new_fname),[time,accel],'delimiter','\t','precision',6);
         
+        close(bh);
     end
     
     choice = questdlg('Finished. Open containing folder?', ...
