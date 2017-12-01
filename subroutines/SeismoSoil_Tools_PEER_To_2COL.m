@@ -77,7 +77,6 @@ function varargout = SeismoSoil_Tools_PEER_To_2COL_OutputFcn(hObject, eventdata,
 varargout{1} = handles.output;
 
 
-
 % * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 % * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 % * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -97,7 +96,6 @@ end
 
 handles.metricdata.step4_complete = 0;
 guidata(hObject,handles);
-
 
 
 % --- Executes on button press in pushbutton2_select_motions.
@@ -135,10 +133,11 @@ handles.metricdata.motion_dir_name = motion_dir_name;
 handles.metricdata.nr_motion = nr_motion;
 
 motion = cell(nr_motion,1); % preallocation of cell array
+bh = msgbox('Importing data, please wait...','Importing...');
 for i = 1 : 1 : nr_motion
-    motion{i} = importdata(fullfile(motion_dir_name,motion_file_name{i}),...
-                           ' ',4);
+    motion{i} = importdata(fullfile(motion_dir_name,motion_file_name{i}),' ',4);
 end
+close(bh);
 handles.metricdata.motion = motion;
 handles.metricdata.step4_complete = 1;
 
@@ -204,9 +203,6 @@ handles.metricdata.factor_to_SI = 1;
 guidata(hObject,handles);
 
 
-
-
-
 % --- Executes during object creation, after setting all properties.
 function uipanel7_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to uipanel7 (see GCBO)
@@ -215,8 +211,6 @@ function uipanel7_CreateFcn(hObject, eventdata, handles)
 
 handles.metricdata.factor_from_SI = 1;
 guidata(hObject,handles);
-
-
 
 
 % --- Executes when selected object is changed in uipanel7.
@@ -240,8 +234,6 @@ handles.metricdata.factor_from_SI = factor_from_SI;
 guidata(hObject,handles);
 
 
-
-
 % --- Executes on button press in pushbutton3_convert_all.
 function pushbutton3_convert_all_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3_convert_all (see GCBO)
@@ -258,6 +250,8 @@ else
     
     motion_dir_name = handles.metricdata.motion_dir_name;
     for i = 1 : 1 : nr_motion
+        bh = msgbox(sprintf('Converting %d of %d...',i,nr_motion),'Converting...');
+        
         current_motion_filename = handles.metricdata.motion_file_name{i};
         [~,fname,ext] = fileparts(current_motion_filename);
         fprintf('%s\n',current_motion_filename);
@@ -274,7 +268,7 @@ else
         
         current_motion_struct = motion{i};
         factor_from_SI = handles.metricdata.factor_from_SI;
-        factor_to_SI = 9.81;
+        factor_to_SI = 9.81;  % because PEER raw files have units of g
         
         accel_matrix = current_motion_struct.data;
         
@@ -286,20 +280,22 @@ else
             dt = str2double(dt_str);
         end
         
-        accel_matrix_tr = transpose(accel_matrix);
-        npts = numel(accel_matrix);
+        accel_matrix_T = transpose(accel_matrix);
+        npts = numel(accel_matrix);  % may be inaccurate, if accel_matrix has NaN
         
         time = (dt : dt : dt*npts)';
-        accel = zeros(npts,1);
         
-        for j = 1 : 1 : npts
-            accel(j) = accel_matrix_tr(j);
-        end
+        accel = reshape(accel_matrix_T,1,[])';  % flatten into vector, row by row
+        
+        non_nan_index = find(~isnan(accel),1,'last');  % index of last non-NaN element
+        accel = accel(1:non_nan_index);  % remove trailing NaN values
+        time = time(1:non_nan_index);  % remove trailing NaN values
         
         accel = accel * factor_to_SI * factor_from_SI;
         
         dlmwrite(fullfile(motion_dir_name,new_fname),[time,accel],'delimiter','\t','precision',6);
         
+        close(bh);
     end
     
     choice = questdlg('Finished. Open containing folder?', ...
@@ -395,7 +391,6 @@ function pushbutton12_close_all_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 close all;
-
 
 
 % --- Executes on button press in pushbutton1_return_to_tools.
