@@ -84,7 +84,7 @@ if ok_to_proceed == 1
         fprintf('Ground motion No. %d\n',ii);
         
         current_motion = motion{ii};
-        [a_temp,motion_name_without_ext,ext] = fileparts(motion_name{ii});
+        [~,motion_name_without_ext,ext] = fileparts(motion_name{ii});
         output_dir2 = fullfile(output_dir,motion_name_without_ext);
         mkdir(output_dir2);
         
