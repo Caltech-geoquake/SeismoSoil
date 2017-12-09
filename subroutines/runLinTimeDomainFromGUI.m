@@ -1,5 +1,6 @@
-function [ok_to_proceed,h_running] = runLinTimeDomainFromGUI(vs_profile,nr_motion,motion,motion_name,output_dir,...
-    factor_rho,factor_xi,unit_factor_accel,bedrock_type,motion_type,fig_visible)
+function [ok_to_proceed,h_running] = runLinTimeDomainFromGUI(vs_profile,...
+    nr_motion,motion,motion_name,output_dir,factor_rho,factor_xi,...
+    unit_factor_accel,bedrock_type,motion_type,fig_visible,use_parallel)
 
 h_running = 0;
 
@@ -11,6 +12,13 @@ vs_profile(:,4) = rho;
 vs_profile(:,3) = xi;
 
 % para = H2n;
+
+if use_parallel == 1
+    nr_cores = inf;  % using a maximum of "nr_cores" workers or threads
+elseif use_parallel == 0
+    nr_cores = 0;  % do not use multiple cores/threads
+end
+
 
 %% Manually selecting the current working directory ("pwd") for Mac OS X
 % % if strcmpi(computer,'maci64')
@@ -132,7 +140,7 @@ if ok_to_proceed == 1
         end
     end
     
-    parfor ii = 1 : nr_motion
+    parfor (ii = 1 : nr_motion, nr_cores)
         fprintf('Ground motion No. %d\n',ii);
         %% Prepare output folder
         current_motion_name_with_ext = motion_name{ii};
