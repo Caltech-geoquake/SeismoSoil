@@ -4,11 +4,9 @@ function plotFourierSpectrumAndOrSave(motion,x_axis_scale,y_axis_scale,side_opti
 
 [f_array,spectrum] = fourierTransform(motion,side_option,complex_option);
 if strcmpi(smooth_option,'regular')
-    df = f_array(2) - f_array(1);
-    smoothed_spectrum = getsmoothed(abs(spectrum),df,0.3);
-else if strcmpi(smooth_option,'konnoOhmachi')
+    smoothed_spectrum = sineSmooth(abs(spectrum),f_array,0.3);
+elseif strcmpi(smooth_option,'konnoOhmachi')
     smoothed_spectrum = fasterKonnoOhmachi(abs(spectrum),f_array);
-    end
 end
         
 figure;

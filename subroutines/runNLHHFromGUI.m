@@ -289,7 +289,6 @@ if ok_to_proceed == 1
         freq_array = (0 : df : df*(N-1))';
         ACCEL_IN = fft(accel_in(:,2));
         ACCEL_SURFACE = fft(accel_surface(:,1));
-        % tf1 = getsmoothed(abs(ACCEL_SURFACE),df,0.3)./(2*getsmoothed(abs(ACCEL_IN),df,0.3));
         freq_array = freq_array(find(freq_array <= f_max)); % only keeps 0 -- f_max
         ACCEL_IN = ACCEL_IN(find(freq_array <= f_max));
         ACCEL_SURFACE = ACCEL_SURFACE(find(freq_array <= f_max));
