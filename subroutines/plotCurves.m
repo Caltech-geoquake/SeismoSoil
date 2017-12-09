@@ -1,4 +1,7 @@
 function plotCurves(curve_matrix)
+%
+% Plots G/Gmax and dampint curves
+%
 
 nr_strn_pts = size(curve_matrix,1);  % number of strain points
 nr_mtrls = size(curve_matrix,2)/4; % number of different materials
@@ -15,16 +18,6 @@ for i = 1 : 1 : nr_mtrls
     xi_arrays(:,i) = curve_matrix(:,(i-1)*4+4);
 end
 
-% % fig1 = figure;
-% % xSize = 7.5; ySize = 3;     %  Width = 3 in., height = 2.25 in.
-% % set(fig1,'Units','inches');  %  Set units as inch
-% % set(fig1,'PaperUnits','inches');  %  Set paper unit as inch
-% % xLeft = (12-xSize)/2;  % xLeft: the larger the more to the right;
-% % yTop = (10-ySize)/2;   % yTop: the larger the higher
-% % set(fig1,'position',[xLeft yTop xSize ySize]);  
-% %              % Defines where figure is shown on screen
-% % set(fig1,'PaperPosition',[xLeft yTop xSize ySize]); 
-% %              % Defines where figure is shown on "paper"
 hfig = figure('unit','pixels','outerposition',[50,50,750,380]);
 set(hfig,'unit','inches','paperposition',[2.25,3.5,7.5,3]);
 
