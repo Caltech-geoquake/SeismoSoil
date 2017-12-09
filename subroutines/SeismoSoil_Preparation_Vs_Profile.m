@@ -247,12 +247,36 @@ if handles.metricdata.rock_property_complete * handles.metricdata.soil_property_
     density_or_unit_weight = handles.metricdata.density_or_unit_weight;
     unit_of_damping = handles.metricdata.unit_of_damping;
     
-    profile_without_rock = cell2mat(handles.metricdata.profile_without_rock);
+    %profile_without_rock = cell2mat(handles.metricdata.profile_without_rock);
+    cell_profile = handles.metricdata.profile_without_rock;
+    nrow = size(cell_profile,1);
+    ncol = size(cell_profile,2);
+    profile_without_rock = zeros(nrow, ncol);
+    for j = 1 : nrow
+        for k = 1 : ncol
+            if ischar(cell_profile{j,k})
+                profile_without_rock(j,k) = str2double(cell_profile{j,k});
+            elseif isfloat(cell_profile{j,k})
+                profile_without_rock(j,k) = cell_profile{j,k};
+            else
+                msgbox(sprintf('Data at row #%d column #d is invalid!',j,k),'Error');
+            end
+        end
+    end
     
     rock_property = handles.metricdata.rock_property; % this is a 1x5 cell array
     rock_Vs = rock_property{2};
     rock_xi = rock_property{3};
     rock_rho = rock_property{4};
+    if ischar(rock_Vs)
+        rock_Vs = str2double(rock_Vs);
+    end
+    if ischar(rock_xi)
+        rock_xi = str2double(rock_xi);
+    end
+    if ischar(rock_rho)
+        rock_rho = str2double(rock_rho);
+    end
     
     if isempty(rock_Vs), rock_Vs = 0; end
     if isempty(rock_xi), rock_xi = 0; end
@@ -302,14 +326,37 @@ if handles.metricdata.rock_property_complete * handles.metricdata.soil_property_
     density_or_unit_weight = handles.metricdata.density_or_unit_weight;
     unit_of_damping = handles.metricdata.unit_of_damping;
     
-    vs_profile_without_rock = cell2mat(handles.metricdata.profile_without_rock);
+    cell_profile = handles.metricdata.profile_without_rock;
+    nrow = size(cell_profile,1);
+    ncol = size(cell_profile,2);
+    profile_without_rock = zeros(nrow, ncol);
+    for j = 1 : nrow
+        for k = 1 : ncol
+            if ischar(cell_profile{j,k})
+                profile_without_rock(j,k) = str2double(cell_profile{j,k});
+            elseif isfloat(cell_profile{j,k})
+                profile_without_rock(j,k) = cell_profile{j,k};
+            else
+                msgbox(sprintf('Data at row #%d column #d is invalid!',j,k),'Error');
+            end
+        end
+    end
     
     rock_property = handles.metricdata.rock_property; % this is a 1x5 cell array
     rock_Vs = rock_property{2};
     rock_xi = rock_property{3};
     rock_rho = rock_property{4};
+    if ischar(rock_Vs)
+        rock_Vs = str2double(rock_Vs);
+    end
+    if ischar(rock_xi)
+        rock_xi = str2double(rock_xi);
+    end
+    if ischar(rock_rho)
+        rock_rho = str2double(rock_rho);
+    end
     
-    vs_profile = [vs_profile_without_rock;0,rock_Vs,rock_xi,rock_rho,0];
+    vs_profile = [profile_without_rock;0,rock_Vs,rock_xi,rock_rho,0];
     
     if strcmp(unit_of_damping,'percent')
         vs_profile(:,3) = vs_profile(:,3)/100;
