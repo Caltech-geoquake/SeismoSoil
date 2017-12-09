@@ -994,8 +994,8 @@ else
     
     tic;
     [ok_to_proceed,h_running] = runLinTimeDomainFromGUI(vs_profile, nr_motion,...
-        motion, motion_name, output_dir, factor_rho, factor_xi,...
-        unit_factor_accel, bedrock_type, motion_type, fig_visible_option);
+        motion, motion_name, output_dir, factor_rho, factor_xi, unit_factor_accel, ...
+        bedrock_type, motion_type, fig_visible_option, use_parallel);
     elapsed_time = toc;
     fprintf('Simulation finished in %s.\n',sec2datetime(elapsed_time));
     
