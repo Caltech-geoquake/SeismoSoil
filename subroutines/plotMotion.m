@@ -50,13 +50,6 @@ end
 %% Plot figures
 hfig = figure('unit','pixels','outerposition',[100,25,500,715]);
 set(hfig,'unit','inches','paperposition',[2.5,1,5,7]);
-% % xSize = 5; ySize = 7;     %  Width = 3 in., height = 2.25 in.
-% % set(fig1,'Units','inches');  %  Set units as inch
-% % set(fig1,'PaperUnits','inches');  %  Set paper unit as inch
-% % xLeft = (10-xSize)/2;  % xLeft: the larger the more to the right;
-% % yBottom = (7-ySize)/2;   % yTop: the larger the higher
-% % set(hfig,'position',[xLeft yBottom xSize ySize]); % Defines where figure is shown on screen
-% % set(hfig,'PaperPosition',[xLeft yBottom xSize ySize]); % Defines where figure is shown on "paper"
 
 subplot(311);
 if show_RMS_accel == 1
@@ -66,15 +59,21 @@ end
 h1 = plot(t,a,'b'); hold on;
 plot(t(pga_index),a(pga_index),'ro','linewidth',1.75);
 grid on;
-% annotation('textbox',[.3 .8 .1 .1],'String',sprintf('PGA = %.2f (unit)',PGA),'backgroundcolor','w');
-text(t(min(pga_index+round(length(t)/40),length(t))),a(pga_index),sprintf('PGA = %.2f %s',PGA,unit),'fontsize',12,'backgroundcolor','w');
+yl = ylim;  % query y limits
+text_x_loc = t(min(pga_index+round(length(t)/40),length(t)));
+if a(pga_index) <= 0.87*min(yl) || a(pga_index) >= 0.87*max(yl)
+    text_y_loc = a(pga_index)*0.8;
+else
+    text_y_loc = a(pga_index);
+end
+text(text_x_loc,text_y_loc,sprintf('PGA = %.2f %s',PGA,unit),'fontsize',12);
 xlim([min(t) max(t)]);
-xlabel('Time (s)');
+xlabel('Time [sec]');
 ylabel(sprintf('Acceleration [%s]',unit));
 title(title_text,'fontsize',14,'interpreter','none');
 
 subplot(312);
-h2 = plot(t,v(:,2)/factor*100,'b'); % division by "factor" makes the unit into meter
+h2 = plot(t,v(:,2)/factor*100,'b'); % division by "factor" makes the unit cm/s
 grid on;
 xlim([min(t) max(t)]);
 xlabel('Time [s]');
