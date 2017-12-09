@@ -22,7 +22,7 @@ function varargout = SeismoSoil_Tools_SMC_To_2COL(varargin)
 
 % Edit the above text to modify the response to help SeismoSoil_Tools_SMC_To_2COL
 
-% Last Modified by GUIDE v2.5 21-May-2015 15:06:20
+% Last Modified by GUIDE v2.5 09-Dec-2017 00:26:51
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -134,13 +134,13 @@ handles.metricdata.motion_file_name = motion_file_name;
 handles.metricdata.motion_dir_name = motion_dir_name;
 handles.metricdata.nr_motion = nr_motion;
 
-% * * * * This commented part is moved to "convert_all_Callback" * * * * * *
-% % motion = cell(nr_motion,1); % preallocation of cell array
-% % for i = 1 : 1 : nr_motion
-% %     motion{i} = readtext(fullfile(motion_dir_name,motion_file_name{i}));
-% % end
-% % handles.metricdata.motion = motion;
-% * * * * * * * * * * * * * * *
+motion = cell(nr_motion,1); % preallocation of cell array
+bh = msgbox('Importing data, please wait...','Importing...');
+for i = 1 : 1 : nr_motion
+    motion{i} = readtext(fullfile(motion_dir_name,motion_file_name{i}));
+end
+close(bh);
+handles.metricdata.motion = motion;
 handles.metricdata.step4_complete = 1;
 
 % Initialize baseline correction log
@@ -154,11 +154,6 @@ set(handles.listbox_motions,'String',temp,'Value',1);
 handles.metricdata.motion_listbox_contents = temp;
 
 guidata(hObject,handles);
-
-
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 
 
 % --- Executes on selection change in listbox_motions.
@@ -191,10 +186,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-
 % --- Executes during object creation, after setting all properties.
 function uipanel1_unit_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to uipanel1_unit (see GCBO)
@@ -205,9 +196,6 @@ handles.metricdata.factor_to_SI = 1;
 guidata(hObject,handles);
 
 
-
-
-
 % --- Executes during object creation, after setting all properties.
 function uipanel7_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to uipanel7 (see GCBO)
@@ -216,8 +204,6 @@ function uipanel7_CreateFcn(hObject, eventdata, handles)
 
 handles.metricdata.factor_from_SI = 1;
 guidata(hObject,handles);
-
-
 
 
 % --- Executes when selected object is changed in uipanel7.
@@ -241,6 +227,27 @@ handles.metricdata.factor_from_SI = factor_from_SI;
 guidata(hObject,handles);
 
 
+% --- Executes on button press in checkbox_show_waveforms.
+function checkbox_show_waveforms_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox_show_waveforms (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkbox_show_waveforms
+
+show_waveforms = get(hObject,'Value');
+handles.metricdata.show_waveforms = show_waveforms;
+guidata(hObject,handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function checkbox_show_waveforms_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to checkbox_show_waveforms (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+handles.metricdata.show_waveforms = 1;
+guidata(hObject,handles);
 
 
 % --- Executes on button press in pushbutton3_convert_all.
@@ -253,16 +260,9 @@ if handles.metricdata.step4_complete == 0
     msgbox('You haven''t selected any files yet.','Warning');
 else
     nr_motion = handles.metricdata.nr_motion;
-    motion_dir_name = handles.metricdata.motion_dir_name;
-    motion_file_name = handles.metricdata.motion_file_name;
-    
-    motion = cell(nr_motion,1); % preallocation of cell array
-    bh = msgbox('Importing data...','Importing...');
-    for i = 1 : 1 : nr_motion
-        motion{i} = readtext(fullfile(motion_dir_name,motion_file_name{i}));
-    end
-    close(bh);
+    motion = handles.metricdata.motion;
 
+    motion_dir_name = handles.metricdata.motion_dir_name;
     for i = 1 : 1 : nr_motion
         bh = msgbox(sprintf('Converting %d of %d...',i,nr_motion),'Converting...');
         
@@ -273,10 +273,13 @@ else
         switch handles.metricdata.factor_from_SI % Get Tag of selected object.
             case 1
                 str1 = 'SI';
+                str2 = 'm/s^2';
             case 100
                 str1 = 'gal';
+                str2 = 'cm/s^2';
             case 1/9.81
                 str1 = 'g';
+                str2 = 'g';
         end
         new_fname = sprintf('%s_(unit=%s).txt',fname,str1);
         
@@ -284,61 +287,13 @@ else
         factor_from_SI = handles.metricdata.factor_from_SI;
         factor_to_SI = 0.01;
         
-        str_a = current_motion_cell{14,1}; % the 14th line
-        content_a = str2num(str_a); % convert from string to matrix
-        npts = content_a(1); % total number of points in the time series
-        
-        str_b = current_motion_cell{18,1}; % the 18th line
-        content_b = str2num(str_b); % convert from string to matrix
-        srps = content_b(2); % "srps" = sampling rate per second
-        dt = 1/srps; % unit: sec
-        
-        for i_row = 28 : 1 : size(current_motion_cell,1)
-            row_str = current_motion_cell{i_row};
-            if row_str(1) == '|'
-                i_accel = i_row; % i_accel = row # below which the contents are accel time histories
-            else
-                break;
-            end
-        end
-        
-        cell_2 = current_motion_cell(i_accel+1:end,1); % extract and construct a new cell array
-        
-        accel_matrix = zeros(length(cell_2),8);  % 8 columns (http://escweb.wr.usgs.gov/nsmp-data/smcfmt.html)
-        for j = 1 : 1 : length(cell_2)-1  % until the second to the last row
-            line_content = cell_2{j};
-            if line_content(1) ~= '-'  % negative sign
-                line_content = [' ',line_content];
-            end
-            for k = 1 : 1 : 8
-                accel_matrix(j,k) = str2double(line_content((k-1)*10+1:(k-1)*10+10));
-            end
-        end
-        for j = length(cell_2) % last row
-            line_content = cell_2{j};
-            if ischar(line_content)
-                if line_content(1) ~= '-'  % negative sign
-                    line_content = [' ',line_content];
-                end
-                for k = 1 : 1 : length(line_content)/10
-                    accel_matrix(j,k) = str2double(line_content((k-1)*10+1:(k-1)*10+10));
-                end
-            else % this means that there's only one number in the last line
-                accel_matrix(j,1) = line_content;
-            end
-        end
-        
-        time = (dt : dt : dt*npts)';
-        accel = zeros(npts,1);
-        accel_matrix_tr = accel_matrix';
-        
-        for j = 1 : 1 : npts
-            accel(j) = accel_matrix_tr(j); % unit of raw "accel" = cm/s/s (http://nsmp.wr.usgs.gov/smcfmt.html)
-        end
-        
-        accel = accel * factor_to_SI * factor_from_SI;
+        [time,accel] = convertSingleMotion(current_motion_cell,factor_from_SI,factor_to_SI);
         
         dlmwrite(fullfile(motion_dir_name,new_fname),[time,accel],'delimiter','\t','precision',6);
+        
+        if handles.metricdata.show_waveforms
+            plotMotion([time,accel],str2,1.0,fname);
+        end
         
         close(bh);
     end
@@ -357,9 +312,6 @@ else
     
 end
 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 
 % --- Executes on button press in pushbutton4_convert_selected.
 function pushbutton4_convert_selected_Callback(hObject, eventdata, handles)
@@ -367,46 +319,58 @@ function pushbutton4_convert_selected_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+all_motion = handles.metricdata.motion;
+
 if handles.metricdata.step4_complete == 0
     msgbox('You haven''t selected any motions yet.','Warning');
 else
     if handles.metricdata.nr_motion == 1
         selected_motion_indices = 1;
-        motion_filenames = handles.metricdata.motion_file_name;
-        nr_motion = 1;
+        %motion_filenames = handles.metricdata.motion_file_name;
+        motion = all_motion(selected_motion_indices);
+        nr_selected_motion = 1;
     else
         selected_motion_indices = handles.metricdata.selected_motion_indices;
-        motion_listbox_contents = handles.metricdata.motion_listbox_contents;
-        motion_filenames = motion_listbox_contents(selected_motion_indices);
-        nr_motion = length(motion_filenames);
+        %motion_listbox_contents = handles.metricdata.motion_listbox_contents;
+        %motion_filenames = motion_listbox_contents(selected_motion_indices);
+        motion = all_motion(selected_motion_indices);
+        nr_selected_motion = length(motion);
     end
 
     motion_dir_name = handles.metricdata.motion_dir_name;
-    for i = 1 : 1 : nr_motion
-        current_motion_filename = motion_filenames{i};
+    for i = 1 : 1 : nr_selected_motion
+        bh = msgbox(sprintf('Converting %d of %d...',i,nr_selected_motion),'Converting...');
+        
+        fprintf('%d/%d\n',i,nr_selected_motion);
+        current_motion_filename = handles.metricdata.motion_file_name{i};
         [~,fname,ext] = fileparts(current_motion_filename);
         
         switch handles.metricdata.factor_from_SI % Get Tag of selected object.
             case 1
                 str1 = 'SI';
+                str2 = 'm/s^2';
             case 100
                 str1 = 'gal';
+                str2 = 'cm/s^2';
             case 1/9.81
                 str1 = 'g';
+                str2 = 'g';
         end
-        new_fname = sprintf('%s_in_%s%s',fname,str1,ext);
+        new_fname = sprintf('%s_(unit=%s).txt',fname,str1);
         
-        current_motion = importdata(fullfile(motion_dir_name,current_motion_filename));
-        factor_to_SI = handles.metricdata.factor_to_SI;
+        current_motion_cell = motion{i};
         factor_from_SI = handles.metricdata.factor_from_SI;
+        factor_to_SI = 0.01;
         
-        time = current_motion(:,1);
-        accel = current_motion(:,2);
-        
-        accel = accel * factor_to_SI * factor_from_SI;
+        [time,accel] = convertSingleMotion(current_motion_cell,factor_from_SI,factor_to_SI);
         
         dlmwrite(fullfile(motion_dir_name,new_fname),[time,accel],'delimiter','\t','precision',6);
         
+        if handles.metricdata.show_waveforms
+            plotMotion([time,accel],str2,1.0,fname);
+        end
+        
+        close(bh);
     end
     
     choice = questdlg('Finished. Open containing folder?', ...
@@ -423,9 +387,61 @@ else
 end
 
 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+function [time,accel] = convertSingleMotion(current_motion_cell,factor_from_SI,factor_to_SI)
+
+    str_a = current_motion_cell{14,1}; % the 14th line
+    content_a = str2num(str_a); % convert from string to matrix
+    npts = content_a(1); % total number of points in the time series
+
+    str_b = current_motion_cell{18,1}; % the 18th line
+    content_b = str2num(str_b); % convert from string to matrix
+    srps = content_b(2); % "srps" = sampling rate per second
+    dt = 1/srps; % unit: sec
+
+    for i_row = 28 : 1 : size(current_motion_cell,1)
+        row_str = current_motion_cell{i_row};
+        if row_str(1) == '|'
+            i_accel = i_row; % i_accel = row # below which the contents are accel time histories
+        else
+            break;
+        end
+    end
+
+    cell_2 = current_motion_cell(i_accel+1:end,1); % extract and construct a new cell array
+
+    accel_matrix = zeros(length(cell_2),8);  % 8 columns (http://escweb.wr.usgs.gov/nsmp-data/smcfmt.html)
+    for j = 1 : 1 : length(cell_2)-1  % until the second to the last row
+        line_content = cell_2{j};
+        if line_content(1) ~= '-'  % negative sign
+            line_content = [' ',line_content];
+        end
+        for k = 1 : 1 : 8
+            accel_matrix(j,k) = str2double(line_content((k-1)*10+1:(k-1)*10+10));
+        end
+    end
+    for j = length(cell_2) % last row
+        line_content = cell_2{j};
+        if ischar(line_content)
+            if line_content(1) ~= '-'  % negative sign
+                line_content = [' ',line_content];
+            end
+            for k = 1 : 1 : length(line_content)/10
+                accel_matrix(j,k) = str2double(line_content((k-1)*10+1:(k-1)*10+10));
+            end
+        else % this means that there's only one number in the last line
+            accel_matrix(j,1) = line_content;
+        end
+    end
+
+    time = (dt : dt : dt*npts)';
+    accel = zeros(npts,1);
+    accel_matrix_tr = accel_matrix';
+
+    for j = 1 : 1 : npts
+        accel(j) = accel_matrix_tr(j); % unit of raw "accel" = cm/s/s (http://nsmp.wr.usgs.gov/smcfmt.html)
+    end
+
+    accel = accel * factor_to_SI * factor_from_SI;
 
 
 % --- Executes on button press in pushbutton12_close_all.
@@ -463,3 +479,4 @@ end
 
 handles.metricdata.dt_entered = 0;
 guidata(hObject,handles);
+

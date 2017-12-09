@@ -22,7 +22,7 @@ function varargout = SeismoSoil_Tools_PEER_To_2COL(varargin)
 
 % Edit the above text to modify the response to help SeismoSoil_Tools_PEER_To_2COL
 
-% Last Modified by GUIDE v2.5 21-May-2015 15:16:03
+% Last Modified by GUIDE v2.5 09-Dec-2017 00:50:03
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -108,7 +108,7 @@ clc;
 
 global start_dir0;
 
-filter_spec = {'*.AT2','NGA Acceleration Format (*.AT2)';'*.*','All Files (*.*)'};
+filter_spec = {'*.AT2','PEER format (*.AT2)';'*.*','All Files (*.*)'};
 dlg_title = 'Select input file(s)...';
 [motion_file_name,motion_dir_name,filter_index] ...
     = uigetfile(filter_spec,dlg_title,start_dir0,'MultiSelect','on');
@@ -154,11 +154,6 @@ handles.metricdata.motion_listbox_contents = temp;
 guidata(hObject,handles);
 
 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-
-
 % --- Executes on selection change in listbox_motions.
 function listbox_motions_Callback(hObject, eventdata, handles)
 % hObject    handle to listbox_motions (see GCBO)
@@ -175,7 +170,6 @@ handles.metricdata.selected_motion_indices = selected_motion_indices;
 guidata(hObject,handles);
 
 
-
 % --- Executes during object creation, after setting all properties.
 function listbox_motions_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to listbox_motions (see GCBO)
@@ -188,10 +182,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 
 % --- Executes during object creation, after setting all properties.
 function uipanel1_unit_CreateFcn(hObject, eventdata, handles)
@@ -234,6 +224,29 @@ handles.metricdata.factor_from_SI = factor_from_SI;
 guidata(hObject,handles);
 
 
+% --- Executes on button press in checkbox_show_waveforms.
+function checkbox_show_waveforms_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox_show_waveforms (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkbox_show_waveforms
+
+show_waveforms = get(hObject,'Value');
+handles.metricdata.show_waveforms = show_waveforms;
+guidata(hObject,handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function checkbox_show_waveforms_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to checkbox_show_waveforms (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+handles.metricdata.show_waveforms = 1;
+guidata(hObject,handles);
+
+
 % --- Executes on button press in pushbutton3_convert_all.
 function pushbutton3_convert_all_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3_convert_all (see GCBO)
@@ -244,7 +257,6 @@ clc;
 if handles.metricdata.step4_complete == 0
     msgbox('You haven''t selected any files yet.','Warning');
 else
-   
     motion = handles.metricdata.motion;
     nr_motion = handles.metricdata.nr_motion;
     
@@ -259,10 +271,13 @@ else
         switch handles.metricdata.factor_from_SI % Get Tag of selected object.
             case 1
                 str1 = 'SI';
+                str2 = 'm/s^2';
             case 100
                 str1 = 'gal';
+                str2 = 'cm/s^2';
             case 1/9.81
                 str1 = 'g';
+                str2 = 'g';
         end
         new_fname = sprintf('%s_(unit=%s).txt',fname,str1);
         
@@ -270,34 +285,17 @@ else
         factor_from_SI = handles.metricdata.factor_from_SI;
         factor_to_SI = 9.81;  % because PEER raw files have units of g
         
-        accel_matrix = current_motion_struct.data;
-        
-        if any(strcmp('colheaders',fields(current_motion_struct)))
-            dt = str2double(current_motion_struct.colheaders{4});
-        else  % if current_motion_struct does not have a field named 'colheaders'
-            dt_info = current_motion_struct.textdata{end};
-            dt_str = dt_info(18:26);
-            dt = str2double(dt_str);
-        end
-        
-        accel_matrix_T = transpose(accel_matrix);
-        npts = numel(accel_matrix);  % may be inaccurate, if accel_matrix has NaN
-        
-        time = (dt : dt : dt*npts)';
-        
-        accel = reshape(accel_matrix_T,1,[])';  % flatten into vector, row by row
-        
-        non_nan_index = find(~isnan(accel),1,'last');  % index of last non-NaN element
-        accel = accel(1:non_nan_index);  % remove trailing NaN values
-        time = time(1:non_nan_index);  % remove trailing NaN values
-        
-        accel = accel * factor_to_SI * factor_from_SI;
-        
+        [time,accel] = convertSingleMotion(current_motion_struct,factor_from_SI,factor_to_SI);
+
         dlmwrite(fullfile(motion_dir_name,new_fname),[time,accel],'delimiter','\t','precision',6);
         
+        if handles.metricdata.show_waveforms
+            plotMotion([time,accel],str2,1.0,fname);
+        end
+
         close(bh);
     end
-    
+
     choice = questdlg('Finished. Open containing folder?', ...
 	'Finished', ...
 	'Yes','No','No');
@@ -309,60 +307,66 @@ else
         case 'No'
             % do nothing
     end
-    
-end
 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+end
+   
+    
 
 % --- Executes on button press in pushbutton4_convert_selected.
 function pushbutton4_convert_selected_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton4_convert_selected (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-clc;
+
+all_motion = handles.metricdata.motion;
 
 if handles.metricdata.step4_complete == 0
     msgbox('You haven''t selected any motions yet.','Warning');
 else
     if handles.metricdata.nr_motion == 1
         selected_motion_indices = 1;
-        motion_filenames = handles.metricdata.motion_file_name;
+        motion = all_motion(selected_motion_indices);
         nr_motion = 1;
     else
         selected_motion_indices = handles.metricdata.selected_motion_indices;
-        motion_listbox_contents = handles.metricdata.motion_listbox_contents;
-        motion_filenames = motion_listbox_contents(selected_motion_indices);
-        nr_motion = length(motion_filenames);
+        motion = all_motion(selected_motion_indices);
+        nr_selected_motion = length(motion);
     end
 
     motion_dir_name = handles.metricdata.motion_dir_name;
-    for i = 1 : 1 : nr_motion
-        current_motion_filename = motion_filenames{i};
+    for i = 1 : 1 : nr_selected_motion
+        bh = msgbox(sprintf('Converting %d of %d...',i,nr_selected_motion),'Converting...');
+        
+        current_motion_filename = handles.metricdata.motion_file_name{i};
         [~,fname,ext] = fileparts(current_motion_filename);
+        fprintf('%s\n',current_motion_filename);
         
         switch handles.metricdata.factor_from_SI % Get Tag of selected object.
             case 1
                 str1 = 'SI';
+                str2 = 'm/s^2';
             case 100
                 str1 = 'gal';
+                str2 = 'cm/s^2';
             case 1/9.81
                 str1 = 'g';
+                str2 = 'g';
         end
-        new_fname = sprintf('%s_in_%s%s',fname,str1,ext);
+        new_fname = sprintf('%s_(unit=%s).txt',fname,str1);
         
-        current_motion = importdata(fullfile(motion_dir_name,current_motion_filename));
-        factor_to_SI = handles.metricdata.factor_to_SI;
+        current_motion_struct = motion{i};
         factor_from_SI = handles.metricdata.factor_from_SI;
+        factor_to_SI = 9.81;  % because PEER raw files have units of g
         
-        time = current_motion(:,1);
-        accel = current_motion(:,2);
-        
-        accel = accel * factor_to_SI * factor_from_SI;
-        
+        [time,accel] = convertSingleMotion(current_motion_struct,factor_from_SI,factor_to_SI);
+
         dlmwrite(fullfile(motion_dir_name,new_fname),[time,accel],'delimiter','\t','precision',6);
         
+        if handles.metricdata.show_waveforms
+            plotMotion([time,accel],str2,1.0,fname);
+        end
+
+        close(bh);
     end
     
     choice = questdlg('Finished. Open containing folder?', ...
@@ -379,9 +383,35 @@ else
 end
 
 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-% * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+function [time,accel] = convertSingleMotion(current_motion_struct,factor_from_SI,factor_to_SI)
+    
+    accel_matrix = current_motion_struct.data;
+        
+    if any(strcmp('colheaders',fields(current_motion_struct)))
+        dt = str2double(current_motion_struct.colheaders{4});
+    else  % if current_motion_struct does not have a field named 'colheaders'
+        dt_info = current_motion_struct.textdata{end};
+        if any('=' == dt_info)  % dt_info has character '='
+            dt_str = dt_info(18:26);
+            dt = str2double(dt_str);
+        else  % another format: "8200    0.0050    NPTS, DT"
+            splitted_str = strsplit(dt_info,' ');
+            dt = str2double(splitted_str{2});
+        end
+    end
+
+    accel_matrix_T = transpose(accel_matrix);
+    npts = numel(accel_matrix);  % may be inaccurate, if accel_matrix has NaN
+
+    time = (dt : dt : dt*npts)';
+
+    accel = reshape(accel_matrix_T,1,[])';  % flatten into vector, row by row
+
+    non_nan_index = find(~isnan(accel),1,'last');  % index of last non-NaN element
+    accel = accel(1:non_nan_index);  % remove trailing NaN values
+    time = time(1:non_nan_index);  % remove trailing NaN values
+    
+    accel = accel * factor_to_SI * factor_from_SI;
 
 
 % --- Executes on button press in pushbutton12_close_all.
@@ -418,3 +448,4 @@ end
 
 handles.metricdata.dt_entered = 0;
 guidata(hObject,handles);
+
