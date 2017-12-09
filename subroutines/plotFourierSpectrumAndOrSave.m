@@ -45,7 +45,7 @@ if save_option == 1
         [f_array,spectrum_abs] = fourierTransform(motion,side_option,'abs');
     end
         
-    [a0_tmp,motion_filename_without_ext,ext_tmp] = fileparts(motion_filename);
+    [~,motion_filename_without_ext,ext_tmp] = fileparts(motion_filename);
     fname_str1 = sprintf('%s_Fourier_spectrum_absolute%s',motion_filename_without_ext,ext_tmp);
     fname_str2 = sprintf('%s_Fourier_spectrum_complex%s',motion_filename_without_ext,ext_tmp);
     
