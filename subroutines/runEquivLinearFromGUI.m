@@ -76,12 +76,11 @@ if ok_to_proceed == 1
     
     mkdir(output_dir);
     
-    % for ii = 1 : 1 : nr_motion
-	parfor (ii = 1 : nr_motion, nr_cores)
+    parfor (ii = 1 : nr_motion, nr_cores)
         fprintf('Ground motion No. %d\n',ii);
         
         current_motion = motion{ii};
-        [a_temp,motion_name_without_ext,ext] = fileparts(motion_name{ii});
+        [~,motion_name_without_ext,ext] = fileparts(motion_name{ii});
         mkdir(output_dir,motion_name_without_ext);
         output_dir2 = fullfile(output_dir,motion_name_without_ext);
         
@@ -214,7 +213,7 @@ if ok_to_proceed == 1
         set(gca,'yDir','reverse','fontsize',fz_axes);
         ylim([0 max(layer_boundary_depth)]);
         xlabel('\gamma_{max} (%)','fontsize',fz_axes);
-% %         set(get(gca,'xLabel'),'position',get(get(gca,'xLabel'),'position')+[0,4.5,0]);
+        % set(get(gca,'xLabel'),'position',get(get(gca,'xLabel'),'position')+[0,4.5,0]);
         grid on;
         
         subplot(155);
@@ -222,7 +221,7 @@ if ok_to_proceed == 1
         set(gca,'yDir','reverse','fontsize',fz_axes);
         ylim([0 max(layer_boundary_depth)]);
         xlabel('\sigma_{max} (kPa)','fontsize',fz_axes);
-% %         set(get(gca,'xLabel'),'position',get(get(gca,'xLabel'),'position')+[0,4.5,0]);
+        % set(get(gca,'xLabel'),'position',get(get(gca,'xLabel'),'position')+[0,4.5,0]);
         grid on;
         
         max_fig_filename = sprintf('%s_max_a_v_d_gamma_tau.png',motion_name_without_ext);
