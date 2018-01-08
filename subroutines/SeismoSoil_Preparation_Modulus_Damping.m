@@ -243,7 +243,7 @@ if handles.metricdata.select_profile_complete == 1
     curve_mtrx = zeros(length(strain),4*nr_layer); % preallocation
     
     sigma_v0 = computeVerticalStress(h,rho); % unit of stress: Pa
-    [G_over_Gmax,D,gamma_r] = dynamicSoilParameter(strain/100,sigma_v0,PI);
+    [G_over_Gmax,D,gamma_r] = darendeli2001(strain/100,sigma_v0,PI);
     
     for j = 1 : 1 : nr_layer
         curve_mtrx(:,(j-1)*4+1) = strain;
@@ -252,7 +252,9 @@ if handles.metricdata.select_profile_complete == 1
         curve_mtrx(:,(j-1)*4+4) = D(:,j)*100;
     end
     
-    dlmwrite(fullfile(profile_dir_name,sprintf('curve_%s.txt',sitecode)),curve_mtrx,'delimiter','\t');
+    out_filename = fullfile(profile_dir_name,sprintf('curve_%s.txt',sitecode));
+    dlmwrite(out_filename,curve_mtrx,'delimiter','\t','precision',6);
+    showFileInExplorer(out_filename);
     
     handles.metricdata.curve_mtrx = curve_mtrx;
     handles.metricdata.calculate_curves_complete = 1;
@@ -306,7 +308,10 @@ if handles.metricdata.calculate_curves_complete == 1
     
     sitecode = handles.metricdata.sitecode;
     profile_dir_name = handles.metricdata.profile_dir_name;
-    dlmwrite(fullfile(profile_dir_name,sprintf('H2_n_%s.txt',sitecode)),H2n,'delimiter','\t');
+    
+    out_file_name = fullfile(profile_dir_name,sprintf('H2_n_%s.txt',sitecode));
+    dlmwrite(out_file_name,H2n,'delimiter','\t','precision',6);
+    showFileInExplorer(out_file_name);
     
 else
     msgbox('You need to calculate G/Gmax and damping curves first.','Error...');
@@ -330,14 +335,14 @@ h_running = msgbox('Curve-fitting in progess. Please do not click other buttons.
 
 if handles.metricdata.calculate_curves_complete == 1
     curve = handles.metricdata.curve_mtrx;
-%     H4G = gaH4G(curve,handles.metricdata.showfig);
     H4G = fitMKZ(curve,handles.metricdata.showfig);
     H4x = gaH4x(curve,handles.metricdata.showfig);
     
     sitecode = handles.metricdata.sitecode;
     profile_dir_name = handles.metricdata.profile_dir_name;
-    dlmwrite(fullfile(profile_dir_name,sprintf('H4_G_%s.txt',sitecode)),H4G,'delimiter','\t');
-    dlmwrite(fullfile(profile_dir_name,sprintf('H4_x_%s.txt',sitecode)),H4x,'delimiter','\t');
+    dlmwrite(fullfile(profile_dir_name,sprintf('H4_G_%s.txt',sitecode)),H4G,'delimiter','\t','precision',6);
+    dlmwrite(fullfile(profile_dir_name,sprintf('H4_x_%s.txt',sitecode)),H4x,'delimiter','\t','precision',6);
+    showFileInExplorer(fullfile(profile_dir_name,sprintf('H4_x_%s.txt',sitecode)));
 else
     msgbox('You need to calculate G/Gmax and damping curves first.','Error...');
 end
