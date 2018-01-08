@@ -38,6 +38,26 @@ elseif strcmpi(option,'vs_profile')
         flag = -1;
         err_msg = 'Unit of damping ratio wrong: should be 1, not percent.';
     end
+elseif strcmpi(option,'vs_profile_2_col')
+    if ~isnumeric(data)
+        flag = -1;
+        err_msg = 'Data is not a numeric array. Check input file format.';
+    elseif hasInfNaN(data)
+        flag = -1;
+        err_msg = 'Data has NaN.';
+    elseif hasNegative(data)
+        flag = -1;
+        err_msg = 'Data has negative values.';
+    elseif size(data,2) ~= 2  % number of columns
+        flag = -1;
+        err_msg = 'Data has incorrect number of columns. (Should be at least 2.)';
+    elseif hasNonPositive(data(1:end-1,1))  % thickness
+        flag = -1;
+        err_msg = 'Soil thickness has non-positive numbers between first and second-to-last layers.';
+    elseif hasNonPositive(data(:,2))  % Vs
+        flag = -1;
+        err_msg = 'Vs has non-positive numbers.';
+    end
 elseif strcmpi(option,'curve')
     if ~isnumeric(data)
         flag = -1;
@@ -51,9 +71,6 @@ elseif strcmpi(option,'curve')
     elseif mod(size(data,2),4) ~= 0  % number of columns
         flag = -1;
         err_msg = 'Data has incorrect number of columns. (Should be a multiple of 4.)';
-    elseif any(data(1:2:end,3) > 1)  % shear strain larger than 1
-        flag = -1;
-        err_msg = 'Unit of shear strain wrong: should be 1, not percent.';
     end
 elseif strcmpi(option,'motion')
     if ~isnumeric(data)
