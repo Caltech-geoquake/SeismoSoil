@@ -475,12 +475,12 @@ if ok_to_proceed == 1
         curve_HH = zeros(length_array,nr_layer*4);  % pre-allocation, to put the "curve" matrix
         h = vs_profile(1:end-1,1); % layer thicknesses
         if size(vs_profile,2) <= 2
-            [~,rho] = getXiRho(vs_profile);
+            [~,rho] = getXiRho(vs_profile(:,2));
         else
             rho = vs_profile(1:end-1,4); % mass density of soil of each layer
         end
         stress = computeVerticalStress(h,rho); % unit of stress: Pa
-        [~,damping,~] = dynamicSoilParameter(strain_20/100,stress,PI); % unit of "damping": 1
+        [~,damping,~] = darendeli2001(strain_20/100,stress,PI); % unit of "damping": 1
 
         for j = 1 : 1 : nr_layer
             Gmax = para(6,j);
