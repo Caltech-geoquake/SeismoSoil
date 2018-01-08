@@ -132,7 +132,7 @@ handles.metricdata.nr_motion = nr_motion;
 motion = cell(nr_motion,1); % preallocation of cell array
 for i = 1 : 1 : nr_motion
     motion{i} = importdata(fullfile(motion_dir_name,motion_file_name{i}));
-    checkInputs(motion{i},'vs_profile',sprintf('Vs profile #%d',i));
+    checkInputs(motion{i},'vs_profile_2_col',sprintf('Vs profile #%d',i));
 end
 handles.metricdata.motion = motion;
 handles.metricdata.step4_complete = 1;
