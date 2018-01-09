@@ -212,7 +212,7 @@ clc;
 % strain = [0.0001 0.0003 0.0006 0.001 0.003 0.006 ...
 %         0.01 0.03 0.06 0.1 0.3 0.6 1 3 6]';  % unit: percent
 
-strain = logspace(-4,0.778151250383644,50)'; % unit: percent
+strain = logspace(-4,0.778151250383644,50)'; % from 1e-4 to 6 (unit: percent)
 
 if handles.metricdata.select_profile_complete == 1
 
