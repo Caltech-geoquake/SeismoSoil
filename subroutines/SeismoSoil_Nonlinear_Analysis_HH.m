@@ -490,13 +490,13 @@ if handles.metricdata.already_import_H4x == 1
     end
     if decision == 1
         curve_ = handles.metricdata.curve;
-        H4x_ = gaHyX(curve_,1);
+        H4x_ = gaHHx(curve_,1);
         handles.metricdata.H4x = H4x_;
         handles.metricdata.step3B_complete = 1;
     end
 else
         curve_ = handles.metricdata.curve;
-        H4x_ = gaHyX(curve_,1);
+        H4x_ = gaHHx(curve_,1);
         handles.metricdata.H4x = H4x_;
         handles.metricdata.step3B_complete = 1;
 end
