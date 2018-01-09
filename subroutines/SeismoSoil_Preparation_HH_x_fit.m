@@ -190,13 +190,11 @@ end
 if save_fig == 1
     fig_out_dir = uigetdir(start_dir0,'Select folder to save curve-fitting figures...');
     clc;
-    [para_xi,fitted_curves] = gaHyX(curve_matrix,show_fig,save_fig,fig_out_dir,sitecode); % "gaHHX" is MKZ + FKZ
+    [para_xi,fitted_curves] = gaHHx(curve_matrix,show_fig,save_fig,fig_out_dir,sitecode);
 else
     clc;
-    [para_xi,fitted_curves] = gaHyX(curve_matrix,show_fig,save_fig);  % "gaHyX" = MKZ+muKZ, with "d=1" as the 9th parameter at the end
+    [para_xi,fitted_curves] = gaHHx(curve_matrix,show_fig,save_fig);
 end
-
-para_xi = [para_xi;ones(1,size(para_xi,2))]; % manually add a row of "1" at the bottom of the matrix
 
 % * * *  Transform para_xi according to the material number  * * * *
 try
