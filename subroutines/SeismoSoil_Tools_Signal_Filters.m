@@ -604,11 +604,8 @@ else
         % * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
         
     end
-    command_text = sprintf('explorer.exe %s',motion_dir);
-    system(command_text);
+    openFolder(motion_dir);
 end
-
-
 
 
 % --- Executes on button press in pushbutton6_filter_selected_and_save.
@@ -664,8 +661,7 @@ else
         dlmwrite(fullfile(motion_dir,result_filename),result,'delimiter','\t','precision',6);
         % * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
     end
-    command_text = sprintf('explorer.exe %s',motion_dir);
-    system(command_text);
+    openFolder(motion_dir);
 end
 
 

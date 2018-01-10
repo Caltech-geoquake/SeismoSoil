@@ -458,11 +458,8 @@ else
             handles.metricdata.grid_on,motion_dir);
         
     end
-    command_text = sprintf('explorer.exe %s',motion_dir);
-    system(command_text);
+    openFolder(motion_dir);
 end
-
-
 
 
 % --- Executes on button press in pushbutton6_transform_selected_and_save.
@@ -500,8 +497,7 @@ else
             side_option,'complex',smooth_option,current_motion_filename,1,motion_dir,...
             handles.metricdata.grid_on);
     end
-    command_text = sprintf('explorer.exe %s',motion_dir);
-    system(command_text);
+    openFolder(motion_dir);
 end
 
 

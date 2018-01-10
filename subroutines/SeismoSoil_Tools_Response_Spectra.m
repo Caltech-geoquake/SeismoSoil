@@ -564,11 +564,8 @@ else
         dlmwrite(fullfile(motion_dir,RS_filename),[Tn,SA,PSA,SV,PSV,SD],'delimiter','\t','precision',6);
         
     end
-    command_text = sprintf('explorer.exe %s',motion_dir);
-    system(command_text);
+    openFolder(motion_dir);
 end
-
-
 
 
 % --- Executes on button press in pushbutton6_calculate_selected_and_save.
@@ -615,8 +612,7 @@ else
         RS_filename = sprintf('%s_response_spectra%s',motion_fname_without_ext,ext);
         dlmwrite(fullfile(motion_dir,RS_filename),[Tn,SA,PSA,SV,PSV,SD],'delimiter','\t','precision',6);
     end
-    command_text = sprintf('explorer.exe %s',motion_dir);
-    system(command_text);
+    openFolder(motion_dir);
 end
 
 
