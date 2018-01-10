@@ -48,9 +48,9 @@ elseif strcmpi(option,'vs_profile_2_col')
     elseif hasNegative(data)
         flag = -1;
         err_msg = 'Data has negative values.';
-    elseif size(data,2) ~= 2  % number of columns
+    elseif (size(data,2) ~= 2) || (size(data,2) ~= 5)  % number of columns
         flag = -1;
-        err_msg = 'Data has incorrect number of columns. (Should be at least 2.)';
+        err_msg = 'Data has incorrect number of columns. (Should be 2 or 5.)';
     elseif hasNonPositive(data(1:end-1,1))  % thickness
         flag = -1;
         err_msg = 'Soil thickness has non-positive numbers between first and second-to-last layers.';
