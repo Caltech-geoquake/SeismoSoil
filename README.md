@@ -42,7 +42,7 @@ To run from source codes within MATLAB:
 
 To run compiled executables:
 
-- Windows 7/8/8.1/10 or macOS (Mavericks and newer)
+- Windows 7/8/8.1/10, or macOS (Mavericks and newer)
 - Memory > 2 GB
 
 
@@ -59,7 +59,7 @@ To run from compiled executable:
 - Download executable files and extract to hard drive
 - Before running *SeismoSoil* for the first time, **make sure to set up MATLAB Runtime**:
   - Go to http://www.mathworks.com/products/compiler/mcr/
-  - Download MATLAB Runtime (R2016b version) for your operating system
+  - Download MATLAB Runtime (64-bit, R2017b version) for your operating system
   - Install MATLAB Runtime to your computer
 
 
@@ -89,7 +89,7 @@ The user manual, which contains a tutorial and technical details, is [here](http
 
 ### Copyright
 
-(c) 2014-2017, [GeoQuake Research Group](http://asimaki.caltech.edu/), California Institute of Technology
+(c) 2014-2018, [GeoQuake Research Group](http://asimaki.caltech.edu/), California Institute of Technology
 
 
 
