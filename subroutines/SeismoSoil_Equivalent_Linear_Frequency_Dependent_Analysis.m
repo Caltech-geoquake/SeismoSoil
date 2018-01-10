@@ -821,17 +821,7 @@ if ok_to_proceed == 1
     msgbox(sprintf('Simulation finished in %s.',sec2datetime(elapsed_time)),'Done');
     if handles.metricdata.open_result_folder_option == 1
         output_dir_absolute = cd(cd(output_dir));
-        if ismac()
-            output_dir_absolute = regexprep(output_dir_absolute,' ','\\ ');
-        end
-        
-        command_Windows = sprintf('explorer.exe %s',output_dir_absolute);
-        command_Mac = sprintf('open %s',output_dir_absolute);
-        if ispc()
-            system(command_Windows);
-        elseif ismac()
-            system(command_Mac);
-        end
+        openFolder(output_dir_absolute);
     end
 end
 
@@ -844,17 +834,7 @@ function pushbutton17_open_result_folder_Callback(hObject, eventdata, handles)
 
 output_dir = handles.metricdata.output_dir;
 output_dir_absolute = cd(cd(output_dir));
-if ismac()
-    output_dir_absolute = regexprep(output_dir_absolute,' ','\\ ');
-end
-
-command_Windows = sprintf('explorer.exe %s',output_dir_absolute);
-command_Mac = sprintf('open %s',output_dir_absolute);
-if ispc()
-    system(command_Windows);
-elseif ismac()
-    system(command_Mac);
-end
+openFolder(output_dir_absolute);
 
 
 % --- Executes on button press in pushbutton0_return_to_main.

@@ -298,10 +298,7 @@ elseif handles.metricdata.load_complete == -1 % single rock layer
         dlmwrite(fullfile(motion_dir_name,new_filename),response,'delimiter','\t','precision',6,'newline','pc');
         
         fprintf(' done.\n');
-        if ispc()
-            command_text = sprintf('explorer.exe %s',motion_dir_name);
-            system(command_text);
-        end
+        openFolder(motion_dir_name);
     else  % more than one motion was chosen
         fprintf('Deconvolving... ');
         nn = length(motion_file_name);
@@ -336,10 +333,7 @@ elseif handles.metricdata.load_complete == -1 % single rock layer
             dlmwrite(fullfile(motion_dir_name,new_filename),response,'delimiter','\t','precision',6,'newline','pc');
         end
         fprintf(' done.\n');
-        if ispc()
-            command_text = sprintf('explorer.exe %s',motion_dir_name);
-            system(command_text);
-        end
+        openFolder(motion_dir_name);
     end
 elseif handles.metricdata.load_complete == 1  % multiple soil layers
     profile_fname = handles.metricdata.profile_file_name;
@@ -381,10 +375,7 @@ elseif handles.metricdata.load_complete == 1  % multiple soil layers
         dlmwrite(fullfile(motion_dir_name,new_filename),response,'delimiter','\t','precision',6,'newline','pc');
         
         fprintf(' done.\n');
-        if ispc()
-            command_text = sprintf('explorer.exe %s',motion_dir_name);
-            system(command_text);
-        end
+        openFolder(motion_dir_name);
     else % if more than one motion was chosen
         fprintf('Deconvolving... ');
         nn = length(motion_file_name);
@@ -420,10 +411,7 @@ elseif handles.metricdata.load_complete == 1  % multiple soil layers
         end
         
         fprintf(' done.\n');
-        if ispc()
-            command_text = sprintf('explorer.exe %s',motion_dir_name);
-            system(command_text);
-        end
+        openFolder(motion_dir_name);
     end
     
 end

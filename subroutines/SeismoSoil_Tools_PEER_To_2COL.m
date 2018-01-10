@@ -302,8 +302,7 @@ else
     switch choice
         case 'Yes'
             dir_absolute = cd(cd(motion_dir_name));
-            command_text = sprintf('explorer.exe %s',dir_absolute);
-            system(command_text);
+            openFolder(dir_absolute);
         case 'No'
             % do nothing
     end
@@ -375,8 +374,7 @@ else
     switch choice
         case 'Yes'
             dir_absolute = cd(cd(motion_dir_name));
-            command_text = sprintf('explorer.exe %s',dir_absolute);
-            system(command_text);
+            openFolder(dir_absolute);
         case 'No'
             % do nothing
     end

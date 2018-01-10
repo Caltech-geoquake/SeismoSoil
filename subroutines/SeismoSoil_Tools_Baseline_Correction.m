@@ -555,11 +555,8 @@ else
         dat_filename = sprintf('%s_baseline_corrected%s',motion_fname_without_ext,ext);
         dlmwrite(fullfile(motion_dir,dat_filename),baseline_result,'delimiter','\t','precision',7,'newline','pc');       
     end
-    command_text = sprintf('explorer.exe %s',motion_dir);
-    system(command_text);
+    openFolder(motion_dir);
 end
-
-
 
 
 % --- Executes on button press in pushbutton6_calculate_selected_and_save.
@@ -599,8 +596,7 @@ else
         dat_filename = sprintf('%s_baseline_corrected%s',motion_fname_without_ext,ext);
         dlmwrite(fullfile(motion_dir,dat_filename),baseline_result,'delimiter','\t','precision',7,'newline','pc');  
     end
-    command_text = sprintf('explorer.exe %s',motion_dir);
-    system(command_text);
+    openFolder(motion_dir);
 end
 
 
