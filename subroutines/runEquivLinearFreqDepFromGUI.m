@@ -286,13 +286,12 @@ if ispc()
     end
 elseif ismac()
     if isdeployed()
-        copyfile('/Applications/SeismoSoil.app/Contents/MacOS/FDEQ',dir_FDEQ);
+        copyfile('/Applications/SeismoSoil.app/Contents/MacOS/FDEQ.mac',dir_FDEQ);
     else
-        copyfile('FDEQ',dir_FDEQ);
+        copyfile('FDEQ.mac',dir_FDEQ);
     end
-else  % Linux, not mac
-    warning('Compiled SeismoSoil does not work properly on Linux.')
-    copyfile(fullfile(fortran_dir,'FDEQ'),dir_FDEQ);
+elseif isunix()
+    copyfile(fullfile(fortran_dir,'FDEQ.unix'),dir_FDEQ);
 end
 
 % If motion length > 16384, increase sampling time interval so that the
@@ -322,10 +321,12 @@ delete('profile.dat');
 delete('soil.dat');
 delete('input_motion.dat');
 
-if strcmpi(computer,'pcwin64')
+if ispc()
     delete('FDEQ.exe');
-elseif strcmpi(computer,'maci64')
-    delete('./FDEQ');
+elseif ismac()
+    delete('./FDEQ.mac');
+elseif isunix()
+    delete('./FDEQ.unix');
 end
 
 cd(current_dir); % return to the directory before calling "resp_FD"
@@ -427,10 +428,12 @@ for k=1:n_ma
 end
 fclose(fid2);
 
-if strcmpi(computer,'pcwin64')
-    system('FDEQ');
-elseif strcmpi(computer,'maci64')
-    system ('./FDEQ');
+if ispc()
+    system('FDEQ.exe');
+elseif ismac()
+    system ('./FDEQ.mac');
+elseif isunix()
+    system ('./FDEQ.unix');
 end
 
 GM = load('kausel001.sac');

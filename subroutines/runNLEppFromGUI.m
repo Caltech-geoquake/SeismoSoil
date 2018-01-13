@@ -142,14 +142,13 @@ if ok_to_proceed == 1
         elseif ismac()
             if use_fortran == 1
                 if isdeployed()
-                    copyfile('/Applications/SeismoSoil.app/Contents/MacOS/NLEPP',dir_h2rev);
+                    copyfile('/Applications/SeismoSoil.app/Contents/MacOS/NLEPP.mac',dir_h2rev);
                 else
-                    copyfile(fullfile(fortran_dir,'NLEPP'),dir_h2rev);
+                    copyfile(fullfile(fortran_dir,'NLEPP.mac'),dir_h2rev);
                 end
             end
-        else  % Linux, not mac
-            warning('Compiled SeismoSoil does not work properly on Linux.');
-            copyfile(fullfile(fortran_dir,'NLEPP'),dir_h2rev);
+        elseif isunix()
+            copyfile(fullfile(fortran_dir,'NLEPP.unix'),dir_h2rev);
         end
         
         %% Reconstruct "tabk.dat"
@@ -225,13 +224,17 @@ if ok_to_proceed == 1
         delete('max_gamma.dat');
         delete('Tau_max.dat');
         
-        if strcmpi(computer,'pcwin64')
+        if ispc()
             if use_fortran == 1
                 delete('NLEPP.exe');
             end
-        elseif strcmpi(computer,'maci64')
+        elseif ismac()
             if use_fortran == 1
-                delete('./NLEPP');
+                delete('./NLEPP.mac');
+            end
+        elseif isunix()
+            if use_fortran == 1
+                delete('./NLEPP.unix');
             end
         end
         
@@ -480,15 +483,21 @@ dlmwrite('incident.dat',acc);
 % dlmwrite('curve.dat', curve);
 dlmwrite('Tau_max.dat', para);
 
-if strcmpi(computer,'pcwin64')
+if ispc()
     if use_fortran == 1
         system('NLEPP.exe');
     else
         nlEPP(); % run function "nlH2" -- no input args, no output args
     end
-elseif strcmpi(computer,'maci64')
+elseif ismac()
     if use_fortran == 1
-        system('./NLEPP');
+        system('./NLEPP.mac');
+    else
+        nlEPP();
+    end
+elseif isunix()
+    if use_fortran == 1
+        system('./NLEPP.unix');
     else
         nlEPP();
     end
