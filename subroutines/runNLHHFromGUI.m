@@ -153,14 +153,13 @@ if ok_to_proceed == 1
         elseif ismac()
             if use_fortran == 1
                 if isdeployed()
-                    copyfile('/Applications/SeismoSoil.app/Contents/MacOS/NLHH',dir_H4);
+                    copyfile('/Applications/SeismoSoil.app/Contents/MacOS/NLHH.mac',dir_H4);
                 else
-                    copyfile(fullfile(fortran_dir,'NLHH'),dir_H4);
+                    copyfile(fullfile(fortran_dir,'NLHH.mac'),dir_H4);
                 end
             end
-        else  % Linux, not mac
-            warning('Compiled SeismoSoil does not work properly on Linux.');
-            copyfile(fullfile(fortran_dir,'NLHH'),dir_H4);
+        elseif isunix()
+            copyfile(fullfile(fortran_dir,'NLHH.unix'),dir_H4);
         end
         
         %% Reconstruct "tabk.dat"
@@ -239,13 +238,17 @@ if ok_to_proceed == 1
         delete('max_tau.dat');
         delete('max_gamma.dat');
         
-        if strcmpi(computer,'pcwin64')
+        if ispc()
             if use_fortran == 1
                 delete('NLHH.exe');
             end
-        elseif strcmpi(computer,'maci64')
+        elseif ismac()
             if use_fortran == 1
-                delete('./NLHH');
+                delete('./NLHH.mac');
+            end
+        elseif isunix()
+            if use_fortran == 1
+                delete('./NLHH.unix');
             end
         end
         
@@ -506,15 +509,21 @@ dlmwrite('curve.dat', curve);
 dlmwrite('HH_G.dat', para_G);
 dlmwrite('HH_x.dat', para_x);
 
-if strcmpi(computer,'pcwin64')
+if ispc()
     if use_fortran == 1
-        system('NLHH');
+        system('NLHH.exe');
     else
         nlHH; % run function "nlHH" -- no input args, no output args
     end
-elseif strcmpi(computer,'maci64')
+elseif ismac()
     if use_fortran == 1
-        system('./NLHH');
+        system('./NLHH.mac');
+    else
+        nlHH;
+    end
+elseif isunix()
+    if use_fortran == 1
+        system('./NLHH.unix');
     else
         nlHH;
     end

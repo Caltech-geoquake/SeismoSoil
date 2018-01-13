@@ -157,13 +157,12 @@ if ok_to_proceed == 1
             end
         elseif ismac()
             if isdeployed()
-                copyfile('/Applications/SeismoSoil.app/Contents/MacOS/TDLinear',dir_h2rev);
+                copyfile('/Applications/SeismoSoil.app/Contents/MacOS/TDLinear.mac',dir_h2rev);
             else
-                copyfile(fullfile(fortran_dir,'TDLinear'),dir_h2rev);
+                copyfile(fullfile(fortran_dir,'TDLinear.mac'),dir_h2rev);
             end
-        else  % Linux, not mac
-            warning('Compiled SeismoSoil does not work properly on Linux.');
-            copyfile(fullfile(fortran_dir,'TDLinear'),dir_h2rev);
+        elseif isunix()
+            copyfile(fullfile(fortran_dir,'TDLinear.unix'),dir_h2rev);
         end
         
         %% Reconstruct "tabk.dat"
@@ -241,10 +240,12 @@ if ok_to_proceed == 1
         delete('max_tau.dat');
         delete('max_gamma.dat');
         
-        if strcmpi(computer,'pcwin64')
+        if ispc()
             delete('TDLinear.exe');
-        elseif strcmpi(computer,'maci64')
-            delete('./TDLinear');
+        elseif ismac()
+            delete('./TDLinear.mac');
+        elseif isunix()
+            delete('./TDLinear.unix');
         end
         
         %         dlmwrite('max_displ_profile.dat',max_d,'delimiter','\t');
@@ -491,10 +492,12 @@ dlmwrite('incident.dat',acc);
 dlmwrite('curve.dat', curve);
 dlmwrite('H2_n.dat', para);
 
-if strcmpi(computer,'pcwin64')
-    system('TDLinear');
-elseif strcmpi(computer,'maci64')
-    system('./TDLinear');
+if ispc()
+    system('TDLinear.exe');
+elseif ismac()
+    system('./TDLinear.mac');
+elseif isunix()
+    system('./TDLinear.unix');
 end
 
 layer_depth=load('layer_depth.dat');

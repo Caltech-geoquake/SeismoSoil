@@ -142,14 +142,13 @@ if ok_to_proceed == 1
         elseif ismac()
             if use_fortran == 1
                 if isdeployed()
-                    copyfile('/Applications/SeismoSoil.app/Contents/MacOS/NLH2',dir_h2rev);
+                    copyfile('/Applications/SeismoSoil.app/Contents/MacOS/NLH2.mac',dir_h2rev);
                 else
-                    copyfile(fullfile(fortran_dir,'NLH2'),dir_h2rev);
+                    copyfile(fullfile(fortran_dir,'NLH2.mac'),dir_h2rev);
                 end
             end
-        else  % Linux, not mac
-            warning('Compiled SeismoSoil does not work properly on Linux.');
-            copyfile(fullfile(fortran_dir,'NLH2'),dir_h2rev);
+        elseif isunix()
+            copyfile(fullfile(fortran_dir,'NLH2.unix'),dir_h2rev);
         end
         
         %% Reconstruct "tabk.dat"
@@ -224,13 +223,17 @@ if ok_to_proceed == 1
         delete('max_tau.dat');
         delete('max_gamma.dat');
         
-        if strcmpi(computer,'pcwin64')
+        if ispc()
             if use_fortran == 1
                 delete('NLH2.exe');
             end
-        elseif strcmpi(computer,'maci64')
+        elseif ismac()
             if use_fortran == 1
-                delete('./NLH2');
+                delete('./NLH2.mac');
+            end
+        elseif isunix()
+            if use_fortran == 1
+                delete('./NLH2.unix');
             end
         end
         
@@ -477,15 +480,21 @@ dlmwrite('incident.dat',acc);
 dlmwrite('curve.dat', curve);
 dlmwrite('H2_n.dat', para);
 
-if strcmpi(computer,'pcwin64')
+if ispc()
     if use_fortran == 1
-        system('NLH2');
+        system('NLH2.exe');
     else
         nlH2(dir_H2); % run function "nlH2" -- no input args, no output args
     end
-elseif strcmpi(computer,'maci64')
+elseif ismac()
     if use_fortran == 1
-        system('./NLH2');
+        system('./NLH2.mac');
+    else
+        nlH2(dir_H2);
+    end
+elseif isunix()
+    if use_fortran == 1
+        system('./NLH2.unix');
     else
         nlH2(dir_H2);
     end
