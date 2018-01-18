@@ -132,7 +132,6 @@ function uitable2_CellEditCallback(hObject, eventdata, handles)
 
 profile_without_rock = get(hObject,'data');
 handles.metricdata.profile_without_rock = profile_without_rock;
-% disp(profile_without_rock);
 handles.metricdata.soil_property_complete = 1;
 guidata(hObject,handles);
 
@@ -167,7 +166,6 @@ handles.metricdata.density_or_unit_weight = density_or_unit_weight;
 guidata(hObject,handles);
 
 
-
 % --- Executes during object creation, after setting all properties.
 function uipanel2_unit_of_damping_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to uipanel2_unit_of_damping (see GCBO)
@@ -176,7 +174,6 @@ function uipanel2_unit_of_damping_CreateFcn(hObject, eventdata, handles)
 
 handles.metricdata.unit_of_damping = 'percent';
 guidata(hObject,handles);
-
 
 
 % --- Executes when selected object is changed in uipanel2_unit_of_damping.
@@ -197,9 +194,6 @@ switch get(eventdata.NewValue,'Tag') % Get Tag of selected object.
 end
 handles.metricdata.unit_of_damping = unit_of_damping;
 guidata(hObject,handles);
-
-
-
 
 
 % --- Executes during object creation, after setting all properties.
@@ -238,8 +232,6 @@ function pushbutton1_plot_Vs_profile_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1_plot_Vs_profile (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-clc;
 
 g = 9.81;
 
@@ -381,77 +373,83 @@ function pushbutton4_auto_calc_xi_rho_Callback(hObject, eventdata, handles)
 
 unit_of_damping = handles.metricdata.unit_of_damping;
 
-profile_without_rock = cell2mat(handles.metricdata.profile_without_rock);
-rock_property = handles.metricdata.rock_property; % this is a 1x5 cell array
-rock_Vs = rock_property{2};
-soil_Vs = profile_without_rock(:,2);
-soil_xi = zeros(size(soil_Vs));
-soil_rho = zeros(size(soil_xi));
-nr_soil_layer = size(soil_Vs,1);
-
-switch unit_of_damping
-    case 'unity'
-        damping_unit_factor = 1;
-    case 'percent'
-        damping_unit_factor = 100;
-end
-
-if rock_Vs < 250
-    rock_xi = 0.05*damping_unit_factor;
-    handles.metricdata.rock_property{3} = rock_xi;
-elseif rock_Vs < 750
-    rock_xi = 0.02*damping_unit_factor;
-    handles.metricdata.rock_property{3} = rock_xi;
+if handles.metricdata.rock_property_complete * handles.metricdata.soil_property_complete == 0
+    msgbox('You need to enter both soil and rock Vs info.','Warning');
 else
-    rock_xi = 0.01*damping_unit_factor;
-    handles.metricdata.rock_property{3} = rock_xi;
-end
-
-if rock_Vs < 200
-    rock_rho = 1600;
-    handles.metricdata.rock_property{4} = rock_rho;
-elseif rock_Vs < 800
-    rock_rho = 1800;
-    handles.metricdata.rock_property{4} = rock_rho;
-else
-    rock_rho = 2000;
-    handles.metricdata.rock_property{4} = rock_rho;
-end
-
-for i = 1 : 1 : nr_soil_layer
-    if soil_Vs(i) < 250
-        soil_xi(i) = 0.05*damping_unit_factor;
-        handles.metricdata.profile_without_rock{i,3} = soil_xi(i);
-    elseif soil_Vs(i) < 750
-        soil_xi(i) = 0.02*damping_unit_factor;
-        handles.metricdata.profile_without_rock{i,3} = soil_xi(i);
-    else
-        soil_xi(i) = 0.01*damping_unit_factor;
-        handles.metricdata.profile_without_rock{i,3} = soil_xi(i);
-    end
+    rock_property = handles.metricdata.rock_property;
+    rock_Vs = rock_property{2};
     
-    if soil_Vs(i) < 200
-        soil_rho(i) = 1600;
-        handles.metricdata.profile_without_rock{i,4} = soil_rho(i);
-    elseif soil_Vs(i) < 800
-        soil_rho(i) = 1800;
-        handles.metricdata.profile_without_rock{i,4} = soil_rho(i);
-    else
-        soil_rho(i) = 2000;
-        handles.metricdata.profile_without_rock{i,4} = soil_rho(i);
+    soil_Vs = zeros(size(handles.metricdata.profile_without_rock,1),1);
+    for j = 1 : length(soil_Vs)
+        soil_Vs(j) = str2double(handles.metricdata.profile_without_rock{j,2});
     end
-    handles.metricdata.profile_without_rock{i,5} = i;
+    soil_xi = zeros(size(soil_Vs));
+    soil_rho = zeros(size(soil_xi));
+    nr_soil_layer = size(soil_Vs,1);
+
+    switch unit_of_damping
+        case 'unity'
+            damping_unit_factor = 1;
+        case 'percent'
+            damping_unit_factor = 100;
+    end
+
+    if rock_Vs < 250
+        rock_xi = 0.05*damping_unit_factor;
+        handles.metricdata.rock_property{3} = rock_xi;
+    elseif rock_Vs < 750
+        rock_xi = 0.02*damping_unit_factor;
+        handles.metricdata.rock_property{3} = rock_xi;
+    else
+        rock_xi = 0.01*damping_unit_factor;
+        handles.metricdata.rock_property{3} = rock_xi;
+    end
+
+    if rock_Vs < 200
+        rock_rho = 1600;
+        handles.metricdata.rock_property{4} = rock_rho;
+    elseif rock_Vs < 800
+        rock_rho = 1800;
+        handles.metricdata.rock_property{4} = rock_rho;
+    else
+        rock_rho = 2000;
+        handles.metricdata.rock_property{4} = rock_rho;
+    end
+
+    for i = 1 : 1 : nr_soil_layer
+        if soil_Vs(i) < 250
+            soil_xi(i) = 0.05*damping_unit_factor;
+            handles.metricdata.profile_without_rock{i,3} = soil_xi(i);
+        elseif soil_Vs(i) < 750
+            soil_xi(i) = 0.02*damping_unit_factor;
+            handles.metricdata.profile_without_rock{i,3} = soil_xi(i);
+        else
+            soil_xi(i) = 0.01*damping_unit_factor;
+            handles.metricdata.profile_without_rock{i,3} = soil_xi(i);
+        end
+
+        if soil_Vs(i) < 200
+            soil_rho(i) = 1600;
+            handles.metricdata.profile_without_rock{i,4} = soil_rho(i);
+        elseif soil_Vs(i) < 800
+            soil_rho(i) = 1800;
+            handles.metricdata.profile_without_rock{i,4} = soil_rho(i);
+        else
+            soil_rho(i) = 2000;
+            handles.metricdata.profile_without_rock{i,4} = soil_rho(i);
+        end
+        handles.metricdata.profile_without_rock{i,5} = i;
+    end
+
+    set(handles.metricdata.profile_table_handle,'data',handles.metricdata.profile_without_rock);
+
+    set(handles.metricdata.rock_table_handle,'data',...
+        {'    Infinity',handles.metricdata.rock_property{2},...
+        handles.metricdata.rock_property{3},...
+                handles.metricdata.rock_property{4},'   N/A'});
+
+    guidata(hObject,handles);
 end
-
-set(handles.metricdata.profile_table_handle,'data',handles.metricdata.profile_without_rock);
-
-set(handles.metricdata.rock_table_handle,'data',...
-    {'    Infinity',handles.metricdata.rock_property{2},...
-    handles.metricdata.rock_property{3},...
-    handles.metricdata.rock_property{4},'   N/A'});
-    
-guidata(hObject,handles);
-
 
 % --- Executes on button press in pushbutton3_return.
 function pushbutton3_return_Callback(hObject, eventdata, handles)
