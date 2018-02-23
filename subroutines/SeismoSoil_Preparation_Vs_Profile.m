@@ -378,6 +378,9 @@ if handles.metricdata.rock_property_complete * handles.metricdata.soil_property_
 else
     rock_property = handles.metricdata.rock_property;
     rock_Vs = rock_property{2};
+    if ~isfloat(rock_Vs) && ischar(rock_Vs)
+        rock_Vs = str2double(rock_Vs);
+    end
     
     soil_Vs = zeros(size(handles.metricdata.profile_without_rock,1),1);
     for j = 1 : length(soil_Vs)
@@ -394,50 +397,16 @@ else
             damping_unit_factor = 100;
     end
 
-    if rock_Vs < 250
-        rock_xi = 0.05*damping_unit_factor;
-        handles.metricdata.rock_property{3} = rock_xi;
-    elseif rock_Vs < 750
-        rock_xi = 0.02*damping_unit_factor;
-        handles.metricdata.rock_property{3} = rock_xi;
-    else
-        rock_xi = 0.01*damping_unit_factor;
-        handles.metricdata.rock_property{3} = rock_xi;
-    end
-
-    if rock_Vs < 200
-        rock_rho = 1600;
-        handles.metricdata.rock_property{4} = rock_rho;
-    elseif rock_Vs < 800
-        rock_rho = 1800;
-        handles.metricdata.rock_property{4} = rock_rho;
-    else
-        rock_rho = 2000;
-        handles.metricdata.rock_property{4} = rock_rho;
-    end
-
+    [rock_xi, rock_rho] = getXiRho(rock_Vs, 3);
+    rock_xi = rock_xi * damping_unit_factor;
+    handles.metricdata.rock_property{3} = rock_xi;
+    handles.metricdata.rock_property{4} = rock_rho;
+    
     for i = 1 : 1 : nr_soil_layer
-        if soil_Vs(i) < 250
-            soil_xi(i) = 0.05*damping_unit_factor;
-            handles.metricdata.profile_without_rock{i,3} = soil_xi(i);
-        elseif soil_Vs(i) < 750
-            soil_xi(i) = 0.02*damping_unit_factor;
-            handles.metricdata.profile_without_rock{i,3} = soil_xi(i);
-        else
-            soil_xi(i) = 0.01*damping_unit_factor;
-            handles.metricdata.profile_without_rock{i,3} = soil_xi(i);
-        end
-
-        if soil_Vs(i) < 200
-            soil_rho(i) = 1600;
-            handles.metricdata.profile_without_rock{i,4} = soil_rho(i);
-        elseif soil_Vs(i) < 800
-            soil_rho(i) = 1800;
-            handles.metricdata.profile_without_rock{i,4} = soil_rho(i);
-        else
-            soil_rho(i) = 2000;
-            handles.metricdata.profile_without_rock{i,4} = soil_rho(i);
-        end
+        [soil_xi(i), soil_rho(i)] = getXiRho(soil_Vs(i), 3);
+        soil_xi(i) = soil_xi(i) * damping_unit_factor;
+        handles.metricdata.profile_without_rock{i,3} = soil_xi(i);
+        handles.metricdata.profile_without_rock{i,4} = soil_rho(i);
         handles.metricdata.profile_without_rock{i,5} = i;
     end
 
