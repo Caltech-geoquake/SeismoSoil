@@ -243,7 +243,10 @@ if handles.metricdata.select_profile_complete == 1
     curve_mtrx = zeros(length(strain),4*nr_layer); % preallocation
     
     sigma_v0 = computeVerticalStress(h,rho); % unit of stress: Pa
-    [G_over_Gmax,D,gamma_r] = darendeli2001(strain/100,sigma_v0,PI);
+    sigma_p0 = 0.106 * Vs.^1.47;  % Mayne, Robertson, Lunne (1998) "Clay stress history evaluated fromseismic piezocone tests"
+    sigma_p0 = sigma_p0 * 1000; % kPa --> Pa
+    OCR = sigma_p0./sigma_v0;
+    [G_over_Gmax,D,~] = darendeli2001(strain/100,sigma_v0,PI,[],OCR);
     
     for j = 1 : 1 : nr_layer
         curve_mtrx(:,(j-1)*4+1) = strain;
@@ -254,7 +257,7 @@ if handles.metricdata.select_profile_complete == 1
     
     out_filename = fullfile(profile_dir_name,sprintf('curve_%s.txt',sitecode));
     dlmwrite(out_filename,curve_mtrx,'delimiter','\t','precision',6);
-    showFileInExplorer(out_filename);
+    openFolder(profile_dir_name, sprintf('curve_%s.txt',sitecode));
     
     handles.metricdata.curve_mtrx = curve_mtrx;
     handles.metricdata.calculate_curves_complete = 1;
@@ -266,7 +269,6 @@ if handles.metricdata.select_profile_complete == 1
 else
     msgbox('You need to select a Vs profile file first.','Error...');
 end
-
 
 
 % --- Executes during object creation, after setting all properties.
@@ -311,7 +313,7 @@ if handles.metricdata.calculate_curves_complete == 1
     
     out_file_name = fullfile(profile_dir_name,sprintf('H2_n_%s.txt',sitecode));
     dlmwrite(out_file_name,H2n,'delimiter','\t','precision',6);
-    showFileInExplorer(out_file_name);
+    openFolder(profile_dir_name, sprintf('H2_n_%s.txt',sitecode));
     
 else
     msgbox('You need to calculate G/Gmax and damping curves first.','Error...');
@@ -342,7 +344,7 @@ if handles.metricdata.calculate_curves_complete == 1
     profile_dir_name = handles.metricdata.profile_dir_name;
     dlmwrite(fullfile(profile_dir_name,sprintf('H4_G_%s.txt',sitecode)),H4G,'delimiter','\t','precision',6);
     dlmwrite(fullfile(profile_dir_name,sprintf('H4_x_%s.txt',sitecode)),H4x,'delimiter','\t','precision',6);
-    showFileInExplorer(fullfile(profile_dir_name,sprintf('H4_x_%s.txt',sitecode)));
+    openFolder(profile_dir_name, sprintf('H4_x_%s.txt',sitecode));
 else
     msgbox('You need to calculate G/Gmax and damping curves first.','Error...');
 end
