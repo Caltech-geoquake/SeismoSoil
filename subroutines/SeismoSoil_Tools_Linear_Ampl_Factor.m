@@ -168,19 +168,19 @@ else
         current_profile = vs_profile{i};
         [freq_array,AF_ro,TF_ro,f0_ro,AF_in,TF_in,AF_bh,TF_bh,f0_bh]...
             = tfLIN(current_profile,'off');
-        plotProfileAndLAF(current_profile,freq_array,AF_ro,f0_ro,AF_bh,f0_bh,...
+        plotProfileAndLAF(current_profile,freq_array,AF_ro,TF_ro,f0_ro,AF_bh,TF_bh,f0_bh,...
             current_profile_filename);
     end
     
 end
 
 
-function plotProfileAndLAF(vs_profile,freq,AF_ro,f0_ro,AF_bh,f0_bh,name)
+function plotProfileAndLAF(vs_profile,freq,AF_ro,TF_ro,f0_ro,AF_bh,TF_bh,f0_bh,name)
 
 hfig = figure;
-set(hfig,'unit','inches','paperposition',[3,3,7.5,5.5]);
+set(hfig,'unit','inches','position',[2,2,10.25,5.5]);
 
-subplot(2,3,[1,4]);
+subplot(2,5,[1,6]);
 [x,y] = genProfilePlotArrayFromMatrix(vs_profile);
 plot(x,y,'k','linewidth',1.5);
 set(gca,'Ydir','reverse','fontsize',10);
@@ -192,20 +192,27 @@ ylabel('Depth [m]','fontsize',10);
 grid on;
 title(name,'interpreter','none');
 
-subplot(2,3,2:3);
+subplot(2,5,2:3);
 semilogx(freq,AF_ro,'k','linewidth',1.5); hold on;
-plot(f0_ro,AF_ro(find(freq==f0_ro)),'ro','linewidth',1.75);
-annotation('textbox',[.42 .8 .1 .1],'String',sprintf('f_0 = %.2f Hz',f0_ro),'fontsize',9,'backgroundcolor','w');
+plot(f0_ro,AF_ro(freq==f0_ro),'ro','linewidth',1.75);
+annotation('textbox',[.3 .8 .1 .1],'String',sprintf('f_0 = %.2f Hz',f0_ro),'fontsize',9,'backgroundcolor','w');
 xlim([min(freq) max(freq)]);
 ylim([0 max(AF_ro)*1.15]);
 ylabel('Amplification Factor','fontsize',10);
 grid on;
 title('Rock outcrop');
 
-subplot(2,3,5:6);
+subplot(2,5,4:5);
+semilogx(freq,phase(TF_ro),'k','linewidth',1.5); hold on;
+xlim([min(freq) max(freq)]);
+ylabel('Phase shift (rad)','fontsize',10);
+grid on;
+title('Rock outcrop');
+
+subplot(2,5,7:8);
 semilogx(freq,AF_bh,'k','linewidth',1.5); hold on;
-plot(f0_bh,AF_bh(find(freq==f0_bh)),'ro','linewidth',1.75);
-annotation('textbox',[.42 .32 .1 .1],'String',sprintf('f_0 = %.2f Hz',f0_bh),'fontsize',9,'backgroundcolor','w');
+plot(f0_bh,AF_bh(freq==f0_bh),'ro','linewidth',1.75);
+annotation('textbox',[.3 .32 .1 .1],'String',sprintf('f_0 = %.2f Hz',f0_bh),'fontsize',9,'backgroundcolor','w');
 xlabel('Frequency [Hz]','fontsize',10);
 xlim([min(freq) max(freq)]);
 ylim([0 max(AF_bh)*1.15]);
@@ -213,6 +220,13 @@ ylabel('Amplification Factor','fontsize',10);
 grid on;
 title('Borehole');
 
+subplot(2,5,9:10);
+semilogx(freq,phase(TF_bh),'k','linewidth',1.5); hold on;
+xlim([min(freq) max(freq)]);
+xlabel('Frequency [Hz]','fontsize',10);
+ylabel('Phase shift (rad)','fontsize',10);
+grid on;
+title('Rock outcrop');
 
 % --- Executes on button press in pushbutton4_plot_selected.
 function pushbutton4_plot_selected_Callback(hObject, eventdata, handles)
