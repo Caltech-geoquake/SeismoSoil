@@ -211,8 +211,8 @@ catch
 end
 % * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-Hy_G_filename = sprintf('HH_X_%s.txt',sitecode);
-dlmwrite(fullfile(dir_out,Hy_G_filename),para_xi,'delimiter','\t','precision',6);
+HH_x_filename = sprintf('HH_X_%s.txt',sitecode);
+dlmwrite(fullfile(dir_out,HH_x_filename),para_xi,'delimiter','\t','precision',6);
 
 fitted_curves_filename = sprintf('Damping_curve_fit_by_HH_%s.txt',sitecode);
 dlmwrite(fullfile(dir_out,fitted_curves_filename),fitted_curves,'delimiter','\t','precision',6);
