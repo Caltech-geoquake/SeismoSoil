@@ -278,8 +278,12 @@ h_running = msgbox('Curve-fitting in progess. Please do not click other buttons.
 
 if handles.metricdata.select_curves_complete == 1
     curve = handles.metricdata.curve_data;
-%     H4G = gaH4G(curve,handles.metricdata.showfig);
+    % H4G = gaH4G(curve,handles.metricdata.showfig);
+    
+    fprintf('H4_G curve fitting...  ');
     H4G = fitMKZ(curve,handles.metricdata.showfig);
+    
+    fprintf('\nH4_x curve fitting...  ');
     H4x = gaH4x(curve,handles.metricdata.showfig);
     
     sitecode = handles.metricdata.sitecode;
