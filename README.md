@@ -77,7 +77,7 @@ To run from compiled executable:
   - Double-click `SeismoSoil.exe`
 - On macOS
   - Place `SeismoSoil` in the Applications folder
-  - Open Terminal and execute: `Applications/SeismoSoil.app/Contents/MacOS/applauncher`
+  - Open Terminal and execute: `/Applications/SeismoSoil.app/Contents/MacOS/applauncher`
 
 
 
