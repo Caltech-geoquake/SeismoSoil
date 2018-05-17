@@ -69,7 +69,7 @@ To run from compiled executable:
 To run from source:
 
 - Run `SeismoSoil.m` from the folder that contains it
-- You can also add the folder that contains `SeismoSoil.m` into your MATLAB search path (by typing `pathtool` in the command window)
+- You can also add the folder that contains `SeismoSoil.m` into your MATLAB search path (by running `pathtool` from the command window)
 
 To run from compiled executable:
 
