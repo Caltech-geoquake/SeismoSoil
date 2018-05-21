@@ -324,7 +324,7 @@ if ok_to_proceed == 1
         % ACCEL_SURFACE = fft(accel_surface(:,1));
         
         
-        % transfer functions (raw and smoothed)
+        %------------ transfer functions (raw and smoothed) ---------------
         fig1 = figure('visible',fig_visible);
         width = 5; height = 7;
         xLeft = (8-width)/2; yBottom = (10-height)/2;
@@ -355,14 +355,21 @@ if ok_to_proceed == 1
         tf_fig_filename = sprintf('%s_nonlinear_TF.png',motion_name_without_ext);
         saveas(fig1,fullfile(output_dir2,tf_fig_filename));
         
-        % input and output accelerations
+        %------------- input and output accelerations ---------------------
         fig2 = figure('visible',fig_visible);
         width = 5; height = 4;
         xLeft = (18.5-width)/2;  yBottom = (11-height)/2;
         set(fig2,'units','inches','paperposition',[xLeft,yBottom,width,height]);
         
-        plot(time_array,accel_surface(:,1),'color',[.6 .6 .6]); hold on;
-        plot(time_array,accel_in(:,2)*outcrop_conversion_factor,'r');
+        if max(abs(accel_surface(:,1))) > max(abs(accel_in(:,2)*outcrop_conversion_factor))
+            plot(time_array,accel_surface(:,1),'color',[255,127,14]/255,'linewidth',1.75); hold on;
+            plot(time_array,accel_in(:,2)*outcrop_conversion_factor,'color',[31,119,180]/255,'linewidth',1.75);
+            legend('Output','Rock Outcrop','location','northeast');
+        else
+            plot(time_array,accel_in(:,2)*outcrop_conversion_factor,'color',[31,119,180]/255,'linewidth',1.75); hold on;
+            plot(time_array,accel_surface(:,1),'color',[255,127,14]/255,'linewidth',1.75);
+            legend('Rock Outcrop','Output','location','northeast');
+        end
         ylabel('Acceleration (m/s^2)','fontsize',fz_axes);
         xlabel('Time (s)','fontsize',fz_axes);
         set(gca,'fontsize',fz_axes);
@@ -371,12 +378,10 @@ if ok_to_proceed == 1
         accel_title_text = sprintf('Input and Output Accelerations\n%s',motion_name_without_ext);
         title(accel_title_text,'interpreter','none','fontsize',fz_title);
         
-        legend('Output','Rock Outcrop','location','northeast');
-        
         accel_fig_filename = sprintf('%s_accelerations.png',motion_name_without_ext);
         saveas(fig2,fullfile(output_dir2,accel_fig_filename));
         
-        %% Plot max_a_v_d_gamma_tau
+        %--------------- Plot max_a_v_d_gamma_tau -------------------------
         fz_axes = fz_axes - 2;
         fz_title = fz_title - 1;
         
