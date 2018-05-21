@@ -93,7 +93,7 @@ if ok_to_proceed == 1
         output_or_not = 'n';
         [freq_array,tf,t_out,accel_on_surface,...
             new_profile,out_a,out_v,out_d,out_gamma,out_tau,max_avd,max_gt] ...
-            = equivLinSiteResp(vs_profile,accel_incident,curve,'off',boundary,output_or_not);
+            = equivLinSiteRespVec(vs_profile,accel_incident,curve,'off',boundary,output_or_not);
         
         filename_TF = sprintf('%s_equivalent_linear_TF%s',motion_name_without_ext,ext);
         filename_surface_accel = sprintf('%s_accel_on_surface%s',motion_name_without_ext,ext);
