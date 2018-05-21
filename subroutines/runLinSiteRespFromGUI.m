@@ -148,14 +148,20 @@ if ok_to_proceed == 1
         xLeft = (18.5-width)/2;  yBottom = (11-height)/2;
         set(fig2,'units','inches','paperposition',[xLeft,yBottom,width,height]);
         
-        plot(t_out,accel_on_surface,'color',[.6 .6 .6]); hold on;
-        plot(accel_incident(:,1),accel_incident(:,2)*outcrop_conversion_factor,'r');
+        if max(abs(accel_on_surface)) > max(abs(accel_incident(:,2)*outcrop_conversion_factor))
+            plot(t_out,accel_on_surface,'color',[255,127,14]/255,'linewidth',1.75); hold on;
+            plot(accel_incident(:,1),accel_incident(:,2)*outcrop_conversion_factor,'color',[31,119,180]/255,'linewidth',1.75);
+            h_legend = legend('Output','Rock outcrop','location','northeast');%,'fontsize',fz_axes);
+        else
+            plot(accel_incident(:,1),accel_incident(:,2)*outcrop_conversion_factor,'color',[31,119,180]/255,'linewidth',1.75); hold on;
+            plot(t_out,accel_on_surface,'color',[255,127,14]/255,'linewidth',1.75); hold on;
+            h_legend = legend('Rock outcrop','Output','location','northeast');%,'fontsize',fz_axes);
+        end
         ylabel('Acceleration (m/s^2)','fontsize',fz_axes);
         xlabel('Time (s)','fontsize',fz_axes);
         set(gca,'fontsize',fz_axes);
         xlim([0 max(t_out)]);
         grid on;
-        h_legend = legend('Output','Rock outcrop','location','northeast');%,'fontsize',fz_axes);
         set(h_legend,'fontsize',fz_axes); % actually the fontsize of legend is by default the same as axes
         accel_title_text = sprintf('Input and Output Accelerations\n%s',motion_name_without_ext);
         title(accel_title_text,'interpreter','none','fontsize',fz_title);
