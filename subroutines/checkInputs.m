@@ -139,7 +139,7 @@ elseif strcmpi(option,'vs_profile_and_tau_max')
     vs_profile = data{1};
     tau_max = data{2};
     len_tau = length(tau_max);
-    if len_tau ~= size(vs_profile,1) && len_tau ~= size(vs_profile,1)-1
+    if len_tau ~= size(vs_profile,1) && len_tau ~= size(vs_profile,1)-1 && len_tau ~= 0
         flag = -1;
         err_msg = 'Number of layers in tau_max and in vs_profile should match.';
     end
