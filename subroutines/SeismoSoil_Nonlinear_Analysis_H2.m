@@ -22,7 +22,7 @@ function varargout = SeismoSoil_Nonlinear_Analysis_H2(varargin)
 
 % Edit the above text to modify the response to help SeismoSoil_Nonlinear_Analysis_H2
 
-% Last Modified by GUIDE v2.5 20-May-2015 12:40:00
+% Last Modified by GUIDE v2.5 03-Jun-2018 18:24:38
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -51,8 +51,6 @@ function SeismoSoil_Nonlinear_Analysis_H2_OpeningFcn(hObject, eventdata, handles
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to SeismoSoil_Nonlinear_Analysis_H2 (see VARARGIN)
-
-clc;
 
 % Choose default command line output for SeismoSoil_Nonlinear_Analysis_H2
 handles.output = hObject;
@@ -995,3 +993,12 @@ function pushbutton20_post_processing_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 SeismoSoil_PostProcessing;
+
+
+% --- Executes on button press in pushbutton21_clear_console.
+function pushbutton21_clear_console_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton21_clear_console (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+clc;

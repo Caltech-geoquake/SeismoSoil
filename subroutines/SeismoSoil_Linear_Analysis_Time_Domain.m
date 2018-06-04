@@ -22,7 +22,7 @@ function varargout = SeismoSoil_Linear_Analysis_Time_Domain(varargin)
 
 % Edit the above text to modify the response to help SeismoSoil_Linear_Analysis_Time_Domain
 
-% Last Modified by GUIDE v2.5 20-Nov-2017 18:00:05
+% Last Modified by GUIDE v2.5 03-Jun-2018 18:21:07
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -51,8 +51,6 @@ function SeismoSoil_Linear_Analysis_Time_Domain_OpeningFcn(hObject, eventdata, h
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to SeismoSoil_Linear_Analysis_Time_Domain (see VARARGIN)
-
-clc;
 
 % Choose default command line output for SeismoSoil_Linear_Analysis_Time_Domain
 handles.output = hObject;
@@ -246,50 +244,6 @@ msgbox({'If you don''t specify a Vs profile name, a site code modified',...
         'Help');
 
 
-% % % % --- Executes during object creation, after setting all properties.
-% % % function pushbutton2a_select_curve_CreateFcn(hObject, eventdata, handles)
-% % % % hObject    handle to pushbutton2a_select_curve (see GCBO)
-% % % % eventdata  reserved - to be defined in a future version of MATLAB
-% % % % handles    empty - handles not created until after all CreateFcns called
-% % % handles.metricdata.step2_complete = 0;
-% % % guidata(hObject,handles);
-    
-    
-% % % % % --- Executes on button press in pushbutton2a_select_curve.
-% % % % function pushbutton2a_select_curve_Callback(hObject, eventdata, handles)
-% % % % % hObject    handle to pushbutton2a_select_curve (see GCBO)
-% % % % % eventdata  reserved - to be defined in a future version of MATLAB
-% % % % % handles    structure with handles and user data (see GUIDATA)
-% % % % 
-% % % % clc;
-% % % % 
-% % % % filter_spec = {'*.*';'*.dat';'*.txt'};
-% % % % dlg_title = 'Select "curve" data file...';
-% % % % [curve_file_name_,curve_dir_name_,filter_index] ...
-% % % %     = uigetfile(filter_spec,dlg_title,'MultiSelect','off');
-% % % % 
-% % % % handles.metricdata.curve_file_name = curve_file_name_;
-% % % % handles.metricdata.curve_dir_name = curve_dir_name_;
-% % % % 
-% % % % curve_ = importdata(fullfile(curve_dir_name_,curve_file_name_));
-% % % % handles.metricdata.curve = curve_;
-% % % % 
-% % % % handles.metricdata.step2_complete = 1;
-% % % % guidata(hObject,handles);
-
-
-% % % % % --- Executes on button press in pushbutton2b_plot_curves.
-% % % % function pushbutton2b_plot_curves_Callback(hObject, eventdata, handles)
-% % % % % hObject    handle to pushbutton2b_plot_curves (see GCBO)
-% % % % % eventdata  reserved - to be defined in a future version of MATLAB
-% % % % % handles    structure with handles and user data (see GUIDATA)
-% % % % 
-% % % % curve_matrix = handles.metricdata.curve;
-% % % % plotCurves(curve_matrix);
-
-
-
-
 % --- Executes during object creation, after setting all properties.
 function uipanel13_rho_unit_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to uipanel13_rho_unit (see GCBO)
@@ -320,10 +274,6 @@ handles.metricdata.rho_unit_division_factor = rho_unit_division_factor;
 guidata(hObject,handles);
 
 
-
-
-
-
 % --- Executes during object creation, after setting all properties.
 function uipanel1b_xi_unit_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to uipanel1b_xi_unit (see GCBO)
@@ -352,85 +302,6 @@ switch get(eventdata.NewValue,'Tag') % Get Tag of selected object.
 end
 handles.metricdata.xi_unit_division_factor = xi_unit_division_factor;
 guidata(hObject,handles);
-
-
-
-% % % % --- Executes on button press in pushbutton66666666.
-% % % function pushbutton66666666_Callback(hObject, eventdata, handles)
-% % % % hObject    handle to pushbutton66666666 (see GCBO)
-% % % % eventdata  reserved - to be defined in a future version of MATLAB
-% % % % handles    structure with handles and user data (see GUIDATA)
-% % % 
-% % % profile_ = handles.metricdata.profile;
-% % % rho = profile_(:,4);
-% % % rho,
-
-
-% % % % --- Executes during object creation, after setting all properties.
-% % % function pushbutton3a_select_H2_n_CreateFcn(hObject, eventdata, handles)
-% % % % hObject    handle to pushbutton3a_select_H2_n (see GCBO)
-% % % % eventdata  reserved - to be defined in a future version of MATLAB
-% % % % handles    empty - handles not created until after all CreateFcns called
-% % % 
-% % % handles.metricdata.already_import_H2n = 0;
-% % % handles.metricdata.step3_complete = 1;
-% % % guidata(hObject,handles);
-
-
-% % % % --- Executes on button press in pushbutton3a_select_H2_n.
-% % % function pushbutton3a_select_H2_n_Callback(hObject, eventdata, handles)
-% % % % hObject    handle to pushbutton3a_select_H2_n (see GCBO)
-% % % % eventdata  reserved - to be defined in a future version of MATLAB
-% % % % handles    structure with handles and user data (see GUIDATA)
-% % % 
-% % % clc;
-% % % 
-% % % filter_spec = {'*.*';'*.dat';'*.txt'};
-% % % dlg_title = 'Select "H2_n" data file...';
-% % % [H2n_file_name_,H2n_dir_name_,filter_index] ...
-% % %     = uigetfile(filter_spec,dlg_title,'MultiSelect','off');
-% % % 
-% % % handles.metricdata.H2n_file_name = H2n_file_name_;
-% % % handles.metricdata.H2n_dir_name = H2n_dir_name_;
-% % % 
-% % % H2n_ = importdata(fullfile(H2n_dir_name_,H2n_file_name_));
-% % % handles.metricdata.H2n = H2n_;
-% % % 
-% % % handles.metricdata.step3_complete = 1;
-% % % handles.metricdata.already_import_H2n = 1;
-% % % guidata(hObject,handles);
-
-
-% % % % --- Executes on button press in pushbutton3b_do_curve_fitting.
-% % % function pushbutton3b_do_curve_fitting_Callback(hObject, eventdata, handles)
-% % % % hObject    handle to pushbutton3b_do_curve_fitting (see GCBO)
-% % % % eventdata  reserved - to be defined in a future version of MATLAB
-% % % % handles    structure with handles and user data (see GUIDATA)
-% % % 
-% % % clc;
-% % % if handles.metricdata.already_import_H2n == 1
-% % %     choice = questdlg('You''ve already imported H2_n data. Do this calculation will overwrite the imported data. Do it anyway?', ...
-% % % 	'Caution', ...
-% % % 	'Yes','No','No');
-% % %     switch choice
-% % %         case 'Yes'
-% % %             decision = 1;
-% % %         case 'No'
-% % %             decision = 0;
-% % %     end
-% % %     if decision == 1
-% % %         curve_ = handles.metricdata.curve;
-% % %         H2n_ = gaH2(curve_,1);
-% % %         handles.metricdata.H2n = H2n_;
-% % %         guidata(hObject,handles);
-% % %     end
-% % % else
-% % %         curve_ = handles.metricdata.curve;
-% % %         H2n_ = gaH2(curve_,1);
-% % %         handles.metricdata.H2n = H2n_;
-% % %         guidata(hObject,handles);
-% % % end
-
 
 
 % --- Executes on button press in pushbutton1d_view_lin_TF.
@@ -1042,3 +913,12 @@ function pushbutton22_post_process_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 SeismoSoil_PostProcessing;
+
+
+% --- Executes on button press in pushbutton23_clear_console.
+function pushbutton23_clear_console_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton23_clear_console (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+clc;

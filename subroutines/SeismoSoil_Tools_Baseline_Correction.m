@@ -83,10 +83,8 @@ function pushbutton1_return_to_tools_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
 close SeismoSoil_Tools_Baseline_Correction;
 SeismoSoil_Tools;
-
 
 
 % --- Executes during object creation, after setting all properties.
@@ -106,8 +104,6 @@ function pushbutton2_select_motions_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton2_select_motions (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-clc;
 
 global start_dir0;
 
@@ -285,11 +281,8 @@ function pushbutton9_note_on_units_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
 msgbox({'Changing the unit of acceleration does not affect the result.',...
         'It only affects how Y axis labels of the output figures appear.'},'Note');
-
-
 
 
 % --- Executes during object creation, after setting all properties.
@@ -467,8 +460,6 @@ function pushbutton3_plot_all_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
-
 if handles.metricdata.step4_complete == 0
     msgbox('You haven''t selected any motions yet.','Warning');
 else
@@ -495,7 +486,6 @@ function pushbutton4_plot_selected_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
 
 if handles.metricdata.step4_complete == 0
     msgbox('You haven''t selected any motions yet.','Warning');
@@ -531,7 +521,6 @@ function pushbutton5_calculate_all_and_save_Callback(hObject, eventdata, handles
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
 
 if handles.metricdata.step4_complete == 0
     msgbox('You haven''t selected any motions yet.','Warning');
@@ -565,7 +554,6 @@ function pushbutton6_calculate_selected_and_save_Callback(hObject, eventdata, ha
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
 
 if handles.metricdata.step4_complete == 0
     msgbox('You haven''t selected any motions yet.','Warning');

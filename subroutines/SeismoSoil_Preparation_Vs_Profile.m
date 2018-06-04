@@ -310,8 +310,6 @@ function pushbutton2_save_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
-
 g = 9.81;
 
 if handles.metricdata.rock_property_complete * handles.metricdata.soil_property_complete == 1

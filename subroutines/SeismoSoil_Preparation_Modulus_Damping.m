@@ -22,7 +22,7 @@ function varargout = SeismoSoil_Preparation_Modulus_Damping(varargin)
 
 % Edit the above text to modify the response to help SeismoSoil_Preparation_Modulus_Damping
 
-% Last Modified by GUIDE v2.5 08-Sep-2017 01:02:03
+% Last Modified by GUIDE v2.5 03-Jun-2018 17:26:50
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -95,8 +95,6 @@ function pushbutton1_select_profile_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1_select_profile (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-clc;
 
 global start_dir0;
 
@@ -204,8 +202,6 @@ function pushbutton2_calc_curves_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
-
 % PI = handles.metricdata.PI;  % commented out on 3/27/2016
 
 % strain = [0.0001 0.0003 0.001 0.003 0.01 0.03 0.1 0.3 1 3]';
@@ -237,8 +233,8 @@ if handles.metricdata.select_profile_complete == 1
         end
     end
     fprintf('PI = ');
-    fprintf('%d, ',PI);
-    fprintf('\n');
+    fprintf('%d, ',PI(1:end-1));
+    fprintf('%d\n',PI(end));
     
     curve_mtrx = zeros(length(strain),4*nr_layer); % preallocation
     
@@ -256,6 +252,10 @@ if handles.metricdata.select_profile_complete == 1
     end
     
     out_filename = fullfile(profile_dir_name,sprintf('curve_%s.txt',sitecode));
+    while exist(out_filename, 'file') == 2
+        out_filename = appendFilename(out_filename, '_');
+    end
+    
     dlmwrite(out_filename,curve_mtrx,'delimiter','\t','precision',6);
     openFolder(profile_dir_name, sprintf('curve_%s.txt',sitecode));
     
@@ -300,8 +300,6 @@ function pushbutton4_H2_fitting_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
-
 h_running = msgbox('Curve-fitting in progess. Please do not click other buttons.','Message');
 
 if handles.metricdata.calculate_curves_complete == 1
@@ -312,6 +310,9 @@ if handles.metricdata.calculate_curves_complete == 1
     profile_dir_name = handles.metricdata.profile_dir_name;
     
     out_file_name = fullfile(profile_dir_name,sprintf('H2_n_%s.txt',sitecode));
+    while exist(out_filename, 'file') == 2
+        out_filename = appendFilename(out_filename, '_');
+    end
     dlmwrite(out_file_name,H2n,'delimiter','\t','precision',6);
     openFolder(profile_dir_name, sprintf('H2_n_%s.txt',sitecode));
     
@@ -322,7 +323,7 @@ end
 if ishandle(h_running) % if the users haven't close the figure
     close(h_running);
 end
-msgbox('H2 curve-fitting complete!','Finished');
+msgbox('H2 curve fitting complete!','Finished');
 
 
 % --- Executes on button press in pushbutton5_H4_fitting.
@@ -330,8 +331,6 @@ function pushbutton5_H4_fitting_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton5_H4_fitting (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-clc;
 
 h_running = msgbox('Curve-fitting in progess. Please do not click other buttons.','Message');
 
@@ -342,8 +341,17 @@ if handles.metricdata.calculate_curves_complete == 1
     
     sitecode = handles.metricdata.sitecode;
     profile_dir_name = handles.metricdata.profile_dir_name;
-    dlmwrite(fullfile(profile_dir_name,sprintf('H4_G_%s.txt',sitecode)),H4G,'delimiter','\t','precision',6);
-    dlmwrite(fullfile(profile_dir_name,sprintf('H4_x_%s.txt',sitecode)),H4x,'delimiter','\t','precision',6);
+    H4_G_filename = fullfile(profile_dir_name, sprintf('H4_G_%s.txt',sitecode));
+    while exist(H4_G_filename, 'file') == 2
+        H4_G_filename = appendFilename(H4_G_filename, '_');
+    end
+    dlmwrite(H4_G_filename,H4G,'delimiter','\t','precision',6);
+    
+    H4_x_filename = fullfile(profile_dir_name, sprintf('H4_x_%s.txt',sitecode));
+    while exist(H4_x_filename, 'file') == 2
+        H4_x_filename = appendFilename(H4_x_filename, '_');
+    end
+    dlmwrite(H4_x_filename,H4x,'delimiter','\t','precision',6);
     openFolder(profile_dir_name, sprintf('H4_x_%s.txt',sitecode));
 else
     msgbox('You need to calculate G/Gmax and damping curves first.','Error...');
@@ -352,7 +360,7 @@ end
 if ishandle(h_running) % if the users haven't close the figure
     close(h_running);
 end
-msgbox('H4 curve-fitting complete!','Finished');
+msgbox('H4 curve fitting complete!','Finished');
 
 
 % --- Executes on button press in pushbutton6_close_all.
@@ -372,3 +380,12 @@ function pushbutton7_return_Callback(hObject, eventdata, handles)
 
 close SeismoSoil_Preparation_Modulus_Damping;
 SeismoSoil_Preparation;
+
+
+% --- Executes on button press in pushbutton8_clear_console.
+function pushbutton8_clear_console_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton8_clear_console (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+clc;

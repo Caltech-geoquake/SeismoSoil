@@ -22,7 +22,7 @@ function varargout = SeismoSoil_Nonlinear_Analysis_HH(varargin)
 
 % Edit the above text to modify the response to help SeismoSoil_Nonlinear_Analysis_HH
 
-% Last Modified by GUIDE v2.5 20-May-2015 19:55:29
+% Last Modified by GUIDE v2.5 03-Jun-2018 18:36:13
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -51,8 +51,6 @@ function SeismoSoil_Nonlinear_Analysis_HH_OpeningFcn(hObject, eventdata, handles
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to SeismoSoil_Nonlinear_Analysis_HH (see VARARGIN)
-
-clc;
 
 % Choose default command line output for SeismoSoil_Nonlinear_Analysis_HH
 handles.output = hObject;
@@ -387,42 +385,6 @@ end
 guidata(hObject,handles);
 
 
-% --- Executes on button press in pushbutton3Ab_do_curve_fitting_H4G.
-function pushbutton3Ab_do_curve_fitting_H4G_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton3Ab_do_curve_fitting_H4G (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-if handles.metricdata.already_import_H4G == 1
-    choice = questdlg('You''ve already imported HH_G data. Do this calculation will overwrite the imported data. Do it anyway?', ...
-	'Caution', ...
-	'Yes','No','No');
-    switch choice
-        case 'Yes'
-            decision = 1;
-        case 'No'
-            decision = 0;
-    end
-    if decision == 1
-        curve_ = handles.metricdata.curve;
-        H4G_ = gaH4G(curve_,1);
-        handles.metricdata.H4G = H4G_;
-        handles.metricdata.step3A_complete = 1;
-    end
-else
-        curve_ = handles.metricdata.curve;
-        H4G_ = gaH4G(curve_,1);
-        handles.metricdata.H4G = H4G_;
-        handles.metricdata.step3A_complete = 1;
-end
-
-if (handles.metricdata.step3A_complete == 1) && (handles.metricdata.step3B_complete == 1)
-    handles.metricdata.step3_complete = 1;
-end
-
-guidata(hObject,handles);
-
-
 % --- Executes during object creation, after setting all properties.
 function pushbutton3Ba_select_H4x_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to pushbutton3Ba_select_H4x (see GCBO)
@@ -467,42 +429,6 @@ else
     if (handles.metricdata.step3A_complete == 1) && (handles.metricdata.step3B_complete == 1)
         handles.metricdata.step3_complete = 1;
     end
-end
-
-guidata(hObject,handles);
-
-
-% --- Executes on button press in pushbutton3B_do_curve_fitting_H4x.
-function pushbutton3B_do_curve_fitting_H4x_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton3B_do_curve_fitting_H4x (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-if handles.metricdata.already_import_H4x == 1
-    choice = questdlg('You''ve already imported HH_x data. Do this calculation will overwrite the imported data. Do it anyway?', ...
-	'Caution', ...
-	'Yes','No','No');
-    switch choice
-        case 'Yes'
-            decision = 1;
-        case 'No'
-            decision = 0;
-    end
-    if decision == 1
-        curve_ = handles.metricdata.curve;
-        H4x_ = gaHHx(curve_,1);
-        handles.metricdata.H4x = H4x_;
-        handles.metricdata.step3B_complete = 1;
-    end
-else
-        curve_ = handles.metricdata.curve;
-        H4x_ = gaHHx(curve_,1);
-        handles.metricdata.H4x = H4x_;
-        handles.metricdata.step3B_complete = 1;
-end
-
-if (handles.metricdata.step3A_complete == 1) && (handles.metricdata.step3B_complete == 1)
-    handles.metricdata.step3_complete = 1;
 end
 
 guidata(hObject,handles);
@@ -1082,3 +1008,12 @@ function pushbutton22_post_processing_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 SeismoSoil_PostProcessing;
+
+
+% --- Executes on button press in pushbutton23_clear_console.
+function pushbutton23_clear_console_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton23_clear_console (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+clc;
