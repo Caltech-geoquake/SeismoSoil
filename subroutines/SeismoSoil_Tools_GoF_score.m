@@ -387,6 +387,5 @@ function pushbutton5_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
 close SeismoSoil_Tools_GoF_score;
 SeismoSoil_Tools;

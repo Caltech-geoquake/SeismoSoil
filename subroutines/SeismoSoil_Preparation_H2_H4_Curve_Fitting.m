@@ -22,7 +22,7 @@ function varargout = SeismoSoil_Preparation_H2_H4_Curve_Fitting(varargin)
 
 % Edit the above text to modify the response to help SeismoSoil_Preparation_H2_H4_Curve_Fitting
 
-% Last Modified by GUIDE v2.5 08-Sep-2017 00:22:56
+% Last Modified by GUIDE v2.5 03-Jun-2018 18:13:08
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -95,8 +95,6 @@ function pushbutton1_select_curve_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1_select_curve (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-clc;
 
 global start_dir0;
 
@@ -244,8 +242,6 @@ function pushbutton4_H2_fitting_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
-
 h_running = msgbox('Curve-fitting in progess. Please do not click other buttons.','Calculating');
 
 if handles.metricdata.select_curves_complete == 1
@@ -254,7 +250,11 @@ if handles.metricdata.select_curves_complete == 1
     
     sitecode = handles.metricdata.sitecode;
     curve_dir_name = handles.metricdata.curve_dir_name;
-    dlmwrite(fullfile(curve_dir_name,sprintf('H2_n_%s.txt',sitecode)),H2n,'delimiter','\t');
+    H2_filename = sprintf('H2_n_%s.txt',sitecode);
+    while exist(fullfile(curve_dir_name,H2_filename), 'file') == 2
+        H2_filename = appendFilename(H2_filename, '_');
+    end
+    dlmwrite(fullfile(curve_dir_name,H2_filename),H2n,'delimiter','\t');
     
 else
     msgbox('You need to import the curves data first.','Error');
@@ -272,8 +272,6 @@ function pushbutton5_H4_fitting_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
-
 h_running = msgbox('Curve-fitting in progess. Please do not click other buttons.','Calculating');
 
 if handles.metricdata.select_curves_complete == 1
@@ -288,8 +286,18 @@ if handles.metricdata.select_curves_complete == 1
     
     sitecode = handles.metricdata.sitecode;
     curve_dir_name = handles.metricdata.curve_dir_name;
-    dlmwrite(fullfile(curve_dir_name,sprintf('H4_G_%s.txt',sitecode)),H4G,'delimiter','\t');
-    dlmwrite(fullfile(curve_dir_name,sprintf('H4_x_%s.txt',sitecode)),H4x,'delimiter','\t');
+    H4G_filename = sprintf('H4_G_%s.txt',sitecode);
+    H4x_filename = sprintf('H4_x_%s.txt',sitecode);
+    
+    while exist(fullfile(curve_dir_name,H4G_filename), 'file') == 2
+        H4G_filename = appendFilename(H4G_filename, '_');
+    end
+    while exist(fullfile(curve_dir_name,H4x_filename), 'file') == 2
+        H4x_filename = appendFilename(H4x_filename, '_');
+    end
+    
+    dlmwrite(fullfile(curve_dir_name,H4G_filename),H4G,'delimiter','\t');
+    dlmwrite(fullfile(curve_dir_name,H4x_filename),H4x,'delimiter','\t');
 else
     msgbox('You need to import the curves data first.','Error');
 end
@@ -317,3 +325,13 @@ function pushbutton7_return_Callback(hObject, eventdata, handles)
 
 close SeismoSoil_Preparation_H2_H4_Curve_Fitting;
 SeismoSoil_Preparation;
+
+
+% --- Executes on button press in pushbutton8_clear_console.
+function pushbutton8_clear_console_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton8_clear_console (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+clc;
+

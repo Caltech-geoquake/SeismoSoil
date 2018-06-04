@@ -22,7 +22,7 @@ function varargout = SeismoSoil_Preparation_HH_G_fit(varargin)
 
 % Edit the above text to modify the response to help SeismoSoil_Preparation_HH_G_fit
 
-% Last Modified by GUIDE v2.5 27-Sep-2017 15:59:15
+% Last Modified by GUIDE v2.5 03-Jun-2018 14:22:28
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -104,9 +104,9 @@ handles.metricdata.step1b = handles.metricdata.step1b1 * handles.metricdata.step
 plotCurves(curve);
 
 % if handles.metricdata.step1a * handles.metricdata.step1b == 1
-if handles.metricdata.step1b == 1  % damping parameter fitting does not require Vs profile
-    set(handles.metricdata.handle_Start_damping,'enable','on');
-end
+%if handles.metricdata.step1b == 1  % damping parameter fitting does not require Vs profile
+%    set(handles.metricdata.handle_Start_damping,'enable','on');
+%end
 if handles.metricdata.step2 * handles.metricdata.step1a == 1
     set(handles.metricdata.handle_Start,'enable','on');
 end
@@ -177,12 +177,26 @@ switch get(eventdata.NewValue,'Tag') % Get Tag of selected object.
         set(handles.metricdata.handle_import_curve,'enable','on');
         set(handles.metricdata.handle_import_curve,'enable','off');
         set(handles.metricdata.handle_import_Vs_profile_B,'enable','off');
+        
+        clearvars('handles.metricdata.profile_file_name');
+        clearvars('handles.metricdata.profile_dir_name');
+        clearvars('handles.metricdata.profile');
+        clearvars('handles.metricdata.curve_file_name');
+        clearvars('handles.metricdata.curve_dir_name');
+        clearvars('handles.metricdata.curve');
     case 'radiobutton1b'  % from curve file
         GGmax_data_source = 'fromCurve';
         set(handles.metricdata.handle_import_Vs_profile_A,'enable','off');
         set(handles.metricdata.handle_plot_Vs_profile,'enable','off');
         set(handles.metricdata.handle_import_curve,'enable','on');
         set(handles.metricdata.handle_import_Vs_profile_B,'enable','on');
+        
+        clearvars('handles.metricdata.profile_file_name');
+        clearvars('handles.metricdata.profile_dir_name');
+        clearvars('handles.metricdata.profile');
+        clearvars('handles.metricdata.curve_file_name');
+        clearvars('handles.metricdata.curve_dir_name');
+        clearvars('handles.metricdata.curve');
 end
 handles.metricdata.GGmax_data_source = GGmax_data_source;
 guidata(hObject,handles);
@@ -381,8 +395,6 @@ function pushbutton5_GGmax_para_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% clc;
-
 ok_to_proceed = 0;
 if handles.metricdata.step2 == 0
     if handles.metricdata.step1a + handles.metricdata.step1b == 0  % both are 0
@@ -457,14 +469,14 @@ if ok_to_proceed == 1
         % [~,damping,~] = dynamicSoilParameter(strain_20/100,stress,PI); % unit of "damping": 1
 
         for j = 1 : 1 : nr_layer
-            strain_from_curve = curve(:,(j-1)*4+1);
+            strain_from_curve = curves_expanded(:,(j-1)*4+1);
             Gmax = para(6,j);
             T_HH = tauHH(strain_from_curve/100,para(:,j));
             GGmax_HH = T_HH./(strain_from_curve/100)/Gmax;
             curve_HH(:,(j-1)*4+1) = strain_from_curve;
             curve_HH(:,(j-1)*4+2) = GGmax_HH;
-            curve_HH(:,(j-1)*4+3) = curve(:,(j-1)*4+3);
-            curve_HH(:,(j-1)*4+4) = curve(:,(j-1)*4+4);  % directly take from the original curve data
+            curve_HH(:,(j-1)*4+3) = curves_expanded(:,(j-1)*4+3);
+            curve_HH(:,(j-1)*4+4) = curves_expanded(:,(j-1)*4+4);  % directly take from the original curve data
         end
     end
 
@@ -507,17 +519,26 @@ if ok_to_proceed == 1
     HH_G_filename = sprintf('HH_G_%s.txt',sitecode);
     if (handles.metricdata.step1a == 1) && strcmpi(handles.metricdata.GGmax_data_source,'fromCurve')
         curve_HH_filename = sprintf('curve_HH_%s_expanded.txt',sitecode);
+        while exist(fullfile(dir_out,curve_HH_filename), 'file') == 2
+            curve_HH_filename = appendFilename(curve_HH_filename, '_');
+        end
         dlmwrite(fullfile(dir_out,curve_HH_filename),curve_HH,'delimiter','\t','precision',6);
-        fprintf('curve_HH file saved to directory: %s\n',dir_out);
+        fprintf('curve_HH file saved as: %s\n',fullfile(dir_out,curve_HH_filename));
     end
     if (handles.metricdata.step1a == 1) && strcmpi(handles.metricdata.GGmax_data_source,'fromVsProfile')
         curve_HH_filename = sprintf('curve_HH_%s.txt',sitecode);
+        while exist(fullfile(dir_out,curve_HH_filename), 'file') == 2
+            curve_HH_filename = appendFilename(curve_HH_filename, '_');
+        end
         dlmwrite(fullfile(dir_out,curve_HH_filename),curve_HH,'delimiter','\t','precision',6);
-        fprintf('curve_HH file saved to directory: %s\n',dir_out);
+        fprintf('curve_HH file saved as: %s\n',fullfile(dir_out,curve_HH_filename));
     end
 
+    while exist(fullfile(dir_out,HH_G_filename), 'file') == 2
+        HH_G_filename = appendFilename(HH_G_filename, '_');
+    end
     dlmwrite(fullfile(dir_out,HH_G_filename),para,'delimiter','\t','precision',6);
-    fprintf('HH_G file saved to directory: %s\n',dir_out);
+    fprintf('HH_G file saved as: %s\n',fullfile(dir_out,HH_G_filename));
 
 end
 
@@ -585,4 +606,12 @@ function pushbutton8_close_all_Callback(hObject, eventdata, handles)
 
 close all;
 
+
+% --- Executes on button press in pushbutton10_clear_console.
+function pushbutton10_clear_console_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton10_clear_console (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+clc;
 

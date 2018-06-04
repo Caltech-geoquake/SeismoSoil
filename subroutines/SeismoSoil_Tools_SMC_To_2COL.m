@@ -106,8 +106,6 @@ function pushbutton2_select_motions_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
-
 global start_dir0;
 
 filter_spec = {'*.smc','SMC V1 format (*.SMC)';'*.*','All Files (*.*)'};
@@ -458,7 +456,6 @@ function pushbutton1_return_to_tools_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
 close SeismoSoil_Tools_SMC_To_2COL;
 SeismoSoil_Tools;
 

@@ -22,7 +22,7 @@ function varargout = SeismoSoil_Equivalent_Linear_Analysis(varargin)
 
 % Edit the above text to modify the response to help SeismoSoil_Equivalent_Linear_Analysis
 
-% Last Modified by GUIDE v2.5 20-Nov-2017 17:51:14
+% Last Modified by GUIDE v2.5 03-Jun-2018 18:17:19
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -51,8 +51,6 @@ function SeismoSoil_Equivalent_Linear_Analysis_OpeningFcn(hObject, eventdata, ha
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to SeismoSoil_Equivalent_Linear_Analysis (see VARARGIN)
-
-clc;
 
 % Choose default command line output for SeismoSoil_Equivalent_Linear_Analysis
 handles.output = hObject;
@@ -887,3 +885,12 @@ function pushbutton20_post_process_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 SeismoSoil_PostProcessing;
+
+
+% --- Executes on button press in pushbutton21_clear_console.
+function pushbutton21_clear_console_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton21_clear_console (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+clc;

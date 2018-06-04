@@ -83,11 +83,8 @@ function pushbutton1_return_to_tools_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
 close SeismoSoil_Tools_Response_Spectra;
 SeismoSoil_Tools;
-
-
 
 % --- Executes during object creation, after setting all properties.
 function pushbutton2_select_motions_CreateFcn(hObject, eventdata, handles)
@@ -99,15 +96,11 @@ handles.metricdata.step4_complete = 0;
 guidata(hObject,handles);
 
 
-
-
 % --- Executes on button press in pushbutton2_select_motions.
 function pushbutton2_select_motions_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton2_select_motions (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-clc;
 
 global start_dir0;
 
@@ -453,7 +446,6 @@ function pushbutton3_plot_all_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
 
 if handles.metricdata.step4_complete == 0
     msgbox('You haven''t selected any motions yet.','Warning');
@@ -489,7 +481,6 @@ function pushbutton4_plot_selected_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
 
 if handles.metricdata.step4_complete == 0
     msgbox('You haven''t selected any motions yet.','Warning');
@@ -532,8 +523,6 @@ function pushbutton5_calculate_all_and_save_Callback(hObject, eventdata, handles
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
-
 if handles.metricdata.step4_complete == 0
     msgbox('You haven''t selected any motions yet.','Warning');
 else
@@ -573,8 +562,6 @@ function pushbutton6_calculate_selected_and_save_Callback(hObject, eventdata, ha
 % hObject    handle to pushbutton6_calculate_selected_and_save (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-clc;
 
 if handles.metricdata.step4_complete == 0
     msgbox('You haven''t selected any motions yet.','Warning');

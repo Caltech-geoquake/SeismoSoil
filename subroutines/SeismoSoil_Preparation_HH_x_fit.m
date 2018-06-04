@@ -22,7 +22,7 @@ function varargout = SeismoSoil_Preparation_HH_x_fit(varargin)
 
 % Edit the above text to modify the response to help SeismoSoil_Preparation_HH_x_fit
 
-% Last Modified by GUIDE v2.5 08-Sep-2017 00:13:49
+% Last Modified by GUIDE v2.5 03-Jun-2018 14:44:11
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -189,10 +189,8 @@ end
 
 if save_fig == 1
     fig_out_dir = uigetdir(start_dir0,'Select folder to save curve-fitting figures...');
-    clc;
     [para_xi,fitted_curves] = gaHHx(curve_matrix,show_fig,save_fig,fig_out_dir,sitecode);
 else
-    clc;
     [para_xi,fitted_curves] = gaHHx(curve_matrix,show_fig,save_fig);
 end
 
@@ -212,10 +210,18 @@ end
 % * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 HH_x_filename = sprintf('HH_X_%s.txt',sitecode);
+while exist(fullfile(dir_out,HH_x_filename), 'file') == 2
+    HH_x_filename = appendFilename(HH_x_filename, '_');
+end
 dlmwrite(fullfile(dir_out,HH_x_filename),para_xi,'delimiter','\t','precision',6);
+fprintf('HH_x file saved as: %s\n',fullfile(dir_out,HH_x_filename));
 
 fitted_curves_filename = sprintf('Damping_curve_fit_by_HH_%s.txt',sitecode);
+while exist(fullfile(dir_out, fitted_curves_filename), 'file') == 2
+    fitted_curves_filename = appendFilename(fitted_curves_filename, '_');
+end
 dlmwrite(fullfile(dir_out,fitted_curves_filename),fitted_curves,'delimiter','\t','precision',6);
+fprintf('Damping curve fit saved as: %s\n',fullfile(dir_out,fitted_curves_filename));
 
 
 % --- Executes during object creation, after setting all properties.
@@ -268,3 +274,12 @@ function pushbutton8_close_all_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 close all;
+
+
+% --- Executes on button press in pushbutton9_clear_console.
+function pushbutton9_clear_console_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton9_clear_console (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+clc;

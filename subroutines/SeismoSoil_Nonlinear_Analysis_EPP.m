@@ -22,7 +22,7 @@ function varargout = SeismoSoil_Nonlinear_Analysis_EPP(varargin)
 
 % Edit the above text to modify the response to help SeismoSoil_Nonlinear_Analysis_EPP
 
-% Last Modified by GUIDE v2.5 20-May-2015 19:54:51
+% Last Modified by GUIDE v2.5 03-Jun-2018 18:22:51
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -51,8 +51,6 @@ function SeismoSoil_Nonlinear_Analysis_EPP_OpeningFcn(hObject, eventdata, handle
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to SeismoSoil_Nonlinear_Analysis_EPP (see VARARGIN)
-
-clc;
 
 % Choose default command line output for SeismoSoil_Nonlinear_Analysis_EPP
 handles.output = hObject;
@@ -234,50 +232,6 @@ function pushbutton2a_select_curve_CreateFcn(hObject, eventdata, handles)
 handles.metricdata.step2_complete = 0;
 guidata(hObject,handles);
     
-    
-% % % % % % --- Executes on button press in pushbutton2a_select_curve.
-% % % % % function pushbutton2a_select_curve_Callback(hObject, eventdata, handles)
-% % % % % % hObject    handle to pushbutton2a_select_curve (see GCBO)
-% % % % % % eventdata  reserved - to be defined in a future version of MATLAB
-% % % % % % handles    structure with handles and user data (see GUIDATA)
-% % % % % 
-% % % % % clc;
-% % % % % 
-% % % % % global start_dir0;
-% % % % % 
-% % % % % filter_spec = {'*.dat;*.txt','Text files (*.dat,*.txt)';'*.*', 'All Files (*.*)'};
-% % % % % dlg_title = 'Select "curve" data file...';
-% % % % % [curve_file_name,curve_dir_name,filter_index] ...
-% % % % %     = uigetfile(filter_spec,dlg_title,start_dir0,'MultiSelect','off');
-% % % % % 
-% % % % % if isequal(curve_file_name,0)
-% % % % %     disp('User did not select any files.');
-% % % % % else
-% % % % %     disp(['User selected ',fullfile(curve_dir_name,curve_file_name)]);
-% % % % %     start_dir0 = curve_dir_name; % update "start dir"
-% % % % % 
-% % % % %     handles.metricdata.curve_file_name = curve_file_name;
-% % % % %     handles.metricdata.curve_dir_name = curve_dir_name;
-% % % % %     
-% % % % %     curve_ = importdata(fullfile(curve_dir_name,curve_file_name));
-% % % % %     handles.metricdata.curve = curve_;
-% % % % %     
-% % % % %     handles.metricdata.step2_complete = 1;
-% % % % % end
-% % % % % 
-% % % % % guidata(hObject,handles);
-% % % % % 
-% % % % % 
-% % % % % % --- Executes on button press in pushbutton2b_plot_curves.
-% % % % % function pushbutton2b_plot_curves_Callback(hObject, eventdata, handles)
-% % % % % % hObject    handle to pushbutton2b_plot_curves (see GCBO)
-% % % % % % eventdata  reserved - to be defined in a future version of MATLAB
-% % % % % % handles    structure with handles and user data (see GUIDATA)
-% % % % % 
-% % % % % curve_matrix = handles.metricdata.curve;
-% % % % % plotCurves(curve_matrix);
-
-
 
 % --- Executes during object creation, after setting all properties.
 function uipanel13_mass_density_CreateFcn(hObject, eventdata, handles)
@@ -307,10 +261,6 @@ switch get(eventdata.NewValue,'Tag') % Get Tag of selected object.
 end
 handles.metricdata.rho_unit_division_factor = rho_unit_division_factor;
 guidata(hObject,handles);
-
-
-
-
 
 
 % --- Executes during object creation, after setting all properties.
@@ -1006,3 +956,12 @@ function pushbutton20_post_processing_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 SeismoSoil_PostProcessing;
+
+
+% --- Executes on button press in pushbutton21_clear_console.
+function pushbutton21_clear_console_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton21_clear_console (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+clc;

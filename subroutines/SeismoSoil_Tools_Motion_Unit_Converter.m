@@ -100,8 +100,6 @@ function pushbutton2_select_motions_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
-
 global start_dir0;
 
 filter_spec = {'*.dat;*.txt','Text files (*.dat,*.txt)';'*.*','All Files (*.*)'};
@@ -261,7 +259,6 @@ function pushbutton3_convert_all_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3_convert_all (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-clc;
 
 if handles.metricdata.step4_complete == 0
     msgbox('You haven''t selected any motions yet.','Warning');
@@ -320,7 +317,6 @@ function pushbutton4_convert_selected_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton4_convert_selected (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-clc;
 
 if handles.metricdata.step4_complete == 0
     msgbox('You haven''t selected any motions yet.','Warning');
@@ -391,13 +387,11 @@ function pushbutton12_close_all_Callback(hObject, eventdata, handles)
 close all;
 
 
-
 % --- Executes on button press in pushbutton1_return_to_tools.
 function pushbutton1_return_to_tools_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1_return_to_tools (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
 close SeismoSoil_Tools_Motion_Unit_Converter;
 SeismoSoil_Tools;

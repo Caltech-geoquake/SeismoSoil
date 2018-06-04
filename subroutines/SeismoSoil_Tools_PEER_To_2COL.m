@@ -104,7 +104,6 @@ function pushbutton2_select_motions_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
 
 global start_dir0;
 
@@ -252,7 +251,6 @@ function pushbutton3_convert_all_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3_convert_all (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-clc;
 
 if handles.metricdata.step4_complete == 0
     msgbox('You haven''t selected any files yet.','Warning');
@@ -427,7 +425,6 @@ function pushbutton1_return_to_tools_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-clc;
 close SeismoSoil_Tools_PEER_To_2COL;
 SeismoSoil_Tools;
 
