@@ -22,7 +22,7 @@ function varargout = SeismoSoil_PostProcessing(varargin)
 
 % Edit the above text to modify the response to help SeismoSoil_PostProcessing
 
-% Last Modified by GUIDE v2.5 20-Nov-2017 16:18:16
+% Last Modified by GUIDE v2.5 06-Mar-2019 19:52:18
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -119,7 +119,7 @@ function pushbutton2_plot_loops_Callback(hObject, eventdata, handles)
 if handles.metricdata.folder_select_flag == 0
     msgbox('You have not selected a folder yet.','Warning');
 else
-    showLoops(handles);
+    showLoops(handles,false);
 end
 
 
@@ -136,6 +136,7 @@ else
 end
 
 function showLoops(handles,save_figure)
+% Plot stress-strain loops for each soil layer
 
 if nargin < 2
     save_figure = false;
@@ -172,14 +173,36 @@ depth = convertThicknessToDepth(thickness);
 if save_figure
     mkdir(fullfile(results_dir,'Stress strain loops'));
 end
+
+num_subplots = handles.metricdata.num_subplots;
+
+%------ Find two closest integers whose product equals num_subplots -------
+n_row = floor(sqrt(num_subplots));
+while n_row >= 1
+    if mod(num_subplots, n_row) == 0
+        n_col = num_subplots / n_row;
+        break
+    else
+        n_row = n_row - 1;
+    end
+end
+
 for j = 1 : 1 : nr_layer
-    fig = figure;
+    if mod(j, num_subplots) == 1
+        fig = figure('unit', 'inches', 'position', [1, 1, n_col * 2, n_row * 2]);
+    end
+    if mod(j, num_subplots) == 0
+        subplot_index = num_subplots;
+    else
+        subplot_index = mod(j, num_subplots);
+    end
+    subplot(n_row, n_col, subplot_index);
     plot(strain(:,j)*100,stress(:,j)/1000);
     grid on;
     xlabel('Strain [%]');
     ylabel('Stress [kPa]');
-    title(sprintf('Layer #%d. Depth = %.2f m',j,depth(j)));
-    if save_figure
+    title(sprintf('Layer #%d\nDepth = %.2f m',j,depth(j)));
+    if save_figure && (mod(j, num_subplots) == 0 || j == nr_layer)
         saveas(fig,fullfile(results_dir,'Stress strain loops',...
             sprintf('Stress_strain_loops_Layer_%d.png',j)));
     end
@@ -344,3 +367,36 @@ function pushbutton6_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 close all;
 
+
+
+
+function edit2_Callback(hObject, eventdata, handles)
+% hObject    handle to edit2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit2 as text
+%        str2double(get(hObject,'String')) returns contents of edit2 as a double
+
+num_subplots = str2double(get(hObject,'String'));
+if num_subplots <= 0
+    msgbox('Please specify positive integers only..','Error');
+end
+handles.metricdata.num_subplots = floor(num_subplots);
+guidata(hObject,handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function edit2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+handles.metricdata.num_subplots = 20;
+guidata(hObject, handles);
