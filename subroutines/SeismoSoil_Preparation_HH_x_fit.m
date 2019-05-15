@@ -189,9 +189,9 @@ end
 
 if save_fig == 1
     fig_out_dir = uigetdir(start_dir0,'Select folder to save curve-fitting figures...');
-    [para_xi,fitted_curves] = gaHHx(curve_matrix,show_fig,save_fig,fig_out_dir,sitecode);
+    [para_xi,fitted_curves] = gaHHx(curve_matrix,logical(show_fig),logical(save_fig),fig_out_dir,sitecode);
 else
-    [para_xi,fitted_curves] = gaHHx(curve_matrix,show_fig,save_fig);
+    [para_xi,fitted_curves] = gaHHx(curve_matrix,logical(show_fig),logical(save_fig));
 end
 
 % * * *  Transform para_xi according to the material number  * * * *
