@@ -444,8 +444,8 @@ if ok_to_proceed == 1
         end
     end
 
-    show_fig = handles.metricdata.show_fig;
-    save_fig = handles.metricdata.save_fig;
+    show_fig = logical(handles.metricdata.show_fig);
+    save_fig = logical(handles.metricdata.save_fig);
 
     %% Get HH_G parameters
     if (handles.metricdata.step1a == 1) && strcmpi(handles.metricdata.GGmax_data_source,'fromVsProfile')
