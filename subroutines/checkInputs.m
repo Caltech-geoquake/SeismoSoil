@@ -221,3 +221,6 @@ function tf = hasNonPositive(x)
     tf = any(x(:) <= 0);
 end
 
+function tf = hasInfNaN(x)
+    tf = any(isinf(x(:))) || any(isnan(x(:)));
+end
