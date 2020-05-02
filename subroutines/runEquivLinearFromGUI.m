@@ -92,7 +92,7 @@ if ok_to_proceed == 1
         
         output_or_not = 'n';
         [freq_array,tf,t_out,accel_on_surface,...
-            new_profile,out_a,out_v,out_d,out_gamma,out_tau,max_avd,max_gt] ...
+            new_profile,out_a,out_v,out_d,out_gamma,out_tau,max_avd,max_gt,G_matrix,D_matrix] ...
             = equivLinSiteRespVec(vs_profile,accel_incident,curve,'off',boundary,output_or_not);
         
         filename_TF = sprintf('%s_equivalent_linear_TF%s',motion_name_without_ext,ext);
@@ -105,6 +105,8 @@ if ok_to_proceed == 1
         filename_out_tau = sprintf('%s_time_history_stress%s',motion_name_without_ext,ext);
         filename_max_avd = sprintf('%s_max_a_v_d%s',motion_name_without_ext,ext);
         filename_max_gt = sprintf('%s_max_gamma_tau%s',motion_name_without_ext,ext);
+        filename_G_matrix = sprintf('%s_G_matrix%s',motion_name_without_ext,ext);
+        filename_D_matrix = sprintf('%s_D_matrix%s',motion_name_without_ext,ext);
         
         dlmwrite(fullfile(output_dir2,filename_TF),[freq_array,tf],'delimiter','\t','precision',6,'newline','pc');
         dlmwrite(fullfile(output_dir2,filename_surface_accel),[t_out,accel_on_surface],'delimiter','\t','precision',7,'newline','pc');
@@ -116,6 +118,8 @@ if ok_to_proceed == 1
         dlmwrite(fullfile(output_dir2,filename_out_tau),out_tau,'delimiter','\t','precision',6,'newline','pc');
         dlmwrite(fullfile(output_dir2,filename_max_avd),max_avd,'delimiter','\t','precision',6,'newline','pc');
         dlmwrite(fullfile(output_dir2,filename_max_gt),max_gt,'delimiter','\t','precision',6,'newline','pc');
+        dlmwrite(fullfile(output_dir2,filename_G_matrix),G_matrix,'delimiter','\t','precision',6,'newline','pc');
+        dlmwrite(fullfile(output_dir2,filename_D_matrix),D_matrix,'delimiter','\t','precision',6,'newline','pc');
         
         %% Plot transfer function
         fz_axes = 12;
