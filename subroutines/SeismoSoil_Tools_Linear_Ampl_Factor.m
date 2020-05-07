@@ -166,8 +166,11 @@ else
     for i = 1 : 1 : nr_profile
         current_profile_filename = handles.metricdata.motion_file_name{i};
         current_profile = vs_profile{i};
+
+        freq_resolution = 0.05;  % unit: Hz
+        fmax = 100;  % unit: Hz
         [freq_array,AF_ro,TF_ro,f0_ro,AF_in,TF_in,AF_bh,TF_bh,f0_bh]...
-            = tfLIN(current_profile,'off');
+            = tfLIN(current_profile,'off','n', freq_resolution, fmax);
         plotProfileAndLAF(current_profile,freq_array,AF_ro,TF_ro,f0_ro,AF_bh,TF_bh,f0_bh,...
             current_profile_filename);
     end
@@ -252,8 +255,11 @@ else
     for i = 1 : 1 : nr_motion
         current_profile_filename = motion_filenames{i};
         current_profile = importdata(fullfile(motion_dir,current_profile_filename));
+
+        freq_resolution = 0.05;  % unit: Hz
+        fmax = 100;  % unit: Hz
         [freq_array,AF_ro,TF_ro,f0_ro,AF_in,TF_in,AF_bh,TF_bh,f0_bh]...
-            = tfLIN(current_profile,'off');
+            = tfLIN(current_profile,'off','n', freq_resolution, fmax);
         plotProfileAndLAF(current_profile,freq_array,AF_ro,f0_ro,AF_bh,f0_bh,...
             current_profile_filename);
     end
